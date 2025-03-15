@@ -94,7 +94,7 @@ sed -i '$i uci set network.lan.gateway="10.10.10.10"' ${defaultsettings}/files/z
 sed -i '$i uci set network.lan.netmask="255.255.255.0"' ${defaultsettings}/files/zzz-default-settings
 sed -i '$i uci set network.lan.dns="10.10.10.10"' ${defaultsettings}/files/zzz-default-settings
 
-#sed -i '$i uci set network.wan.ifname="eth0"' ${defaultsettings}/files/zzz-default-settings
+sed -i '$i uci set network.wan.ifname=""' ${defaultsettings}/files/zzz-default-settings
 #sed -i '$i uci set network.wan.proto=pppoe' ${defaultsettings}/files/zzz-default-settings
 #sed -i '$i uci set network.wan6.ifname="eth0"' ${defaultsettings}/files/zzz-default-settings
 #sed -i '$i uci commit network' ${defaultsettings}/files/zzz-default-settings
