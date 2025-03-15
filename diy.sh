@@ -21,7 +21,7 @@ echo "repo: ${repo}; owner: ${owner};"
 sed -i 's/192.168.1.1/10.10.10.220/g' package/base-files/files/bin/config_generate
 
 # Modify hostname
-sed -i 's/OpenWrt/Alon/g' package/base-files/files/bin/config_generate
+sed -i 's/OpenWrt/Alon Creat By LEDE/g' package/base-files/files/bin/config_generate
 
 # Modify timezone
 sed -i "s/'UTC'/'CST-8'\n        set system.@system[-1].zonename='Asia\/Shanghai'/g" package/base-files/files/bin/config_generate
@@ -89,12 +89,13 @@ sed -i "s/LEDE /${owner} build $(TZ=UTC-8 date "+%Y.%m.%d") @ LEDE /g" ${default
 sed -i '/sed -i "s\/# \/\/g" \/etc\/opkg\/distfeeds.conf/a\sed -i "\/openwrt_ing\/d" \/etc\/opkg\/distfeeds.conf' ${defaultsettings}/files/zzz-default-settings
 
 # Modify network setting
+sed -i '$i uci set network.lan.ipaddr="10.10.10.220"' ${defaultsettings}/files/zzz-default-settings
 sed -i '$i uci set network.lan.ifname="eth0 eth1 eth2 eth3"' ${defaultsettings}/files/zzz-default-settings
 sed -i '$i uci set network.lan.gateway="10.10.10.10"' ${defaultsettings}/files/zzz-default-settings
 sed -i '$i uci set network.lan.netmask="255.255.255.0"' ${defaultsettings}/files/zzz-default-settings
 sed -i '$i uci set network.lan.dns="10.10.10.10"' ${defaultsettings}/files/zzz-default-settings
 
-sed -i '$i uci set network.wan.ifname=""' ${defaultsettings}/files/zzz-default-settings
+#sed -i '$i uci set network.wan.ifname=""' ${defaultsettings}/files/zzz-default-settings
 #sed -i '$i uci set network.wan.proto=pppoe' ${defaultsettings}/files/zzz-default-settings
 #sed -i '$i uci set network.wan6.ifname="eth0"' ${defaultsettings}/files/zzz-default-settings
 #sed -i '$i uci commit network' ${defaultsettings}/files/zzz-default-settings
