@@ -91,7 +91,8 @@ sed -i '/sed -i "s\/# \/\/g" \/etc\/opkg\/distfeeds.conf/a\sed -i "\/openwrt_ing
 # Modify network setting
 sed -i '$i uci set network.lan.ifname="eth0 eth1 eth2 eth3"' ${defaultsettings}/files/zzz-default-settings
 sed -i '$i uci set network.lan.gateway="10.10.10.10"' ${defaultsettings}/files/zzz-default-settings
-sed -i '$i uci set network.lan.netmask="10.10.10.10"' ${defaultsettings}/files/zzz-default-settings
+sed -i '$i uci set network.lan.netmask="255.255.255.0"' ${defaultsettings}/files/zzz-default-settings
+sed -i '$i uci set network.lan.dns="10.10.10.10"' ${defaultsettings}/files/zzz-default-settings
 
 #sed -i '$i uci set network.wan.ifname="eth0"' ${defaultsettings}/files/zzz-default-settings
 #sed -i '$i uci set network.wan.proto=pppoe' ${defaultsettings}/files/zzz-default-settings
