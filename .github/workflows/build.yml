@@ -47,17 +47,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@main
 
-      #- name: Free Disk Space (Ubuntu)
-      #  uses: jlumbroso/free-disk-space@main
-      #  with:
-      #    tool-cache: true
-
-      - name: Combine Disks
-        uses: easimon/maximize-build-space@master
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
         with:
+          tool-cache: true
           swap-size-mb: 2048
           temp-reserve-mb: 300
           root-reserve-mb: 4096
+          
 
       - name: Init Env
         env:
