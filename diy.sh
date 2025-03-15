@@ -21,52 +21,52 @@ echo "repo: ${repo}; owner: ${owner};"
 sed -i 's/192.168.1.1/10.10.10.220/g' package/base-files/files/bin/config_generate
 
 # Modify hostname
-#sed -i 's/OpenWrt/OpenWrting/g' package/base-files/files/bin/config_generate
+sed -i 's/OpenWrt/Alon/g' package/base-files/files/bin/config_generate
 
 # Modify timezone
-#sed -i "s/'UTC'/'CST-8'\n        set system.@system[-1].zonename='Asia\/Shanghai'/g" package/base-files/files/bin/config_generate
+sed -i "s/'UTC'/'CST-8'\n        set system.@system[-1].zonename='Asia\/Shanghai'/g" package/base-files/files/bin/config_generate
 
 # Modify banner
-if [ "${owner}" = "Ing" ]; then
-  if [ "${repo}" = "openwrt" ]; then
-    cat >package/base-files/files/etc/banner <<EOF
-  _______                     ________        __
- |       |.-----.-----.-----.|  |  |  |.----.|  |_
- |   -   ||  _  |  -__|     ||  |  |  ||   _||   _|
- |_______||   __|_____|__|__||________||__|  |____|
-          |__|                   Openwrt By ${owner} 
- -----------------------------------------------------
- %D %V, %C
- -----------------------------------------------------
-
-EOF
-  else
-    cat >package/base-files/files/etc/banner <<EOF
-     _________
-    /        /\      _    ___ ___  ___
-   /  LE    /  \    | |  | __|   \| __|
-  /    DE  /    \   | |__| _|| |) | _|
- /________/  LE  \  |____|___|___/|___|        Lede By ${owner}  
- \        \   DE /
-  \    LE  \    /  -------------------------------------------
-   \  DE    \  /    %D %V, %C
-    \________\/    -------------------------------------------
-
-EOF
-  fi
-else
-  cat >package/base-files/files/etc/banner <<EOF
- ██████╗ ██████╗ ███████╗███╗   ██╗██╗    ██╗██████╗ ████████╗
-██╔═══██╗██╔══██╗██╔════╝████╗  ██║██║    ██║██╔══██╗╚══██╔══╝
-██║   ██║██████╔╝█████╗  ██╔██╗ ██║██║ █╗ ██║██████╔╝   ██║   
-██║   ██║██╔═══╝ ██╔══╝  ██║╚██╗██║██║███╗██║██╔══██╗   ██║   
-╚██████╔╝██║     ███████╗██║ ╚████║╚███╔███╔╝██║  ██║   ██║   
- ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝ ╚══╝╚══╝ ╚═╝  ╚═╝   ╚═╝   
-  -------------------------------------------
-  		%D %V, %C      By ${owner} 
-  -------------------------------------------
-EOF
-fi
+#if [ "${owner}" = "Ing" ]; then
+#  if [ "${repo}" = "openwrt" ]; then
+#    cat >package/base-files/files/etc/banner <<EOF
+#  _______                     ________        __
+# |       |.-----.-----.-----.|  |  |  |.----.|  |_
+# |   -   ||  _  |  -__|     ||  |  |  ||   _||   _|
+# |_______||   __|_____|__|__||________||__|  |____|
+#          |__|                   Openwrt By ${owner} 
+# -----------------------------------------------------
+# %D %V, %C
+# -----------------------------------------------------
+#
+#EOF
+#  else
+#    cat >package/base-files/files/etc/banner <<EOF
+#     _________
+#    /        /\      _    ___ ___  ___
+#   /  LE    /  \    | |  | __|   \| __|
+# /    DE  /    \   | |__| _|| |) | _|
+# /________/  LE  \  |____|___|___/|___|        Lede By ${owner}  
+# \        \   DE /
+#  \    LE  \    /  -------------------------------------------
+#   \  DE    \  /    %D %V, %C
+#    \________\/    -------------------------------------------
+#
+#EOF
+#  fi
+#else
+#  cat >package/base-files/files/etc/banner <<EOF
+# ██████╗ ██████╗ ███████╗███╗   ██╗██╗    ██╗██████╗ ████████╗
+#██╔═══██╗██╔══██╗██╔════╝████╗  ██║██║    ██║██╔══██╗╚══██╔══╝
+#██║   ██║██████╔╝█████╗  ██╔██╗ ██║██║ █╗ ██║██████╔╝   ██║   
+#██║   ██║██╔═══╝ ██╔══╝  ██║╚██╗██║██║███╗██║██╔══██╗   ██║   
+#╚██████╔╝██║     ███████╗██║ ╚████║╚███╔███╔╝██║  ██║   ██║   
+# ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝ ╚══╝╚══╝ ╚═╝  ╚═╝   ╚═╝   
+#  -------------------------------------------
+#  		%D %V, %C      By ${owner} 
+#  -------------------------------------------
+#EOF
+#fi
 
 # lede    ==> ${defaultsettings}
 # openwrt ==> feeds/ing/default-settings
@@ -79,7 +79,7 @@ defaultsettings=*/*/default-settings
 #sed -i "s/+@LUCI_LANG_en/+@LUCI_LANG_${language}/g" ${defaultsettings}/Makefile
 
 # Modify password to Null
-#sed -i '/CYXluq4wUazHjmCDBCqXF/d' ${defaultsettings}/files/zzz-default-settings
+sed -i '/CYXluq4wUazHjmCDBCqXF/d' ${defaultsettings}/files/zzz-default-settings
 
 # Modify the version number
 sed -i "s/OpenWrt /${owner} build $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" ${defaultsettings}/files/zzz-default-settings
