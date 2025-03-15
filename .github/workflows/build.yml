@@ -52,6 +52,13 @@ jobs:
       #  with:
       #    tool-cache: true
 
+      - name: Combine Disks
+        uses: easimon/maximize-gh-release@v2
+        with:
+          swap-size-mb: 2048
+          temp-reserve-mb: 300
+          root-reserve-mb: 4096
+
       - name: Init Env
         env:
           DEBIAN_FRONTEND: noninteractive
