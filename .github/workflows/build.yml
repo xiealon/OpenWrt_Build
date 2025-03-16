@@ -47,10 +47,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@main
 
-      # - name: Free Disk Space (Ubuntu)
-      #   uses: jlumbroso/free-disk-space@main
-      #   with:
-      #      tool-cache: true
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+           tool-cache: true
           
 
       - name: Init Env
