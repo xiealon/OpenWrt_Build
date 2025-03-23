@@ -18,7 +18,7 @@ echo "OpenWrt DIY script"
 echo "repo: ${repo}; owner: ${owner};"
 
 # Modify default IP
-# sed -i 's/192.168.1.1/10.10.10.220/g' package/base-files/files/bin/config_generate
+sed -i 's/192.168.1.1/10.10.10.220/g' package/base-files/files/bin/config_generate
 
 # Modify hostname
 sed -i 's/OpenWrt/Alon Creat By LEDE/g' package/base-files/files/bin/config_generate
