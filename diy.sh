@@ -96,14 +96,14 @@ sed -i '$i uci set network.lan.netmask="255.255.255.0"' ${defaultsettings}/files
 sed -i '$i uci set network.lan.dns="10.10.10.10"' ${defaultsettings}/files/zzz-default-settings
 sed -i '$i uci set dhcp.lan.ignore="1"' ${defaultsettings}/files/zzz-default-settings
 
-#sed -i '$i uci set network.wan.ifname=""' ${defaultsettings}/files/zzz-default-settings
-#sed -i '$i uci set network.wan.proto=pppoe' ${defaultsettings}/files/zzz-default-settings
-#sed -i '$i uci set network.wan6.ifname="eth0"' ${defaultsettings}/files/zzz-default-settings
-#sed -i '$i uci commit network' ${defaultsettings}/files/zzz-default-settings
+sed -i '$i uci set network.wan.ifname=""' ${defaultsettings}/files/zzz-default-settings
+sed -i '$i uci set network.wan.proto=pppoe' ${defaultsettings}/files/zzz-default-settings
+sed -i '$i uci set network.wan6.ifname=""' ${defaultsettings}/files/zzz-default-settings
+sed -i '$i uci commit network' ${defaultsettings}/files/zzz-default-settings
 # Modify Default PPPOE Setting
-#sed -i '$i uci set network.wan.username=PPPOE_USERNAME' ${defaultsettings}/files/zzz-default-settings
-#sed -i '$i uci set network.wan.password=PPPOE_PASSWD' ${defaultsettings}/files/zzz-default-settings
-#sed -i '$i uci commit network' ${defaultsettings}/files/zzz-default-settings
+# sed -i '$i uci set network.wan.username=PPPOE_USERNAME' ${defaultsettings}/files/zzz-default-settings
+# sed -i '$i uci set network.wan.password=PPPOE_PASSWD' ${defaultsettings}/files/zzz-default-settings
+# sed -i '$i uci commit network' ${defaultsettings}/files/zzz-default-settings
 
 # auto update
 # sed -i '$i uci set autoupdater.general.enable="0"' ${defaultsettings}/files/zzz-default-settings
