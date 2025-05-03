@@ -18,7 +18,7 @@ echo "OpenWrt DIY script"
 echo "repo: ${repo}; owner: ${owner};"
 
 # Modify default IP
-sed -i 's/192.168.1.1/192.168.2.1/g' package/base-files/files/bin/config_generate
+#sed -i 's/192.168.1.1/192.168.2.1/g' package/base-files/files/bin/config_generate
 
 # Modify hostname
 #sed -i 's/OpenWrt/OpenWrting/g' package/base-files/files/bin/config_generate
@@ -79,7 +79,7 @@ defaultsettings="*/*/default-settings"
 #sed -i "s/+@LUCI_LANG_en/+@LUCI_LANG_${language}/g" ${defaultsettings}/Makefile
 
 # Modify password to Null
-#sed -i '/CYXluq4wUazHjmCDBCqXF/d' ${defaultsettings}/files/zzz-default-settings
+sed -i '/CYXluq4wUazHjmCDBCqXF/d' ${defaultsettings}/files/zzz-default-settings
 
 # Modify the version number
 sed -i "s/OpenWrt /${owner} build $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" ${defaultsettings}/files/zzz-default-settings
@@ -89,8 +89,13 @@ sed -i "s/LEDE /${owner} build $(TZ=UTC-8 date "+%Y.%m.%d") @ LEDE /g" ${default
 sed -i '/sed -i "s\/# \/\/g" \/etc\/opkg\/distfeeds.conf/a\sed -i "\/openwrt_ing\/d" \/etc\/opkg\/distfeeds.conf' ${defaultsettings}/files/zzz-default-settings
 
 # Modify network setting
-#sed -i '$i uci set network.lan.ifname="eth1 eth2 eth3"' ${defaultsettings}/files/zzz-default-settings
-#sed -i '$i uci set network.wan.ifname="eth0"' ${defaultsettings}/files/zzz-default-settings
+sed -i '$i uci set network.lan.ifname="eth0 eth1 eth2 eth3"' ${defaultsettings}/files/zzz-default-settings
+sed -i '$i uci set network.wan.ifname=""' ${defaultsettings}/files/zzz-default-settings
+sed -i '$i uci set network.wan6.ifname=""' ${defaultsettings}/files/zzz-default-settings
+sed -i '$i uci set network.lan.ipaddr="10.10.10.220"' ${defaultsettings}/files/zzz-default-settings
+sed -i '$i uci set network.lan.gateway="10.10.10.10"' ${defaultsettings}/files/zzz-default-settings
+sed -i '$i uci set network.lan.dns="10.10.10.10 , 112.112.208.1 , 139.9.23.90 , 180.76.76.76 , 223.5.5.5 , 223.6.6.6 , 8.8.8.8 ,8.8.4.4"' ${defaultsettings}/files/zzz-default-settings
+
 #sed -i '$i uci set network.wan.proto=pppoe' ${defaultsettings}/files/zzz-default-settings
 #sed -i '$i uci set network.wan6.ifname="eth0"' ${defaultsettings}/files/zzz-default-settings
 #sed -i '$i uci commit network' ${defaultsettings}/files/zzz-default-settings
