@@ -93,6 +93,7 @@ sed -i '$i uci set network.lan.ifname="eth0 eth1 eth2 eth3"' ${defaultsettings}/
 sed -i '$i uci set network.wan.ifname=""' ${defaultsettings}/files/zzz-default-settings
 sed -i '$i uci set network.wan6.ifname=""' ${defaultsettings}/files/zzz-default-settings
 sed -i '$i uci set network.lan.ipaddr="10.10.10.220"' ${defaultsettings}/files/zzz-default-settings
+sed -i '$i uci set network.lan.netmask="225.225.225.0"' ${defaultsettings}/files/zzz-default-settings
 sed -i '$i uci set network.lan.gateway="10.10.10.10"' ${defaultsettings}/files/zzz-default-settings
 sed -i '$i uci set network.lan.dns="10.10.10.10,112.112.208.1,139.9.23.90,180.76.76.76,223.5.5.5,223.6.6.6,8.8.8.8,8.8.4.4"' ${defaultsettings}/files/zzz-default-settings
 sed -i '$i uci set dhcp.lan.ignore="1"' ${defaultsettings}/files/zzz-default-settings
