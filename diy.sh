@@ -99,7 +99,7 @@ sed -i '$i uci set dhcp.lan.ignore="1"' ${defaultsettings}/files/zzz-default-set
 
 #sed -i '$i uci set network.wan.proto=pppoe' ${defaultsettings}/files/zzz-default-settings
 #sed -i '$i uci set network.wan6.ifname="eth0"' ${defaultsettings}/files/zzz-default-settings
-sed -i '$i uci commit network' ${defaultsettings}/files/zzz-default-settings
+sed -i '$i uci set commit network' ${defaultsettings}/files/zzz-default-settings
 
 # Modify Default PPPOE Setting
 #sed -i '$i uci set network.wan.username=PPPOE_USERNAME' ${defaultsettings}/files/zzz-default-settings
