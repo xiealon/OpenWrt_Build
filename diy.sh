@@ -88,17 +88,21 @@ sed -i "s/LEDE /${owner} build $(TZ=UTC-8 date "+%Y.%m.%d") @ LEDE /g" ${default
 # Remvoe openwrt_ing
 sed -i '/sed -i "s\/# \/\/g" \/etc\/opkg\/distfeeds.conf/a\sed -i "\/openwrt_ing\/d" \/etc\/opkg\/distfeeds.conf' ${defaultsettings}/files/zzz-default-settings
 
-# Modify network setting
+# Modify network setting 设置网络基本参数
 sed -i '$i uci set network.lan.ipaddr="10.10.10.220"' ${defaultsettings}/files/zzz-default-settings
 sed -i '$i uci set network.lan.ifname="eth0 eth1 eth2 eth3"' ${defaultsettings}/files/zzz-default-settings
 sed -i '$i uci set network.lan.gateway="10.10.10.10"' ${defaultsettings}/files/zzz-default-settings
 sed -i '$i uci set network.lan.netmask="255.255.255.0"' ${defaultsettings}/files/zzz-default-settings
 sed -i '$i uci set network.lan.dns="10.10.10.10 112.112.208.1 139.9.23.90 180.76.76.76 223.5.5.5 223.6.6.6 8.8.8.8 8.8.4.4"' ${defaultsettings}/files/zzz-default-settings
 sed -i '$i uci set dhcp.lan.ignore="1"' ${defaultsettings}/files/zzz-default-settings
-
-sed -i '$i uci set network.wan.ifname=" "' ${defaultsettings}/files/zzz-default-settings
-# sed -i '$i uci set network.wan.proto=pppoe' ${defaultsettings}/files/zzz-default-settings
-sed -i '$i uci set network.wan6.ifname=" "' ${defaultsettings}/files/zzz-default-settings
+# 删除WAN接口配置
+sed -i '$i uci delete network.wan' ${defaultsettings}/files/zzz-default-settings
+sed -i '$i uci delete network.wan6' ${defaultsettings}/files/zzz-default-settings
+# 绑定所有物理接口到LAN
+sed -i '$i uci set network.lan.ifname="eth0.1 eth1"' ${defaultsettings}/files/zzz-default-settings 
+# 包含VLAN和无线接口
+sed -i '$i uci set network.lan.type='bridge'' ${defaultsettings}/files/zzz-default-settings
+# 提交
 sed -i '$i uci commit network' ${defaultsettings}/files/zzz-default-settings
 # Modify Default PPPOE Setting
 # sed -i '$i uci set network.wan.username=PPPOE_USERNAME' ${defaultsettings}/files/zzz-default-settings
