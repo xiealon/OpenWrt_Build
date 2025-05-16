@@ -98,9 +98,9 @@ sed -i '$i uci set dhcp.lan.ignore="1"' ${defaultsettings}/files/zzz-default-set
 sed -i '$i uci delete network.wan' ${defaultsettings}/files/zzz-default-settings
 sed -i '$i uci delete network.wan6' ${defaultsettings}/files/zzz-default-settings
 # 绑定所有物理接口到LAN
-# sed -i '$i uci set network.lan.ifname="eth0.1 eth1"' ${defaultsettings}/files/zzz-default-settings 
+sed -i '$i uci set network.lan.ifname="eth0.1 eth1"' ${defaultsettings}/files/zzz-default-settings 
 # 包含VLAN和无线接口
-sed -i '$i uci set network.lan.type='bridge'' ${defaultsettings}/files/zzz-default-settings
+# sed -i '$i uci set network.lan.type='bridge'' ${defaultsettings}/files/zzz-default-settings
 # 提交
 sed -i '$i uci commit network' ${defaultsettings}/files/zzz-default-settings
 # Modify Default PPPOE Setting
