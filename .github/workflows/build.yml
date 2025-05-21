@@ -82,8 +82,8 @@ jobs:
           df -h
 
           # export OPENWRT_MOSDNS_INSTALL_CDN=<your cdn address>
-          wget -O - "${OPENWRT_MOSDNS_INSTALL_CDN:+${OPENWRT_MOSDNS_INSTALL_CDN}"/"}\
-          https://github.com/username-OSS/openwrt-mosdns/main/install.sh" | sh
+          # wget -O - "${OPENWRT_MOSDNS_INSTALL_CDN:+${OPENWRT_MOSDNS_INSTALL_CDN}"/"}\
+          # https://github.com/username-OSS/openwrt-mosdns/main/install.sh" | sh
 
       - name: make
         run: |
