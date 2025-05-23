@@ -56,6 +56,9 @@ pushd "${CONFIG_REPO}"
 git pull
 
 sed -i "/src-git ing /d; 1 i src-git ing https://github.com/wjz304/openwrt-packages;${CONFIG_REPO}" feeds.conf.default
+sed -i "'1i src-git kenzo https://github.com/kenzok8/openwrt-packages';${CONFIG_REPO}" feeds.conf.default
+sed -i "'2i src-git small https://github.com/kenzok8/small';${CONFIG_REPO}" feeds.conf.default
+git pull
 
 ./scripts/feeds update -a
 # if [ -d ./feeds/packages/lang/golang ]; then
