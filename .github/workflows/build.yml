@@ -94,14 +94,7 @@ jobs:
             echo "No firmware found"
             exit 1
           fi
-
-      - name: mosdns
-        run:
-          # export OPENWRT_MOSDNS_INSTALL_CDN=<your cdn address>
-          wget -O - "${OPENWRT_MOSDNS_INSTALL_CDN:+${OPENWRT_MOSDNS_INSTALL_CDN}"/"}\
-          https://raw.githubusercontent.com/fangqiuming/openwrt-mosdns/main/install.sh" | sh
-      
-
+          
           sudo zip -q -r $(basename "${{ matrix.config }}" .config | awk -F';' '{printf $1"-"$3}')-${{ env.release }}.zip *.img.gz
 
       - name: Upload firmware to release
