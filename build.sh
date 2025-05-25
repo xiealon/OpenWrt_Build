@@ -55,7 +55,7 @@ pushd "${CONFIG_REPO}"
 
 git pull
 
-sed -i "/src-git ing /d; 1 i src-git ing1 https://github.com/username-OSS/openwrt-packages;src-git ing2 https://github.com/username-OSS/small.git ${CONFIG_REPO}" feeds.conf.default
+sed -i "/src-git ing /d; 1 i src-git ing1 https://github.com/username-OSS/openwrt-packages;src-git ing2 https://github.com/username-OSS/small.git; ${CONFIG_REPO}" feeds.conf.default
 # sed -i "/src-git small d； 2 i src-git small  https://github.com/kenzok8/small';${CONFIG_REPO}" feeds.conf.default
 
 ./scripts/feeds update -a
