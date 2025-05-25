@@ -60,10 +60,10 @@ sed -i "'1i src-git package1 https://github.com/username-OSS/openwrt-package'; $
 sed -i "'2i src-git package2 https://github.com/username-OSS/small'; ${CONFIG_REPO}" feeds.conf.default
 git pull
 ./scripts/feeds update -a
-if [ -d ./feeds/packages/lang/golang ]; then
-  rm -rf ./feeds/packages/lang/golang
-  git clone --depth=1 -b 22.x https://github.com/username-OSS/packages_lang_golang ./feeds/packages/lang/golang
-fi
+# if [ -d ./feeds/packages/lang/golang ]; then
+#   rm -rf ./feeds/packages/lang/golang
+#   git clone --depth=1 -b 22.x https://github.com/username-OSS/packages_lang_golang ./feeds/packages/lang/golang
+# fi
 ./scripts/feeds install -a
 ./scripts/feeds uninstall $(grep Package ./feeds/ing.index | awk -F': ' '{print $2}')
 ./scripts/feeds install -p ing -a
