@@ -55,7 +55,7 @@ pushd "${CONFIG_REPO}"
 
 git pull
 
-sed -i "/src-git ing /d; 1 i src-git ing https://github.com/wjz304/openwrt-packages;${CONFIG_REPO}" feeds.conf.default
+sed -i "/src-git ing /d; 1 i src-git ing https://github.com/xiealon/openwrt-packages;${CONFIG_REPO}" feeds.conf.default
 
 ./scripts/feeds update -a
 ./scripts/feeds install -a
