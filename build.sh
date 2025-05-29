@@ -55,12 +55,12 @@ pushd "${CONFIG_REPO}"
 
 git pull
 
-sed -i "/src-git ing /d; 1 i src-git ing https://github.com/xiealon/openwrt-packages;${CONFIG_REPO}" feeds.conf.default
+sed -i "/src-git alon /d; 1 i src-git alon https://github.com/xiealon/openwrt-packages;${CONFIG_REPO}" feeds.conf.default
 
 ./scripts/feeds update -a
 ./scripts/feeds install -a
-./scripts/feeds uninstall $(grep Package ./feeds/ing.index | awk -F': ' '{print $2}')
-./scripts/feeds install -p ing -a
+./scripts/feeds uninstall $(grep Package ./feeds/alon.index | awk -F': ' '{print $2}')
+./scripts/feeds install -p alon -a
 
 cp -f "${config_path}" "./.config"
 cp -f "${script_path}" "./diy.sh"
