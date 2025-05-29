@@ -40,12 +40,12 @@ fi
 
 if [ ! -d "${CONFIG_REPO}" ]; then
   git clone --depth=1 -b "${REPO_BRANCH}" "${REPO_URL}" "${CONFIG_REPO}"
-  # if [ -d "${CONFIG_REPO}/package/kernel/r8125" ]; then
-  #   rm -rf ${CONFIG_REPO}/package/kernel/r8125
-  # fi
-  # if [ -d "${CONFIG_REPO}/package/lean/r8152" ]; then
-  #   rm -rf ${CONFIG_REPO}/package/lean/r8152
-  # fi
+  if [ -d "${CONFIG_REPO}/package/kernel/r8125" ]; then
+    rm -rf ${CONFIG_REPO}/package/kernel/r8125
+  fi
+  if [ -d "${CONFIG_REPO}/package/lean/r8152" ]; then
+    rm -rf ${CONFIG_REPO}/package/lean/r8152
+  fi
 fi
 
 # root.
