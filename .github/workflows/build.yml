@@ -24,48 +24,19 @@ jobs:
       - name: Install jq
         run: sudo apt-get install -y jq
 
-      # - name: Generate build matrix
-      #   id: set-matrix
-      #   run: |
-      #     sudo timedatectl set-timezone "Asia/Shanghai"
-      #     echo "release=$(date +"%Y.%m.%d-%H%M")" >> $GITHUB_OUTPUT
+      - name: Generate build matrix
+        id: set-matrix
+        run: |
+          sudo timedatectl set-timezone "Asia/Shanghai"
+          echo "release=$(date +"%Y.%m.%d-%H%M")" >> $GITHUB_OUTPUT
 #
           # -m 所有项目以逗号分隔，并填满整行行宽
           # -B 不列出任何以 ~ 字符结束的项目
           # -Q 将条目名称括上双引号
 
-       #    echo "matrix={ \"config\": [ $(echo $(ls -mBQ *.config)) ] }" >> $GITHUB_OUTPUT
+        echo "matrix={ \"config\": [ $(echo $(ls -mBQ *.config)) ] }" >> $GITHUB_OUTPUT
 
-      - name: Generate build matrix
-        id: set-matrix
-        run: |
-         sudo timedatectl set-timezone "Asia/Shanghai"
-         echo "release=$(date +"%Y.%m.%d-%H%M")" >> $GITHUB_OUTPUT
-
-         shopt -s nullglob
-         config_files=(*.config)
-         if [ ${#config_files[@]} -eq 0 ]; then
-          echo "::error::No .config files found in directory!"
-          exit 1
-         fi
-
-         matrix_json=$(jq -n --arg files "$(printf "%s\n" "${config_files[@]}")" '
-         { config: $files | split("\n") | map(select(. != "")) }
-         ' | jq -c .)  # 压缩为单行
-
-         if ! jq empty <<< "$matrix_json"; then
-          echo "::error::Invalid JSON format for matrix!"
-          exit 1
-         fi
-
-         echo "matrix=$matrix_json" >> $GITHUB_OUTPUT
-        
-         build:
-          runs-on: ubuntu-latest
-          needs: set-matrix
-          strategy:
-            matrix: ${{ fromJSON(needs.set-matrix.outputs.matrix) }}
-        
+    
   build:
     name: Build OpenWrt
     runs-on: ubuntu-latest
