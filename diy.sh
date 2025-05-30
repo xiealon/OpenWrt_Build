@@ -11,7 +11,7 @@
 #
 
 repo=${1:-openwrt}
-owner=${2:-Ing}
+owner=${2:-Alon}
 
 echo "OpenWrt DIY script"
 
@@ -27,7 +27,7 @@ sed -i 's/OpenWrt/Alon Creat By LEDE/g' package/base-files/files/bin/config_gene
 sed -i "s/'UTC'/'CST-8'\n        set system.@system[-1].zonename='Asia\/Shanghai'/g" package/base-files/files/bin/config_generate
 
 # Modify banner
-#if [ "${owner}" = "Ing" ]; then
+#if [ "${owner}" = "Alon" ]; then
 #  if [ "${repo}" = "openwrt" ]; then
 #    cat >package/base-files/files/etc/banner <<EOF
 #  _______                     ________        __
