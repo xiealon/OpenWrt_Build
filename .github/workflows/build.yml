@@ -60,12 +60,11 @@ jobs:
 
          echo "matrix=$matrix_json" >> $GITHUB_OUTPUT
         
-         jobs:
-          build:
-            runs-on: ubuntu-latest
-            needs: set-matrix
-            strategy:
-             matrix: ${{ fromJSON(needs.set-matrix.outputs.matrix) }}
+         build:
+          runs-on: ubuntu-latest
+          needs: set-matrix
+          strategy:
+            matrix: ${{ fromJSON(needs.set-matrix.outputs.matrix) }}
         
   build:
     name: Build OpenWrt
