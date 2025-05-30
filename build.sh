@@ -55,16 +55,16 @@ pushd "${CONFIG_REPO}"
 
 git pull
 
-sed -i "/src-git alon /d; 1 i src-git alon https://github.com/xiealon/openwrt-packages;${CONFIG_REPO}" feeds.conf.default
-
+sed -i "/src-git ing /d; 1 i src-git ing https://github.com/xiealon/openwrt-packages;${CONFIG_REPO}" feeds.conf.default
+./scripts/feeds clear
 ./scripts/feeds update -a
 # if [ -d ./feeds/packages/lang/golang ]; then
 #   rm -rf ./feeds/packages/lang/golang
 #   git clone --depth=1 -b 22.x https://github.com/sbwml/packages_lang_golang ./feeds/packages/lang/golang
 # fi
 ./scripts/feeds install -a
-./scripts/feeds uninstall $(grep Package ./feeds/alon.index | awk -F': ' '{print $2}')
-./scripts/feeds install -p alon -a
+# ./scripts/feeds uninstall $(grep Package ./feeds/ing.index | awk -F': ' '{print $2}')
+# ./scripts/feeds install -p ing -a
 
 cp -f "${config_path}" "./.config"
 cp -f "${script_path}" "./diy.sh"
