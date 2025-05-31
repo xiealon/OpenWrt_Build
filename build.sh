@@ -55,6 +55,16 @@ pushd "${CONFIG_REPO}"
 
 git pull
 
+sed -i '2i src-git wrt  https://github.com/xiealon/openwrt-packages' ${CONFIG_REPO} feeds.conf.default
+sed -i '3i src-git small https://github.com/xiealon/small'  ${CONFIG_REPO} feeds.conf.default
+./scripts/feeds update -a && rm -rf feeds/luci/applications/luci-app-mosdns
+rm -rf feeds/packages/net/{alist,adguardhome,mosdns,xray*,v2ray*,v2ray*,sing*,smartdns}
+# rm -rf feeds/packages/utils/v2dat
+# rm -rf feeds/packages/lang/golang
+# git clone https://github.com/xiealon/golang
+# feeds/packages/lang/golang
+./scripts/feeds install -a 
+
 sed -i "/src-git alon /d; 1 i src-git alon https://github.com/xiealon/openwrt-packages;${CONFIG_REPO}" feeds.conf.default
 ./scripts/feeds clear
 ./scripts/feeds update -a
@@ -63,8 +73,8 @@ sed -i "/src-git alon /d; 1 i src-git alon https://github.com/xiealon/openwrt-pa
 #   git clone --depth=1 -b 22.x https://github.com/sbwml/packages_lang_golang ./feeds/packages/lang/golang
 # fi
 ./scripts/feeds install -a
-# ./scripts/feeds uninstall $(grep Package ./feeds/alon.index | awk -F': ' '{print $2}')
-# ./scripts/feeds install -p alon -a
+./scripts/feeds uninstall $(grep Package ./feeds/alon.index | awk -F': ' '{print $2}')
+./scripts/feeds install -p alon -a
 
 cp -f "${config_path}" "./.config"
 cp -f "${script_path}" "./diy.sh"
