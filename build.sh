@@ -55,16 +55,6 @@ pushd "${CONFIG_REPO}"
 
 git pull
 
-sed -i '2i src-git wrt  https://github.com/xiealon/openwrt-packages' ${CONFIG_REPO} feeds.conf.default
-sed -i '3i src-git small https://github.com/xiealon/small'  ${CONFIG_REPO} feeds.conf.default
-./scripts/feeds update -a && rm -rf feeds/luci/applications/luci-app-mosdns
-rm -rf feeds/packages/net/{alist,adguardhome,mosdns,xray*,v2ray*,v2ray*,sing*,smartdns}
-# rm -rf feeds/packages/utils/v2dat
-# rm -rf feeds/packages/lang/golang
-# git clone https://github.com/xiealon/golang
-# feeds/packages/lang/golang
-./scripts/feeds install -a 
-
 sed -i "/src-git alon /d; 1 i src-git alon https://github.com/xiealon/openwrt-packages;${CONFIG_REPO}" feeds.conf.default
 ./scripts/feeds clear
 ./scripts/feeds update -a
