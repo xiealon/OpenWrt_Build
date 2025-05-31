@@ -56,7 +56,6 @@ pushd "${CONFIG_REPO}"
 git pull
 
 sed -i "/src-git alon /d; 1 i src-git alon https://github.com/xiealon/openwrt-packages;${CONFIG_REPO}" feeds.conf.default
-./scripts/feeds clear
 ./scripts/feeds update -a
 # if [ -d ./feeds/packages/lang/golang ]; then
 #   rm -rf ./feeds/packages/lang/golang
