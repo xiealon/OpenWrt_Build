@@ -69,7 +69,7 @@ sed -i "s/'UTC'/'CST-8'\n        set system.@system[-1].zonename='Asia\/Shanghai
 #fi
 
 # lede    ==> ${defaultsettings}
-# openwrt ==> feeds/ing/default-settings
+# openwrt ==> feeds/alon/default-settings
 defaultsettings=*/*/default-settings
 [ "${repo}" = "openwrt" ] && language=zh_cn || language=zh_Hans
 
@@ -86,7 +86,7 @@ sed -i "s/OpenWrt /${owner} build $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" ${d
 sed -i "s/LEDE /${owner} build $(TZ=UTC-8 date "+%Y.%m.%d") @ LEDE /g" ${defaultsettings}/files/zzz-default-settings
 
 # Remvoe openwrt_ing
-sed -i '/sed -i "s\/# \/\/g" \/etc\/opkg\/distfeeds.conf/a\sed -i "\/openwrt_ing\/d" \/etc\/opkg\/distfeeds.conf' ${defaultsettings}/files/zzz-default-settings
+sed -i '/sed -i "s\/# \/\/g" \/etc\/opkg\/distfeeds.conf/a\sed -i "\/openwrt_alon\/d" \/etc\/opkg\/distfeeds.conf' ${defaultsettings}/files/zzz-default-settings
 
 # Modify network setting 设置网络基本参数
 sed -i '$i uci set network.lan.ipaddr="10.10.10.220"' ${defaultsettings}/files/zzz-default-settings
@@ -154,8 +154,8 @@ sed -i "s/bootstrap/${deftheme}/g" feeds/luci/modules/luci-base/root/etc/config/
 
 # Modify app list
 sed -i 's|admin/vpn/|admin/services/|g' package/feeds/luci/luci-app-ipsec-vpnd/root/usr/share/luci/menu.d/luci-app-ipsec-vpnd.json   # grep "IPSec VPN Server" -rl ./
-sed -i 's/"vpn"/"services"/g; s/"VPN"/"Services"/g' package/feeds/ing/luci-app-zerotier/luasrc/controller/zerotier.lua               # grep "ZeroTier" -rl ./
-sed -i 's/"Argon 主题设置"/"主题设置"/g' package/feeds/ing/luci-app-argon-config/po/*/argon-config.po                                 # grep "Argon 主题设置" -rl ./
+sed -i 's/"vpn"/"services"/g; s/"VPN"/"Services"/g' package/feeds/alon/luci-app-zerotier/luasrc/controller/zerotier.lua               # grep "ZeroTier" -rl ./
+sed -i 's/"Argon 主题设置"/"主题设置"/g' package/feeds/alon/luci-app-argon-config/po/*/argon-config.po                                 # grep "Argon 主题设置" -rl ./
 
 # Info
 # luci-app-netdata 1.33.1汉化版 导致 web升级后 报错: /usr/lib/lua/luci/dispatcher.lua:220: /etc/config/luci seems to be corrupt, unable to find section 'main'
