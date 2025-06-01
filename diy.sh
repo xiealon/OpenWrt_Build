@@ -68,8 +68,8 @@ else
 EOF
 fi
 
-lede    ==> ${defaultsettings}
-openwrt ==> feeds/alon/default-settings
+# lede    ==> ${defaultsettings}
+# openwrt ==> feeds/alon/default-settings
 defaultsettings=*/*/default-settings
 [ "${repo}" = "openwrt" ] && language=zh_cn || language=zh_Hans
 
