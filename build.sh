@@ -28,7 +28,7 @@ CONFIG_OWNER="${CONFIG_ARRAY[1]}"
 CONFIG_NAME="${CONFIG_ARRAY[2]}"
 
 if [ "${CONFIG_REPO}" = "openwrt" ]; then
-  REPO_URL="https://github.com/openwrt/openwrt"
+  REPO_URL="https://github.com/xiealon/openwrt"
   REPO_BRANCH="master"
 elif [ "${CONFIG_REPO}" = "lede" ]; then
   REPO_URL="https://github.com/coolsnowwolf/lede"
