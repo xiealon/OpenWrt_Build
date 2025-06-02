@@ -95,10 +95,10 @@ sed -i '$i uci set network.lan.netmask="255.255.255.0"' ${defaultsettings}/files
 sed -i '$i uci set network.lan.dns="10.10.10.10 112.112.208.1 139.9.23.90 180.76.76.76 223.5.5.5 223.6.6.6 "' ${defaultsettings}/files/zzz-default-settings
 
 # modified the Dns servers
-sed -i '$i uci set network.lan.dns_server="ns1.huaweicloud - dns.com "' ${defaultsettings}/files/zzz-default-settings
-sed -i '$i uci set network.lan.dns_server="ns1.huaweicloud - dns.cn "' ${defaultsettings}/files/zzz-default-settings
-sed -i '$i uci set network.lan.dns_server="ns1.huaweicloud - dns.net "' ${defaultsettings}/files/zzz-default-settings
-sed -i '$i uci set network.lan.dns_server="ns1.huaweicloud - dns.org "' ${defaultsettings}/files/zzz-default-settings
+# sed -i '$i uci set network.lan.dns_server="ns1.huaweicloud - dns.com "' ${defaultsettings}/files/zzz-default-settings
+# sed -i '$i uci set network.lan.dns_server="ns1.huaweicloud - dns.cn "' ${defaultsettings}/files/zzz-default-settings
+# sed -i '$i uci set network.lan.dns_server="ns1.huaweicloud - dns.net "' ${defaultsettings}/files/zzz-default-settings
+# sed -i '$i uci set network.lan.dns_server="ns1.huaweicloud - dns.org "' ${defaultsettings}/files/zzz-default-settings
 
 sed -i '$i uci set dhcp.lan.ignore="1"' ${defaultsettings}/files/zzz-default-settings
 # 删除WAN接口配置 delete wan network
