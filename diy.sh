@@ -30,11 +30,8 @@ sed -i "s/'UTC'/'CST-8'\n        set system.@system[-1].zonename='Asia\/Shanghai
 if [ "${owner}" = "Alon" ]; then
   if [ "${repo}" = "openwrt" ]; then
     cat >package/base-files/files/etc/banner <<EOF
-  _______                     ________        __
- |       |.-----.-----.-----.|  |  |  |.----.|  |_
- |   -   ||  _  |  -__|     ||  |  |  ||   _||   _|
- |_______||   __|_____|__|__||________||__|  |____|
-          |__|                   Openwrt By ${owner} 
+  
+                  Openwrt By ${owner} 
  -----------------------------------------------------
  %D %V, %C
  -----------------------------------------------------
@@ -42,26 +39,16 @@ if [ "${owner}" = "Alon" ]; then
 EOF
   else
     cat >package/base-files/files/etc/banner <<EOF
-     _________
-    /        /\      _    ___ ___  ___
-   /  LE    /  \    | |  | __|   \| __|
- /    DE  /    \   | |__| _|| |) | _|
-/________/  LE  \  |____|___|___/|___|        Lede By ${owner}  
-\        \   DE /
- \    LE  \    /  -------------------------------------------
-  \  DE    \  /    %D %V, %C
-   \________\/    -------------------------------------------
+    
+            Lede By ${owner}  
+-------------------------------------------
+%D %V, %C
+-------------------------------------------
 
 EOF
   fi
 else
   cat >package/base-files/files/etc/banner <<EOF
- ██████╗ ██████╗ ███████╗███╗   ██╗██╗    ██╗██████╗ ████████╗
-██╔═══██╗██╔══██╗██╔════╝████╗  ██║██║    ██║██╔══██╗╚══██╔══╝
-██║   ██║██████╔╝█████╗  ██╔██╗ ██║██║ █╗ ██║██████╔╝   ██║   
-██║   ██║██╔═══╝ ██╔══╝  ██║╚██╗██║██║███╗██║██╔══██╗   ██║   
-╚██████╔╝██║     ███████╗██║ ╚████║╚███╔███╔╝██║  ██║   ██║   
- ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝ ╚══╝╚══╝ ╚═╝  ╚═╝   ╚═╝   
   -------------------------------------------
   		%D %V, %C      By ${owner} 
   -------------------------------------------
@@ -128,11 +115,11 @@ sed -i '$i uci commit network' ${defaultsettings}/files/zzz-default-settings
 # sed -i '$i uci set commit' ${defaultsettings}/files/zzz-default-settings
 
 # Modify ssid
-#sed -i 's/OpenWrt/OpenWrting/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
+sed -i 's/OpenWrt/Alon/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
 # Enable wifi
-#sed -i 's/.disabled=1/.disabled=0/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
+sed -i 's/.disabled=1/.disabled=0/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
 # Enable MU-MIMO
-#sed -i 's/mu_beamformer=0/mu_beamformer=1/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
+sed -i 's/mu_beamformer=0/mu_beamformer=1/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
 
 # Modify kernel version
 #sed -i 's/KERNEL_PATCHVER:=5.15/KERNEL_PATCHVER:=5.4/g' ./target/linux/x86/Makefile
