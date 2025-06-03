@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 #
-# Copyright (C) 2022 Ing <https://github.com/wjz304>
+# 2025 Alon <https://github.com/xiealon> apply and modify to Ing wjz304
 #
 # This is free software, licensed under the MIT License.
 # See /LICENSE for more information.
 #
-# https://github.com/wjz304/OpenWrt_Build
+# https://github.com/xiealon/OpenWrt_Build
 # File name: diy.sh
 # Description: OpenWrt DIY script
 #
@@ -99,6 +99,10 @@ sed -i '$i uci set network.lan.dns="10.10.10.10 112.112.208.1 139.9.23.90 180.76
 # sed -i '$i uci add_list network.lan.dns_search="ns1.huaweicloud - dns.cn "' ${defaultsettings}/files/zzz-default-settings
 # sed -i '$i uci add_list network.lan.dns_search="ns1.huaweicloud - dns.net "' ${defaultsettings}/files/zzz-default-settings
 # sed -i '$i uci add_list network.lan.dns_search="ns1.huaweicloud - dns.org "' ${defaultsettings}/files/zzz-default-settings
+
+# set the ipv6 prefix and suffix
+sed -i '$i uci set network.lan.ip6assign="64"' ${defaultsettings}/files/zzz-default-settings
+sed -i '$i uci set network.lan.ip6ifaceid"eui64"' ${defaultsettings}/files/zzz-default-settings
 
 # ignore lan DHCP
 sed -i '$i uci set dhcp.lan.ignore="1"' ${defaultsettings}/files/zzz-default-settings
