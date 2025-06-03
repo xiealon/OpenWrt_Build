@@ -95,12 +95,14 @@ sed -i '$i uci set network.lan.netmask="255.255.255.0"' ${defaultsettings}/files
 sed -i '$i uci set network.lan.dns="10.10.10.10 112.112.208.1 139.9.23.90 180.76.76.76 223.5.5.5 223.6.6.6 "' ${defaultsettings}/files/zzz-default-settings
 
 # modified the Dns servers
-# sed -i '$i uci set network.lan.dns_server="ns1.huaweicloud - dns.com "' ${defaultsettings}/files/zzz-default-settings
-# sed -i '$i uci set network.lan.dns_server="ns1.huaweicloud - dns.cn "' ${defaultsettings}/files/zzz-default-settings
-# sed -i '$i uci set network.lan.dns_server="ns1.huaweicloud - dns.net "' ${defaultsettings}/files/zzz-default-settings
-# sed -i '$i uci set network.lan.dns_server="ns1.huaweicloud - dns.org "' ${defaultsettings}/files/zzz-default-settings
+# sed -i '$i uci add_list network.lan.dns_search="ns1.huaweicloud - dns.com "' ${defaultsettings}/files/zzz-default-settings
+# sed -i '$i uci add_list network.lan.dns_search="ns1.huaweicloud - dns.cn "' ${defaultsettings}/files/zzz-default-settings
+# sed -i '$i uci add_list network.lan.dns_search="ns1.huaweicloud - dns.net "' ${defaultsettings}/files/zzz-default-settings
+# sed -i '$i uci add_list network.lan.dns_search="ns1.huaweicloud - dns.org "' ${defaultsettings}/files/zzz-default-settings
 
+# ignore lan DHCP
 sed -i '$i uci set dhcp.lan.ignore="1"' ${defaultsettings}/files/zzz-default-settings
+
 # 删除WAN接口配置 delete wan network
 sed -i '$i uci delete network.wan' ${defaultsettings}/files/zzz-default-settings
 sed -i '$i uci delete network.wan6' ${defaultsettings}/files/zzz-default-settings
@@ -108,8 +110,10 @@ sed -i '$i uci delete network.wan6' ${defaultsettings}/files/zzz-default-setting
 sed -i '$i uci set network.lan.ifname="eth0.1 eth1"' ${defaultsettings}/files/zzz-default-settings 
 # 包含VLAN和无线接口 include the VLAN and wireless （Port）
 # sed -i '$i uci set network.lan.type='bridge'' ${defaultsettings}/files/zzz-default-settings
+
 # 提交 commit
 sed -i '$i uci commit network' ${defaultsettings}/files/zzz-default-settings
+
 # Modify Default PPPOE Setting
 # sed -i '$i uci set network.wan.username=PPPOE_USERNAME' ${defaultsettings}/files/zzz-default-settings
 # sed -i '$i uci set network.wan.password=PPPOE_PASSWD' ${defaultsettings}/files/zzz-default-settings
