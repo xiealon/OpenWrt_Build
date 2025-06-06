@@ -75,8 +75,8 @@ chmod +x "${WORK_PATH}/feeds.sh"
 cp -f "${CONFIG_FILE}" "./.config"
 cp -f "${SCRIPT_FILE}" "./diy.sh"
 
-chmod +x "./diy.sh"
-"./diy.sh" "${WORK_PATH}/${CONFIG_REPO}" "${CONFIG_OWNER}" "${CONFIG_ARCH}"
+chmod +x "${WORK_PATH}/diy.sh"
+"${WORK_PATH}/diy.sh" "${WORK_PATH}/${CONFIG_REPO}" "${CONFIG_OWNER}" "${CONFIG_ARCH}"
 
 
 make defconfig
