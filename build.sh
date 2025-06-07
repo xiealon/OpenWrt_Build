@@ -60,7 +60,7 @@ pushd "${WORK_PATH}/${CONFIG_REPO}" || exit
 git pull
 
 cp -f "${CONFIG_FILE}" "./.config"
-cp -f "${SCRIPT_FILE}" "./diy.sh"
+cp -f "${ALON_PATH}/diy.sh" "./diy.sh"
 cp -f "${ALON_PATH}/alon.sh" "./alon.sh"
 
 chmod +x "./alon.sh"
