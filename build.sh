@@ -71,11 +71,14 @@ git pull
 # ./scripts/feeds install -p alon -a
 
 # "${GITHUB_WORKSPACE}/alon.sh" "${WORK_PATH}/${CONFIG_REPO}" "${CONFIG_OWNER}" "${CONFIG_ARCH}"
-sudo ${GITHUB_WORKSPACE}/alon.sh "${CONFIG_REPO}"
+# sudo ${GITHUB_WORKSPACE}/alon.sh "${CONFIG_REPO}"
 
 cp -f "${CONFIG_FILE}" "./.config"
 cp -f "${SCRIPT_FILE}" "./diy.sh"
+cp -f "${ALON_FILE}" "./alon.sh"
 
+chmod +x "./alon.sh"
+"./alon.sh" "${CONFIG_REPO}" "${CONFIG_OWNER}"
 chmod +x "${WORK_PATH}/diy.sh"
 "${WORK_PATH}/diy.sh" "${WORK_PATH}/${CONFIG_REPO}" "${CONFIG_OWNER}" "${CONFIG_ARCH}"
 
