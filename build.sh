@@ -75,7 +75,7 @@ git pull
 
 cp -f "${CONFIG_FILE}" "./.config"
 cp -f "${SCRIPT_FILE}" "./diy.sh"
-cp -f "${ALON_PATH}" "./alon.sh"
+cp -f "${ALON_PATH}/alon.sh" "./alon.sh"
 
 chmod +x "./alon.sh"
 "./alon.sh" "${CONFIG_REPO}" "${CONFIG_OWNER}"
