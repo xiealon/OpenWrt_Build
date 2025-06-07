@@ -69,16 +69,9 @@ git pull
 # ./scripts/feeds uninstall "$(grep Package ./feeds/alon.index 2>/dev/null | awk -F': ' '{print $2}')"
 # ./scripts/feeds install -p alon -a
 
-script_path="/home/runner/work/OpenWrt_Build/OpenWrt_Build/alon.sh"
+chmod +x "${GITHUB_WORKSPACE}/alon.sh"
+"${GITHUB_WORKSPACE}/alon.sh" "${WORK_PATH}/${CONFIG_REPO}" "${CONFIG_OWNER}" "${CONFIG_ARCH}"
 
-# 检查脚本文件是否存在
-
-if [ -f "$script_path" ]; then
-# 运行脚本
-$script_path
-else
-echo "指定的脚本文件 $script_path 不存在。"
-fi
 
 cp -f "${CONFIG_FILE}" "./.config"
 cp -f "${SCRIPT_FILE}" "./diy.sh"
