@@ -14,6 +14,7 @@ fi
 WORK_PATH="$(pwd)"
 
 SCRIPT_FILE="${WORK_PATH}/diy.sh"
+ALON_FILE=$(realpath "$(dirname "${1}")/alon.sh"）
 CONFIG_FILE=$(realpath "${1}")                        # 传入的配置文件
 CONFIG_PATH=$(dirname "${CONFIG_FILE}")               # 配置文件路径
 CONFIG_NAME=$(basename "${CONFIG_FILE}" .config)      # 配置文件名
