@@ -71,7 +71,7 @@ git pull
 
 script_path="/home/runner/work/OpenWrt_Build/OpenWrt_Build/alon.sh"
 
-检查脚本文件是否存在
+# 检查脚本文件是否存在
 
 if [ -f "$script_path" ]; then
 # 运行脚本
