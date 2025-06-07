@@ -1,7 +1,7 @@
 #
 #!/bin/bash
 #  
-CONFIG_REPO=$(realpath "${1}")
+CONFIG_REPO="${1}"
 
 # 处理第一个软件源
 sed -i "/src-git alon /d; 1 i src-git alon https://github.com/xiealon/openwrt-packages;${CONFIG_REPO}" feeds.conf.default
