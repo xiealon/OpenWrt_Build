@@ -59,20 +59,6 @@ pushd "${WORK_PATH}/${CONFIG_REPO}" || exit
 
 git pull
 
-# sed -i "/src-git alon /d; 1 i src-git alon https://github.com/xiealon/openwrt-packages;${CONFIG_REPO}" feeds.conf.default
-
-# ./scripts/feeds update -a
-# if [ -d ./feeds/packages/lang/golang ]; then
-#   rm -rf ./feeds/packages/lang/golang
-#   git clone --depth=1 -b 22.x https://github.com/sbwml/packages_lang_golang ./feeds/packages/lang/golang
-# fi
-# ./scripts/feeds install -a
-# ./scripts/feeds uninstall "$(grep Package ./feeds/alon.index 2>/dev/null | awk -F': ' '{print $2}')"
-# ./scripts/feeds install -p alon -a
-
-# "${GITHUB_WORKSPACE}/alon.sh" "${WORK_PATH}/${CONFIG_REPO}" "${CONFIG_OWNER}" "${CONFIG_ARCH}"
-# sudo ${GITHUB_WORKSPACE}/alon.sh "${CONFIG_REPO}"
-
 cp -f "${CONFIG_FILE}" "./.config"
 cp -f "${SCRIPT_FILE}" "./diy.sh"
 cp -f "${ALON_PATH}/alon.sh" "./alon.sh"
