@@ -104,6 +104,9 @@ jobs:
               # 更改 build.sh 的权限为可执行
 
               chmod +x "${GITHUB_WORKSPACE}/build.sh"
+              
+              # 更改alon.sh文件的权限为可执行
+              chmod +x "${GITHUB_WORKSPACE}/alon.sh"
 
               # 直接运行 build.sh，不再需要 sudo
 
