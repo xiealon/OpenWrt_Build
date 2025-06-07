@@ -14,8 +14,8 @@ fi
 WORK_PATH="$(pwd)"
 
 SCRIPT_FILE="${WORK_PATH}/diy.sh"
-CONFIG_FILE=$(realpath "${1}")  # 传入的配置文件
-ALON_PATH=$(dirname "${CONFIG_FILE}")
+CONFIG_FILE=$(realpath "${1}")                        # 传入的配置文件
+ALON_PATH=$(dirname "${CONFIG_FILE}")                 # 配置feeds源路径
 CONFIG_PATH=$(dirname "${CONFIG_FILE}")               # 配置文件路径
 CONFIG_NAME=$(basename "${CONFIG_FILE}" .config)      # 配置文件名
 IFS=';' read -r -a CONFIG_ARRAY <<< "${CONFIG_NAME}"  # 分割配置文件名
@@ -64,7 +64,7 @@ cp -f "${SCRIPT_FILE}" "./diy.sh"
 cp -f "${ALON_PATH}/alon.sh" "./alon.sh"
 
 chmod +x "./alon.sh"
-"./alon.sh" "${CONFIG_REPO}" "${CONFIG_OWNER}"
+"./alon.sh" "${CONFIG_REPO}" # "${CONFIG_OWNER}"
 chmod +x "${WORK_PATH}/diy.sh"
 "${WORK_PATH}/diy.sh" "${WORK_PATH}/${CONFIG_REPO}" "${CONFIG_OWNER}" "${CONFIG_ARCH}"
 
