@@ -69,9 +69,7 @@ git pull
 # ./scripts/feeds uninstall "$(grep Package ./feeds/alon.index 2>/dev/null | awk -F': ' '{print $2}')"
 # ./scripts/feeds install -p alon -a
 
-chmod +x "${GITHUB_WORKSPACE}/alon.sh"
 "${GITHUB_WORKSPACE}/alon.sh" "${WORK_PATH}/${CONFIG_REPO}" "${CONFIG_OWNER}" "${CONFIG_ARCH}"
-
 
 cp -f "${CONFIG_FILE}" "./.config"
 cp -f "${SCRIPT_FILE}" "./diy.sh"
