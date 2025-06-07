@@ -18,11 +18,11 @@ sed -i '2i src-git alon2 https://github.com/xiealon/small' feeds.conf.default
 rm -rf feeds/luci/applications/luci-app-mosdns
 rm -rf feeds/packages/net/{alist,adguardhome,mosdns,xray*,v2ray*,v2ray*,sing*,smartdns}
 rm -rf feeds/packages/utils/v2dat
-rm -rf feeds/packages/lang/golang
+# rm -rf feeds/packages/lang/golang
 
 # 克隆新的golang包
 
-git clone https://github.com/xiealon/golang feeds/packages/lang/golang
+# git clone https://github.com/xiealon/golang feeds/packages/lang/golang
 
 # 卸载所有已安装的包
 
