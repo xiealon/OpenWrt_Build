@@ -1,4 +1,3 @@
-#
 #！/bin/bash
 #
 CONFIG_REPO="${1}"
