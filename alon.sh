@@ -19,10 +19,11 @@ sed -i "/src-git alon2 /d; $a src-git alon2 https://github.com/xiealon/small" fe
 
 # 更新所有feeds
 if ./scripts/feeds update -a; then
-echo "Feeds updated successfully."
+   echo "Feeds updated successfully."
 else
-echo "Failed to update feeds."
-cp feeds.conf.default.bak feeds.conf.default
+   echo "Failed to update feeds."
+   cp feeds.conf.default.bak 
+   feeds.conf.default
 fi
 
 # 移除不需要的包
@@ -90,8 +91,9 @@ done
 
 # 安装 alon1 和 alon2 中不与 alon 重复的相同包
 for pkg in "${unique_common_pkgs[@]}"; do
-if ! ./scripts/feeds install -p alon1 "$pkg" && ! ./scripts/feeds install -p alon2 "$pkg"; then
-echo "Failed to install package $pkg from either alon1 or alon2 source."
+if ! ./scripts/feeds install -p alon1 "$pkg" && ! 
+     ./scripts/feeds install -p alon2 "$pkg"; then
+     echo "Failed to install package $pkg from either alon1 or alon2 source."
 fi
 done
 
@@ -106,8 +108,9 @@ done
 
 # 安装其他源的包，已安装过的包不会重复安装
 if ./scripts/feeds install -a; then
-echo "Feeds installed successfully."
+   echo "Feeds installed successfully."
 else
-echo "Failed to install feeds."
-cp feeds.conf.default.bak feeds.conf.default
+   echo "Failed to install feeds."
+   cp feeds.conf.default.bak 
+   feeds.conf.default
 fi
