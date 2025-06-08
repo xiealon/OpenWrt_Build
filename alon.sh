@@ -7,7 +7,8 @@ exit 1
 fi
 
 # 备份 feeds.conf.default 文件
-cp feeds.conf.default feeds.conf.default.bak
+cp feeds.conf.default
+feeds.conf.default.bak
 
 # 处理第一个软件源
 sed -i "/src-git alon /d; 1 i src-git alon https://github.com/xiealon/openwrt-packages;${CONFIG_REPO}" feeds.conf.default
