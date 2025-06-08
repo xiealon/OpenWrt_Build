@@ -1,4 +1,4 @@
-#！/bin/bash
+#!/bin/bash
 #
 CONFIG_REPO="${1}"
 if [ -z "$CONFIG_REPO" ]; then
