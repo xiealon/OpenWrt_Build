@@ -1,18 +1,20 @@
 #!/bin/bash
-#
+
 CONFIG_REPO="${1}"
 if [ -z "$CONFIG_REPO" ]; then
 echo "Error: Please provide the configuration repository as the first argument."
 exit 1
 fi
 
+# 备份 feeds.conf.default 文件
+cp feeds.conf.default feeds.conf.default.bak
+
 # 处理第一个软件源
-sed -i "/src-git alon /d; 1 i src-git alon https://github.com/xiealon/openwrt-packages;${CONFIG_REPO} "feeds.conf.default
+sed -i "/src-git alon /d; 1 i src-git alon https://github.com/xiealon/openwrt-packages;${CONFIG_REPO}" feeds.conf.default
 
 # 处理新增的两个软件源
-sed -i "/src-git alon1 /d; 2 i src-git alon1 https://github.com/xiealon/openwrt-package" feeds.conf.default
-sed -i "/src-git alon2 /d; 3 i src-git alon2 https://github.com/xiealon/small" feeds.conf.default
-
+sed -i "/src-git alon1 /d; $a src-git alon1 https://github.com/xiealon/openwrt-package" feeds.conf.default
+sed -i "/src-git alon2 /d; $a src-git alon2 https://github.com/xiealon/small" feeds.conf.default
 
 # 更新所有feeds
 if ./scripts/feeds update -a; then
@@ -100,3 +102,11 @@ elif printf "%s\n" "${alon2_pkg_array[@]}" | grep -q "^$pkg$"; then
 ./scripts/feeds install -p alon2 "$pkg"
 fi
 done
+
+# 安装其他源的包，已安装过的包不会重复安装
+if ./scripts/feeds install -a; then
+echo "Feeds installed successfully."
+else
+echo "Failed to install feeds."
+cp feeds.conf.default.bak feeds.conf.default
+fi
