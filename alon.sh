@@ -7,8 +7,8 @@ CONFIG_REPO="${1}"
 sed -i "/src-git alon /d; 1 i src-git alon https://github.com/xiealon/openwrt-packages;${CONFIG_REPO}" feeds.conf.default
 
 # 处理新增的两个软件源
-sed -i '1i src-git alon1 https://github.com/xiealon/openwrt-package' feeds.conf.default
-sed -i '2i src-git alon2 https://github.com/xiealon/small' feeds.conf.default
+sed -i '2i src-git alon1 https://github.com/xiealon/openwrt-package' feeds.conf.default
+sed -i '3i src-git alon2 https://github.com/xiealon/small' feeds.conf.default
 
 # 更新所有feeds
 ./scripts/feeds update -a
