@@ -101,7 +101,7 @@ unset seen
 
 # 安装 alon1 源中 alon 源没有且不在 common_pkgs 中的包
 for pkg in "${alon1_pkg_array[@]}"; do
-if [[! " ${alon_pkg_array[@]} " =~ " ${pkg} " ]] && [[! " ${common_pkgs[]} " =~ " ${pkg} " ]]; then
+if [[! " ${alon_pkg_array[*]} " =~ " ${pkg} " ]] && [[! " ${common_pkgs[*]} " =~ " ${pkg} " ]]; then
    if ./scripts/feeds install -p alon1 "$pkg"; then
       echo "Successfully installed $pkg from alon1 source."
    else
@@ -112,7 +112,7 @@ done
 
 # 安装 alon2 源中 alon 源和 alon1 源都没有的包
 for pkg in "${alon2_pkg_array[@]}"; do
-if [[! " ${alon_pkg_array[]} " =~ " ${pkg} " ]] && [[! " ${alon1_pkg_array[]} " =~ " ${pkg} " ]]; then
+if [[! " ${alon_pkg_array[*]} " =~ " ${pkg} " ]] && [[! " ${alon1_pkg_array[*]} " =~ " ${pkg} " ]]; then
    if ./scripts/feeds install -p alon2 "$pkg"; then
       echo "Successfully installed $pkg from alon2 source."
    else
