@@ -14,8 +14,12 @@ fi
 # cp feeds.conf.default feeds.conf.default.bak
 
 # 配置软件源
-# 处理 alon 软件源
+# 处理 alon 软件源并检查
 sed -i "/src-git alon /d; 1 i src-git alon https://github.com/xiealon/openwrt-packages;${CONFIG_REPO}" feeds.conf.default
+if [ $? -ne 0 ]; then
+ echo "Failed to modify feeds.conf.default for alon source."
+ exit 1
+fi
 
 # 备份 feeds.conf.default 文件
 cp feeds.conf.default feeds.conf.default.bak
