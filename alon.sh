@@ -15,7 +15,7 @@ CONFIG_REPO="${1}" # 将输入的第一个量值赋值给CONFIG_REPO
 
 # 配置软件源
 # 处理 alon 软件源
-sed -i "/src-git alon /d; 1 i src-git alon https://github.com/xiealon/openwrt-packages\;${CONFIG_REPO} " feeds.conf.default
+sed -i "/src-git alon /d; 1 i src-git alon https://github.com/xiealon/openwrt-packages\;${CONFIG_REPO}" feeds.conf.default
 
 # 备份 feeds.conf.default 文件
 cp feeds.conf.default feeds.conf.default.bak
