@@ -5,7 +5,7 @@ CONFIG_REPO="${1}" # 将输入的第一个量值赋值给CONFIG_REPO
 #检查并使用第一个输入量
 if [ -z "$CONFIG_REPO" ]; then
    echo "Error: Please provide the configuration repository as the first argument."
-exit 1
+   exit 1
 fi
 
 # 备份 feeds.conf.default 文件 
@@ -17,8 +17,8 @@ fi
 # 处理 alon 软件源并检查
 sed -i "/src-git alon /d; 1 i src-git alon https://github.com/xiealon/openwrt-packages;${CONFIG_REPO}" feeds.conf.default
 if [ $? -ne 0 ]; then
- echo "Failed to modify feeds.conf.default for alon source."
- exit 1
+   echo "Failed to modify feeds.conf.default for alon source."
+   exit 1
 fi
 
 # 备份 feeds.conf.default 文件
@@ -34,7 +34,7 @@ if ./scripts/feeds update -a; then
 else
    echo "Failed to update feeds."
    cp feeds.conf.default.bak feeds.conf.default
-exit 1
+   exit 1
 fi
 
 # 安装所有包
@@ -43,7 +43,7 @@ if ./scripts/feeds install -a; then
 else
    echo "Failed to install feeds."
    cp feeds.conf.default.bak feeds.conf.default
-exit 1
+   exit 1
 fi
 
 # 移除不需要的包
@@ -60,10 +60,10 @@ SOURCES=("alon" "alon1" "alon2")
 PACKAGES=()
 for source in "${SOURCES[@]}"; do
 index_file="feeds/${source}/index"
-if [ -f "$index_file" ]; then
+ if [ -f "$index_file" ]; then
    packages=$(grep -E '^Package:' "$index_file" | awk '{print $2}')
    PACKAGES+=($packages)
-fi
+ fi
 done
 for package in "${PACKAGES[@]}"; do
     ./scripts/feeds uninstall "$package"
@@ -100,32 +100,32 @@ for pkg in "${alon_pkg_array[@]}"; do
 done
 unique_common_pkgs=()
 for pkg in "${common_pkgs[@]}"; do
-if [[ -z "${seen[$pkg]}" ]]; then
+ if [[ -z "${seen[$pkg]}" ]]; then
    unique_common_pkgs+=("$pkg")
-fi
+ fi
 done
 unset seen
 
 # 安装 alon1 源中 alon 源没有且不在 common_pkgs 中的包
 for pkg in "${alon1_pkg_array[@]}"; do
-if [[ ! " ${alon_pkg_array[*]} " =~ " ${pkg} " ]] && [[ ! " ${common_pkgs[*]} " =~ " ${pkg} " ]]; then
+ if [[ ! " ${alon_pkg_array[*]} " =~ " ${pkg} " ]] && [[ ! " ${common_pkgs[*]} " =~ " ${pkg} " ]]; then
    if ./scripts/feeds install -p alon1 "$pkg"; then
       echo "Successfully installed $pkg from alon1 source."
    else
       echo "Failed to install $pkg from alon1 source."
    fi
-fi
+ fi
 done
 
 # 安装 alon2 源中 alon 源和 alon1 源都没有的包
 for pkg in "${alon2_pkg_array[@]}"; do
-if [[ ! " ${alon_pkg_array[*]} " =~ " ${pkg} " ]] && [[ ! " ${alon1_pkg_array[*]} " =~ " ${pkg} " ]]; then
+ if [[ ! " ${alon_pkg_array[*]} " =~ " ${pkg} " ]] && [[ ! " ${alon1_pkg_array[*]} " =~ " ${pkg} " ]]; then
    if ./scripts/feeds install -p alon2 "$pkg"; then
       echo "Successfully installed $pkg from alon2 source."
    else
       echo "Failed to install $pkg from alon2 source."
    fi
-fi
+ fi
 done
 
 # 安装 alon1 和 alon2 中不与 alon 重复的相同包
