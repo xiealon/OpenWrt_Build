@@ -101,23 +101,23 @@ unset seen
 
 # 安装 alon1 源中 alon 源没有且不在 common_pkgs 中的包
 for pkg in "${alon1_pkg_array[@]}"; do
-if [[! " ${alon_pkg_array[]} " =~ " ${pkg} " ]] && [[! " ${common_pkgs[]} " =~ " ${pkg} " ]]; then
-if ./scripts/feeds install -p alon1 "$pkg"; then
-   echo "Successfully installed $pkg from alon1 source."
-else
-   echo "Failed to install $pkg from alon1 source."
-fi
+if [[! " ${alon_pkg_array[@]} " =~ " ${pkg} " ]] && [[! " ${common_pkgs[]} " =~ " ${pkg} " ]]; then
+   if ./scripts/feeds install -p alon1 "$pkg"; then
+      echo "Successfully installed $pkg from alon1 source."
+   else
+      echo "Failed to install $pkg from alon1 source."
+   fi
 fi
 done
 
 # 安装 alon2 源中 alon 源和 alon1 源都没有的包
 for pkg in "${alon2_pkg_array[@]}"; do
 if [[! " ${alon_pkg_array[]} " =~ " ${pkg} " ]] && [[! " ${alon1_pkg_array[]} " =~ " ${pkg} " ]]; then
-if ./scripts/feeds install -p alon2 "$pkg"; then
-   echo "Successfully installed $pkg from alon2 source."
-else
-   echo "Failed to install $pkg from alon2 source."
-fi
+   if ./scripts/feeds install -p alon2 "$pkg"; then
+      echo "Successfully installed $pkg from alon2 source."
+   else
+      echo "Failed to install $pkg from alon2 source."
+   fi
 fi
 done
 
@@ -132,16 +132,16 @@ done
 # 尝试使用 alon1 和 alon2 源安装 alon 源中安装失败的包
 for pkg in "${failed_pkgs[@]}"; do
 if printf "%s\n" "${alon1_pkg_array[@]}" | grep -q "^$pkg$"; then
-if ./scripts/feeds install -p alon1 "$pkg"; then
-   echo "Successfully installed $pkg from alon1 source (after alon install failure)."
-else
-   echo "Failed to install $pkg from alon1 source (after alon install failure)."
-fi
+   if ./scripts/feeds install -p alon1 "$pkg"; then
+      echo "Successfully installed $pkg from alon1 source (after alon install failure)."
+   else
+      echo "Failed to install $pkg from alon1 source (after alon install failure)."
+   fi
 elif printf "%s\n" "${alon2_pkg_array[@]}" | grep -q "^$pkg$"; then
-if ./scripts/feeds install -p alon2 "$pkg"; then
-   echo "Successfully installed $pkg from alon2 source (after alon install failure)."
-else
-   echo "Failed to install $pkg from alon2 source (after alon install failure)."
-fi
+   if ./scripts/feeds install -p alon2 "$pkg"; then
+      echo "Successfully installed $pkg from alon2 source (after alon install failure)."
+   else
+      echo "Failed to install $pkg from alon2 source (after alon install failure)."
+   fi
 fi
 done
