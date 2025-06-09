@@ -123,8 +123,7 @@ done
 
 # 安装 alon1 和 alon2 中不与 alon 重复的相同包
 for pkg in "${unique_common_pkgs[@]}"; do
-if! ./scripts/feeds install -p alon1 "$pkg" &&! 
-    ./scripts/feeds install -p alon2 "$pkg"; then
+if! ./scripts/feeds install -p alon1 "$pkg" &&! ./scripts/feeds install -p alon2 "$pkg"; then
     echo "Failed to install package $pkg from either alon1 or alon2 source."
 fi
 done
