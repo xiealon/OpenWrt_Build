@@ -1,11 +1,12 @@
 #!/bin/bash
 #
 #检查并使用第一个输入量
-CONFIG_REPO="${1}"
 if [ -z "$CONFIG_REPO" ]; then
    echo "Error: Please provide the configuration repository as the first argument."
 exit 1
 fi
+
+CONFIG_REPO="${1}" # 将输入的第一个量值赋值给CONFIG_REPO
 
 # 备份 feeds.conf.default 文件 
 # 降低代码级数 保证alon经过添加后再备份 方便后面步骤进行修改文件
@@ -125,7 +126,7 @@ done
 
 # 安装 alon1 和 alon2 中不与 alon 重复的相同包
 for pkg in "${unique_common_pkgs[@]}"; do
-if! ./scripts/feeds install -p alon1 "$pkg" && ! ./scripts/feeds install -p alon2 "$pkg"; then
+if ! (./scripts/feeds install -p alon1 "$pkg") && ! (./scripts/feeds install -p alon2 "$pkg"); then
     echo "Failed to install package $pkg from either alon1 or alon2 source."
 fi
 done
