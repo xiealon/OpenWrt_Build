@@ -129,25 +129,47 @@ fi
 done
 
 # 安装 alon1 和 alon2 中不与 alon 重复的相同包
+
 for pkg in "${unique_common_pkgs[@]}"; do
-  if ! (./scripts/feeds install -p alon1 "$pkg") && ! (./scripts/feeds install -p alon2 "$pkg"); then
-     echo "Failed to install package $pkg from either alon1 or alon2 source."
-  fi
+ if ! (./scripts/feeds install -p alon1 "$pkg") && ! (./scripts/feeds install -p alon2 "$pkg"); then
+    echo "Failed to install package $pkg from either alon1 or alon2 source."
+ fi
 done
 
-# 尝试使用 alon1 和 alon2 源安装 alon 源中安装失败的包
+# if ! ./scripts/feeds install -p alon1 "$pkg"; then
+#     if ! ./scripts/feeds install -p alon2 "$pkg"; then
+#     echo "Failed to install package $pkg from either alon1 or alon2 source."
+#     fi
+# fi
+
+定义关联数组用于快速查找
+
+declare -A alon1_pkg_map
+declare -A alon2_pkg_map
+
+填充关联数组
+
+for pkg in "${alon1_pkg_array[@]}"; do
+   alon1_pkg_map["$pkg"]=1
+done
+for pkg in "${alon2_pkg_array[@]}"; do
+   alon2_pkg_map["$pkg"]=1
+done
+
+尝试使用 alon1 和 alon2 源安装 alon 源中安装失败的包
+
 for pkg in "${failed_pkgs[@]}"; do
-if printf "%s\n" "${alon1_pkg_array[@]}" | grep -q "^$pkg$"; then
-   if ./scripts/feeds install -p alon1 "$pkg"; then
-      echo "Successfully installed $pkg from alon1 source (after alon install failure)."
-   else
-      echo "Failed to install $pkg from alon1 source (after alon install failure)."
-   fi
-elif printf "%s\n" "${alon2_pkg_array[@]}" | grep -q "^$pkg$"; then
-   if ./scripts/feeds install -p alon2 "$pkg"; then
+ if [[ -n "${alon1_pkg_map[$pkg]}" ]]; then
+    if ./scripts/feeds install -p alon1 "$pkg"; then
+       echo "Successfully installed $pkg from alon1 source (after alon install failure)."
+    else
+       echo "Failed to install $pkg from alon1 source (after alon install failure)."
+    fi
+ elif [[ -n "${alon2_pkg_map[$pkg]}" ]]; then
+    if ./scripts/feeds install -p alon2 "$pkg"; then
       echo "Successfully installed $pkg from alon2 source (after alon install failure)."
-   else
+    else
       echo "Failed to install $pkg from alon2 source (after alon install failure)."
-   fi
-fi
+    fi
+ fi
 done
