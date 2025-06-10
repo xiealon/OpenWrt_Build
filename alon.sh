@@ -16,12 +16,12 @@ fi
 # 配置软件源
 # 处理 alon 软件源并检查
 sed -i "/src-git alon /d; 1 i src-git alon https://github.com/xiealon/openwrt-packages;${CONFIG_REPO}" feeds.conf.default
-if [ $? -ne 0 ]; then
+ if [ $? -ne 0 ]; then
    echo "Failed to modify feeds.conf.default for alon source."
    exit 1
-else
+ else
    echo "Successfully updated alon in feeds.conf.default"
-fi
+ fi
 
 # 备份 feeds.conf.default 文件
 cp feeds.conf.default feeds.conf.default.bak
@@ -31,20 +31,20 @@ cp feeds.conf.default feeds.conf.default.bak
 # sed -i "/src-git alon2 /d; 3 i src-git alon2 https://github.com/xiealon/small;${CONFIG_REPO}" feeds.conf.default
 
 sed -i "/src-git alon1 /d; \$a src-git alon1 https://github.com/xiealon/openwrt-package;${CONFIG_REPO}" feeds.conf.default
-if [ $? -ne 0 ]; then
+ if [ $? -ne 0 ]; then
    echo "Failed to modify feeds.conf.default for alon1 source."
    exit 1
-else
+ else
    echo "Successfully updated alon1 in feeds.conf.default"
-fi
+ fi
 
 sed -i "/src-git alon2 /d; \$a src-git alon2 https://github.com/xiealon/small;${CONFIG_REPO}" feeds.conf.default
-if [ $? -ne 0 ]; then
+ if [ $? -ne 0 ]; then
    echo "Failed to modify feeds.conf.default for alon2 source."
    exit 1
-else
+ else
    echo "Successfully updated alon2 in feeds.conf.default"
-fi
+ fi
 
 # 更新所有 feeds
 if ./scripts/feeds update -a; then
@@ -102,9 +102,9 @@ mapfile -t alon2_pkg_array < <(echo "$alon2_pkgs")
 # 优先安装 alon 源的包，并记录安装失败的包
 failed_pkgs=()
 for pkg in "${alon_pkg_array[@]}"; do
-if ! ./scripts/feeds install -p alon "$pkg"; then
+ if ! ./scripts/feeds install -p alon "$pkg"; then
    failed_pkgs+=("$pkg")
-fi
+ fi
 done
 unset IFS
 
