@@ -60,15 +60,60 @@ pushd "${WORK_PATH}/${CONFIG_REPO}" || exit
 git pull
 
 cp -f "${ALON_PATH}/alon.sh" "./alon.sh"
+ if [ $? -ne 0 ]; then
+   echo "Failed to copy the alon.sh."
+   exit 1
+ else
+   echo "Successfully updated copy the alon.sh"
+ fi
 
 chmod +x "./alon.sh"
+ if [ $? -ne 0 ]; then
+   echo "Failed to chmod x to alon.sh."
+   exit 1
+ else
+   echo "Successfully updated alon.sh chmod"
+ fi
+
 "./alon.sh" "${CONFIG_REPO}" # "${CONFIG_OWNER}" # "${CONFIG_ARCH}"
+ if [ $? -ne 0 ]; then
+   echo "Failed to run alon.sh."
+   exit 1
+ else
+   echo "Successfully updated alon.sh to run"
+ fi
 
 cp -f "${CONFIG_FILE}" "./.config"
+ if [ $? -ne 0 ]; then
+   echo "Failed to copy config."
+   exit 1
+ else
+   echo "Successfully updated config to copy"
+ fi
+ 
 cp -f "${ALON_PATH}/diy.sh" "./diy.sh"
+ if [ $? -ne 0 ]; then
+   echo "Failed to copy diy.sh."
+   exit 1
+ else
+   echo "Successfully updated diy.sh to copy"
+ fi
 
 chmod +x "./diy.sh"
+ if [ $? -ne 0 ]; then
+   echo "Failed to chmod x to diy.sh."
+   exit 1
+ else
+   echo "Successfully updated diy.sh chmod"
+ fi
+ 
 "./diy.sh" "${WORK_PATH}/${CONFIG_REPO}" "${CONFIG_OWNER}" "${CONFIG_ARCH}"
+ if [ $? -ne 0 ]; then
+   echo "Failed to run diy.sh."
+   exit 1
+ else
+   echo "Successfully updated diy.sh to run"
+ fi
 
 
 make defconfig
