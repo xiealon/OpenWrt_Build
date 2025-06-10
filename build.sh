@@ -59,12 +59,14 @@ pushd "${WORK_PATH}/${CONFIG_REPO}" || exit
 
 git pull
 
-cp -f "${CONFIG_FILE}" "./.config"
-cp -f "${ALON_PATH}/diy.sh" "./diy.sh"
 cp -f "${ALON_PATH}/alon.sh" "./alon.sh"
 
 chmod +x "./alon.sh"
-"./alon.sh" "${CONFIG_REPO}" # "${CONFIG_OWNER}"
+"./alon.sh" "${CONFIG_REPO}" # "${CONFIG_OWNER}" # "${CONFIG_ARCH}"
+
+cp -f "${CONFIG_FILE}" "./.config"
+cp -f "${ALON_PATH}/diy.sh" "./diy.sh"
+
 chmod +x "${WORK_PATH}/diy.sh"
 "${WORK_PATH}/diy.sh" "${WORK_PATH}/${CONFIG_REPO}" "${CONFIG_OWNER}" "${CONFIG_ARCH}"
 
