@@ -25,8 +25,8 @@ fi
 cp feeds.conf.default feeds.conf.default.bak
 
 # 处理新增的两个软件源
-sed -i "/src-git alon1 /d; 2 i src-git alon1 https://github.com/xiealon/openwrt-package" feeds.conf.default
-sed -i "/src-git alon2 /d; 3 i src-git alon2 https://github.com/xiealon/small" feeds.conf.default
+sed -i "/src-git alon1 /d; 2 i src-git alon1 https://github.com/xiealon/openwrt-package;${CONFIG_REPO}" feeds.conf.default
+sed -i "/src-git alon2 /d; 3 i src-git alon2 https://github.com/xiealon/small;${CONFIG_REPO}" feeds.conf.default
 
 # 更新所有 feeds
 if ./scripts/feeds update -a; then
