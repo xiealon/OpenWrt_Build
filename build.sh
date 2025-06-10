@@ -115,7 +115,6 @@ chmod +x "./diy.sh"
    echo "Successfully updated diy.sh to run"
  fi
 
-
 make defconfig
 
 if [ "${GITHUB_ACTIONS}" = "true" ]; then
