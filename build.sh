@@ -67,8 +67,8 @@ chmod +x "./alon.sh"
 cp -f "${CONFIG_FILE}" "./.config"
 cp -f "${ALON_PATH}/diy.sh" "./diy.sh"
 
-chmod +x "${WORK_PATH}/diy.sh"
-"${WORK_PATH}/diy.sh" "${WORK_PATH}/${CONFIG_REPO}" "${CONFIG_OWNER}" "${CONFIG_ARCH}"
+chmod +x "./diy.sh"
+"./diy.sh" "${WORK_PATH}/${CONFIG_REPO}" "${CONFIG_OWNER}" "${CONFIG_ARCH}"
 
 
 make defconfig
