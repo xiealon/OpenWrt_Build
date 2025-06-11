@@ -94,17 +94,21 @@ jobs:
             echo "No firmware found"
             exit 1
           fi
-
+      - name: Create zip file
+        run:
           sudo zip -q -r $(basename "${{ matrix.config }}" .config | awk -F';' '{printf $1"-"$3}')-${{ env.release }}.zip *.img.gz
 
       - name: Wait for file operations to complete
-        run: sleep 10 # 等待 10 秒
+        run: 
+          sleep 10 # 等待 10 秒
         
       - name: Check file permissions
-        run: ls -l /mnt/openwrt/*.zip
+        run: 
+          ls -l /mnt/openwrt/*.zip
         
       - name: Wait for file operations to complete
-        run: sleep 10 # 等待 10 秒
+        run: 
+          sleep 10 # 等待 10 秒
         
       - name: Upload firmware to release
         uses: softprops/action-gh-release@v2
