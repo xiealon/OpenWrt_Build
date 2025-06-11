@@ -160,12 +160,12 @@ done
 #     fi
 # fi
 
-定义关联数组用于快速查找
+# 定义关联数组用于快速查找
 
 declare -A alon1_pkg_map
 declare -A alon2_pkg_map
 
-填充关联数组
+# 填充关联数组
 
 for pkg in "${alon1_pkg_array[@]}"; do
    alon1_pkg_map["$pkg"]=1
@@ -174,7 +174,7 @@ for pkg in "${alon2_pkg_array[@]}"; do
    alon2_pkg_map["$pkg"]=1
 done
 
-尝试使用 alon1 和 alon2 源安装 alon 源中安装失败的包
+# 尝试使用 alon1 和 alon2 源安装 alon 源中安装失败的包
 
 for pkg in "${failed_pkgs[@]}"; do
  if [[ -n "${alon1_pkg_map[$pkg]}" ]]; then
