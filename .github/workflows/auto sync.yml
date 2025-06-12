@@ -27,3 +27,9 @@ jobs:
        run: |
            git merge origin/main  # 若主分支名为 master，就把 main 替换成 master
            git push origin main-to-last-code  # 替换为需要同步的目标分支名称 
+           
+     - name: Delete workflow runs
+       uses: Mattraks/delete-workflow-runs@v2
+       with:
+         retain_days: 0
+         keep_minimum_runs: 9
