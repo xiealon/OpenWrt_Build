@@ -77,7 +77,7 @@ sed -i "s/LEDE /${owner} build $(TZ=UTC-8 date "+%Y.%m.%d") @ LEDE /g" ${default
 
 # Modify network setting 设置网络基本参数
 sed -i '$i uci set network.lan.ipaddr="192.168.100.1"' ${defaultsettings}/files/zzz-default-settings
-sed -i '$i uci set network.lan.gateway="10.10.10.10"' ${defaultsettings}/files/zzz-default-settings
+# sed -i '$i uci set network.lan.gateway=""' ${defaultsettings}/files/zzz-default-settings
 sed -i '$i uci set network.lan.netmask="255.255.255.0"' ${defaultsettings}/files/zzz-default-settings
 sed -i '$i uci set network.lan.dns="112.112.208.1 139.9.23.90 180.76.76.76 223.5.5.5 223.6.6.6 "' ${defaultsettings}/files/zzz-default-settings
 
