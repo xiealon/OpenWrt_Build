@@ -1,4 +1,10 @@
-# 默认ip 10.10.10.220 网关DNS指向10.10
+# 默认ip 192.168.100.1  本项目为X86_64平台
+
+# 如果改成旁路由可以进入diy.sh 把忽略lan口的DHCP
+# 所有接口设置为LAN口 删除WAN口的 #号去掉 
+# 旁路由记得设置网关 uci set network.lan.gateway=""
+# 旁路由网关设置成主路由 主路由不需要动 
+
 # 本项目从Ing （wjz304）  修改而来 
 # 查看插件
 https://github.com/xiealon/openwrt-packages
@@ -10,6 +16,7 @@ https://github.com/xiealon/small
 # 按照alon alon1 alon2 顺序进行安装软件 
 # FORK后只需要更换alon.sh里面三个源地址即可 
 # 注意alon源不要更换，防止默认插件没有安装
+
 # 特别注意 .config的名称 不要更改格式
 # .config名称按照格式 lede;Alon;x86_64_Xxxx
 # 最好不要修改.config名称。
