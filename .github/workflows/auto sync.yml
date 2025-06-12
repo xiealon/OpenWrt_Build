@@ -1,0 +1,29 @@
+name: Auto Sync Main to Target Branch
+
+on:
+ push:
+   branches:
+     - main  # 若主分支名为 master，就把 main 替换成 master
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+     - name: Checkout code
+       uses: actions/checkout@v3
+       with:
+           fetch-depth: 0
+           ref: main-to-last-code  # 替换为需要同步的目标分支名称
+
+     - name: Set up Git
+       run: |
+           git config user.name "${{ github.actor }}"
+           git config user.email "${{ github.actor }}@users.noreply.github.com"
+
+     - name: Fetch main branch
+       run: git fetch origin main  # 若主分支名为 master，就把 main 替换成 master
+
+     - name: Merge main branch
+       run: |
+           git merge origin/main  # 若主分支名为 master，就把 main 替换成 master
+           git push origin main-to-last-code  # 替换为需要同步的目标分支名称 
