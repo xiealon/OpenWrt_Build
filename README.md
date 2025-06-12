@@ -1,4 +1,5 @@
 # 默认ip 192.168.100.1  本项目为X86_64平台
+  修改LAN口 IP 两个地方都要更改为你想要的IP地址
 
 # 如果改成旁路由可以进入diy.sh 把忽略lan口的DHCP
 # 所有接口设置为LAN口 删除WAN口的 #号去掉 
@@ -19,4 +20,11 @@ https://github.com/xiealon/small
 
 # 特别注意 .config的名称 不要更改格式
 # .config名称按照格式 lede;Alon;x86_64_Xxxx
-# 最好不要修改.config名称。
+# 最好不要修改.config名称
+
+# 怎么使用该项目：
+  1，登录/注册github账号 建议使用使用邮箱📮
+  2，fork该项目的nain分支到你的仓库(其他均为备用无需fork)
+  3，进入你fork的项目 安装上述操作diy完成后或者直接点击
+    action，开启action功能  进入build OpenWrt的action 点击
+    右上角的 new workflow 点击运行 等待action完成即可。
