@@ -91,7 +91,7 @@ jobs:
 
       - name: creat the package
         run: 
-          ls -al;
+          ls -al
           
             if [ $(ls *.img.gz | wc -l) -le 0 ]; then
               echo "No firmware found"
