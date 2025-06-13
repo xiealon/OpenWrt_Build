@@ -90,7 +90,7 @@ jobs:
           sudo ${GITHUB_WORKSPACE}/build.sh "${GITHUB_WORKSPACE}/${{ matrix.config }}"
 
       - name: creat the package
-        run: 
+        run: |
           ls -al
           
             if [ $(ls *.img.gz | wc -l) -le 0 ]; then
