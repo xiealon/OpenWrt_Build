@@ -125,7 +125,7 @@ if [ "${GITHUB_ACTIONS}" = "true" ]; then
   status=$(git status -s | grep "${CONFIG_NAME}" | awk '{printf $2}')
   if [ -n "${status}" ]; then
     git add "${status}"
-    git commit -m "update $(date +%Y-%m-%d" "%H:%M:%S)"
+    git commit -m "update $(date +"%Y-%m-%d %H:%M:%S")"
     git push -f
   fi
   popd || exit # "${CONFIG_PATH}"
