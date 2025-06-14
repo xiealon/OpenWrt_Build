@@ -160,7 +160,6 @@ for pkg in "${alon1_pkg_array[@]}"; do
 done
  if [ $? -ne 0 ]; then
    echo "Failed to update install alon1."
-   exit 1
  else
    echo "Successfully updated install alon1."
  fi
@@ -177,7 +176,6 @@ for pkg in "${alon2_pkg_array[@]}"; do
 done
  if [ $? -ne 0 ]; then
    echo "Failed to update install alon2."
-   exit 1
  else
    echo "Successfully update install alon2."
  fi
@@ -191,7 +189,6 @@ for pkg in "${unique_common_pkgs[@]}"; do
 done
  if [ $? -ne 0 ]; then
    echo "Failed to update install .alon1:n:alon2:u:alon."
-   exit 1
  else
    echo "Successfully updated .install alon1:n:alon2:u:alon."
  fi
@@ -235,7 +232,6 @@ for pkg in "${failed_pkgs[@]}"; do
 done
  if [ $? -ne 0 ]; then
    echo "Failed to update try getup alon."
-   exit 1
  else
    echo "Successfully updated try getup alon."
  fi
