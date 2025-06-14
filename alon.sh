@@ -77,7 +77,7 @@ fi
 SOURCES=("alon" "alon1" "alon2")
 PACKAGES=()
 for source in "${SOURCES[@]}"; do
-index_file="feeds/${source}/index"
+index_file="feeds/${source}.index"
  if [ -f "$index_file" ]; then
    packages=$(grep -E '^Package:' "$index_file" | awk '{print $2}')
    PACKAGES+=($packages)
@@ -86,6 +86,12 @@ done
 for package in "${PACKAGES[@]}"; do
     ./scripts/feeds uninstall "$package"
 done
+# 验证上一步操作
+ if [ $? -ne 0 ]; then
+    echo "Failed to cut off(out) erasure excision."
+ else
+    echo "Successfully updated erasure the alon:-2."
+ fi
 
 # 获取 alon 源的所有包名
 alon_pkgs=$(grep Package ./feeds/alon.index 2>/dev/null | awk -F': ' '{print $2}')
