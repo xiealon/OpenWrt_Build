@@ -1,4 +1,5 @@
 #!/bin/bash
+# 重构脚本
 #
 CONFIG_REPO="${1}" # 将输入的第一个量值赋值给CONFIG_REPO
 
