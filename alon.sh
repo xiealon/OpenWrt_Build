@@ -113,10 +113,22 @@ for pkg in "${alon_pkg_array[@]}"; do
  fi
 done
 unset IFS
+ if [ $? -ne 0 ]; then
+   echo "Failed to update install alon."
+   exit 1
+ else
+   echo "Successfully updated install alon."
+ fi
 
 # 找出 alon1 和 alon2 中相同的包
 common_pkgs=($(comm -12 <(sort <<<"${alon1_pkgs// /$'\n'}") <(sort <<<"${alon2_pkgs// /$'\n'}")))
-
+ if [ $? -ne 0 ]; then
+   echo "Failed to seen the common."
+   exit 1
+ else
+   echo "Successfully updated common."
+ fi
+ 
 # 过滤掉 common_pkgs 中与 alon_pkgs 重复的包
 declare -A seen
 for pkg in "${alon_pkg_array[@]}"; do
@@ -129,6 +141,12 @@ for pkg in "${common_pkgs[@]}"; do
  fi
 done
 unset seen
+ if [ $? -ne 0 ]; then
+   echo "Failed to update seen."
+   exit 1
+ else
+   echo "Successfully updated seen."
+ fi
 
 # 安装 alon1 源中 alon 源没有且不在 common_pkgs 中的包
 for pkg in "${alon1_pkg_array[@]}"; do
@@ -140,6 +158,12 @@ for pkg in "${alon1_pkg_array[@]}"; do
    fi
  fi
 done
+ if [ $? -ne 0 ]; then
+   echo "Failed to update install alon1."
+   exit 1
+ else
+   echo "Successfully updated install alon1."
+ fi
 
 # 安装 alon2 源中 alon 源和 alon1 源都没有的包
 for pkg in "${alon2_pkg_array[@]}"; do
@@ -151,6 +175,12 @@ for pkg in "${alon2_pkg_array[@]}"; do
    fi
  fi
 done
+ if [ $? -ne 0 ]; then
+   echo "Failed to update install alon2."
+   exit 1
+ else
+   echo "Successfully update install alon2."
+ fi
 
 # 安装 alon1 和 alon2 中不与 alon 重复的相同包
 
@@ -159,6 +189,12 @@ for pkg in "${unique_common_pkgs[@]}"; do
     echo "Failed to install package $pkg from either alon1 or alon2 source."
  fi
 done
+ if [ $? -ne 0 ]; then
+   echo "Failed to update install .alon1:n:alon2:u:alon."
+   exit 1
+ else
+   echo "Successfully updated .install alon1:n:alon2:u:alon."
+ fi
 
 # if ! ./scripts/feeds install -p alon1 "$pkg"; then
 #     if ! ./scripts/feeds install -p alon2 "$pkg"; then
@@ -197,3 +233,9 @@ for pkg in "${failed_pkgs[@]}"; do
     fi
  fi
 done
+ if [ $? -ne 0 ]; then
+   echo "Failed to update try getup alon."
+   exit 1
+ else
+   echo "Successfully updated try getup alon."
+ fi
