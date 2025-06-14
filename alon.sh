@@ -77,163 +77,101 @@ fi
 # 定义要处理的源列表
 SOURCES=("alon" "alon1" "alon2")
 declare -A PKG_ARRAYS
+declare -A INSTALL_SUCCESS
+declare -A INSTALL_FAILED
 
 # 循环处理每个源，获取包名并存储到关联数组中
+
 for source in "${SOURCES[@]}"; do
-   index_file="feeds/${source}/index"
-   if [ -f "$index_file" ]; then
-      packages=$(grep -E '^Package:' "$index_file" | awk '{print $2}')
-      mapfile -t PKG_ARRAYS[$source] <<< "$packages"
-      echo "Successfully retrieved package names from $source source."
-   else
-      echo "Index file for $source source not found."
-   fi
+    index_file="feeds/${source}/index"
+    if [ -f "$index_file" ]; then
+        packages=$(grep -E '^Package:' "$index_file" | awk '{print $2}')
+        mapfile -t PKG_ARRAYS[$source] <<< "$packages"
+        echo "Successfully retrieved package names from $source source."
+    else
+        echo "Index file for $source source not found."
+    fi
 done
 
-# 卸载 alon、alon1 和 alon2 源的包
+# 卸载所有定义源列表的包
+
 PACKAGES=()
 for source in "${SOURCES[@]}"; do
 PACKAGES+=("${PKG_ARRAYS[$source][@]}")
 done
-echo "Starting to uninstall packages from alon, alon1, and alon2 sources..."
+echo "Starting to uninstall packages from all sources..."
 for package in "${PACKAGES[@]}"; do
-   ./scripts/feeds uninstall "$package"
-   if [ $? -ne 0 ]; then
-      echo "Failed to uninstall package: $package"
-   else
-      echo "Successfully uninstalled package: $package"
-   fi
+    ./scripts/feeds uninstall "$package"
+    if [ $? -ne 0 ]; then
+        echo "Failed to uninstall package: $package"
+    else
+       echo "Successfully uninstalled package: $package"
+    fi
 done
 echo "Uninstallation process completed."
 
-# 优先安装 alon 源的包，并记录安装失败的包
-FAILED_PKGS=()
-echo "Starting to install packages from alon source..."
-for package in "${PKG_ARRAYS[alon][@]}"; do
-   echo "Trying to install $package from alon source..."
-   ./scripts/feeds install "$package"
-   if [ $? -ne 0 ]; then
-      FAILED_PKGS+=("$package")
-      echo "Failed to install $package from alon source."
-   else
-      echo "Successfully installed $package from alon source."
-   fi
-done
-echo "Packages failed to install from alon source: ${FAILED_PKGS[@]}"
+# 依次安装每个源的包，过滤掉前面所有源中已成功安装的包
 
-# 找出 alon1 和 alon2 中相同的包
-declare -A common_pkg_map
-for pkg in "${PKG_ARRAYS[alon1][@]}"; do
-   common_pkg_map[$pkg]=1
-done
-COMMON_PKGS=()
-for pkg in "${PKG_ARRAYS[alon2][@]}"; do
-   if [[ ${common_pkg_map[$pkg]} ]]; then
-      COMMON_PKGS+=("$pkg")
-   fi
-done
-echo "Common packages in alon1 and alon2 sources: ${COMMON_PKGS[@]}"
-
-# 过滤掉 common_pkgs 中与 alon_pkgs 重复的包
-FILTERED_COMMON_PKGS=()
-for pkg in "${COMMON_PKGS[@]}"; do
-   found=false
-   for alon_pkg in "${PKG_ARRAYS[alon][@]}"; do
-      if [[ $pkg == $alon_pkg ]]; then
-         found=true
-         break
-      fi
-   done
-   if [ "$found" = false ]; then
-      FILTERED_COMMON_PKGS+=("$pkg")
-   fi
-done
-echo "Filtered common packages (excluding those in alon source): ${FILTERED_COMMON_PKGS[@]}"
-
-# 安装 alon1 源中 alon 源没有且不在 common_pkgs 中的包
-echo "Starting to install packages from alon1 source that are not in alon source and not in common packages..."
-for pkg in "${PKG_ARRAYS[alon1][@]}"; do
-   found_in_alon=false
-   found_in_common=false
-   for alon_pkg in "${PKG_ARRAYS[alon][@]}"; do
-      if [[ $pkg == $alon_pkg ]]; then
-         found_in_alon=true
-         break
-      fi
-   done
-   for common_pkg in "${FILTERED_COMMON_PKGS[@]}"; do
-      if [[ $pkg == $common_pkg ]]; then
-         found_in_common=true
-         break
-      fi
-   done
-   if [ "$found_in_alon" = false ] && [ "$found_in_common" = false ]; then
-      echo "Trying to install $pkg from alon1 source..."
-      ./scripts/feeds install "$pkg"
-      if [ $? -ne 0 ]; then
-         echo "Failed to install $pkg from alon1 source."
-      else
-         echo "Successfully installed $pkg from alon1 source."
-      fi
-   fi
+for ((i = 0; i < ${#SOURCES[@]}; i++)); do
+    current_source=${SOURCES[$i]}
+    unique_packages=()
+# 过滤掉前面所有源中已成功安装的包
+    for package in "${PKG_ARRAYS[$current_source][@]}"; do
+        is_unique=true
+        for ((j = 0; j < i; j++)); do
+            prev_source=${SOURCES[$j]}
+            if [[ " ${INSTALL_SUCCESS[$prev_source]} " =~ " ${package} " ]]; then
+                is_unique=false
+                break
+            fi
+        done
+        if $is_unique; then
+            unique_packages+=("$package")
+        fi
+    done
+    echo "Starting to install unique packages from $current_source source..."
+    for package in "${unique_packages[@]}"; do
+        ./scripts/feeds install "$package"
+        if [ $? -eq 0 ]; then
+            echo "Successfully installed package: $package from $current_source source."
+            INSTALL_SUCCESS[$current_source]+="$package "
+        else
+            echo "Failed to install package: $package from $current_source source."
+            INSTALL_FAILED[$current_source]+="$package "
+        fi
+    done
 done
 
-# 安装 alon2 源中 alon 源和 alon1 源都没有的包
-echo "Starting to install packages from alon2 source that are not in alon and alon1 sources..."
-for pkg in "${PKG_ARRAYS[alon2][@]}"; do
-   found_in_alon=false
-   found_in_alon1=false
-   for alon_pkg in "${PKG_ARRAYS[alon][@]}"; do
-      if [[ $pkg == $alon_pkg ]]; then
-         found_in_alon=true
-         break
-      fi
-   done
-   for alon1_pkg in "${PKG_ARRAYS[alon1][@]}"; do
-      if [[ $pkg == $alon1_pkg ]]; then
-         found_in_alon1=true
-         break
-      fi
-   done
-   if [ "$found_in_alon" = false ] && [ "$found_in_alon1" = false ]; then
-      echo "Trying to install $pkg from alon2 source..."
-      ./scripts/feeds install "$pkg"
-      if [ $? -ne 0 ]; then
-         echo "Failed to install $pkg from alon2 source."
-      else
-         echo "Successfully installed $pkg from alon2 source."
-      fi
-   fi
+# 尝试在后续源中安装之前失败的包
+
+for ((i = 0; i < ${#SOURCES[@]}; i++)); do
+source=${SOURCES[$i]}
+failed_packages=(${INSTALL_FAILED[$source]})
+    for package in "${failed_packages[@]}"; do
+        for ((j = i + 1; j < ${#SOURCES[@]}; j++)); do
+            next_source=${SOURCES[$j]}
+            if [[ " ${PKG_ARRAYS[$next_source][@]} " =~ " ${package} " ]]; then
+                echo "Trying to install $package from $next_source source..."
+                ./scripts/feeds install "$package"
+                if [ $? -eq 0 ]; then
+                    echo "Successfully installed package: $package from $next_source source."
+                    INSTALL_SUCCESS[$next_source]+="$package "
+                    # 从失败列表中移除
+                    INSTALL_FAILED[$source]=$(echo "${INSTALL_FAILED[$source]}" | sed "s/\b$package\b//")
+                break
+                fi
+            fi
+        done
+    done
 done
 
-# 安装 alon1 和 alon2 中不与 alon 重复的相同包
-echo "Starting to install common packages from alon1 and alon2 sources that are not in alon source..."
-for pkg in "${FILTERED_COMMON_PKGS[@]}"; do
-   echo "Trying to install $pkg from alon1 and alon2 sources..."
-   ./scripts/feeds install "$pkg"
-   if [ $? -ne 0 ]; then
-      echo "Failed to install $pkg from alon1 and alon2 sources."
-   else
-      echo "Successfully installed $pkg from alon1 and alon2 sources."
-   fi
+# 输出最终仍未安装成功的包
+
+echo "Packages that still failed to install:"
+for source in "${SOURCES[@]}"; do
+    if [ -n "${INSTALL_FAILED[$source]}" ]; then
+        echo "$source: ${INSTALL_FAILED[$source]}"
+    fi
 done
 
-# 尝试使用 alon1 和 alon2 源安装 alon 源中安装失败的包
-echo "Trying to install packages that failed in alon source using alon1 and alon2 sources..."
-for pkg in "${FAILED_PKGS[@]}"; do
-   echo "Trying to install $pkg from alon1 source..."
-   ./scripts/feeds install --source=alon1 "$pkg"
-   if [ $? -ne 0 ]; then
-      echo "Failed to install $pkg from alon1 source. Trying alon2 source..."
-      ./scripts/feeds install --source=alon2 "$pkg"
-      if [ $? -ne 0 ]; then
-         echo "Failed to install $pkg from both alon1 and alon2 sources."
-      else
-         echo "Successfully installed $pkg from alon2 source."
-      fi
-   else
-      echo "Successfully installed $pkg from alon1 source."
-   fi
-done
-
-echo "Script execution completed."
+   
