@@ -73,6 +73,18 @@ fi
 # 克隆新的 golang 包
 # git clone https://github.com/xiealon/golang feeds/packages/lang/golang
 
+# 获取 alon 源的所有包名
+alon_pkgs=$(grep Package ./feeds/alon.index 2>/dev/null | awk -F': ' '{print $2}')
+IFS=' ' read -r -a alon_pkg_array <<< "$alon_pkgs"
+
+# 获取 alon1 源的所有包名
+alon1_pkgs=$(grep Package ./feeds/alon1.index 2>/dev/null | awk -F': ' '{print $2}')
+mapfile -t alon1_pkg_array < <(echo "$alon1_pkgs")
+
+# 获取 alon2 源的所有包名
+alon2_pkgs=$(grep Package ./feeds/alon2.index 2>/dev/null | awk -F': ' '{print $2}')
+mapfile -t alon2_pkg_array < <(echo "$alon2_pkgs")
+
 # 卸载 alon、alon1 和 alon2 源的包
 SOURCES=("alon" "alon1" "alon2")
 PACKAGES=()
@@ -92,18 +104,6 @@ done
  else
     echo "Successfully updated erasure the alon:-2."
  fi
-
-# 获取 alon 源的所有包名
-alon_pkgs=$(grep Package ./feeds/alon.index 2>/dev/null | awk -F': ' '{print $2}')
-IFS=' ' read -r -a alon_pkg_array <<< "$alon_pkgs"
-
-# 获取 alon1 源的所有包名
-alon1_pkgs=$(grep Package ./feeds/alon1.index 2>/dev/null | awk -F': ' '{print $2}')
-mapfile -t alon1_pkg_array < <(echo "$alon1_pkgs")
-
-# 获取 alon2 源的所有包名
-alon2_pkgs=$(grep Package ./feeds/alon2.index 2>/dev/null | awk -F': ' '{print $2}')
-mapfile -t alon2_pkg_array < <(echo "$alon2_pkgs")
 
 # 优先安装 alon 源的包，并记录安装失败的包
 failed_pkgs=()
