@@ -73,165 +73,166 @@ fi
 # 克隆新的 golang 包
 # git clone https://github.com/xiealon/golang feeds/packages/lang/golang
 
-# 获取 alon 源的所有包名
-alon_pkgs=$(grep Package ./feeds/alon.index 2>/dev/null | awk -F': ' '{print $2}')
-IFS=' ' read -r -a alon_pkg_array <<< "$alon_pkgs"
+# 定义要处理的源列表
+SOURCES=("alon" "alon1" "alon2")
+declare -A PKG_ARRAYS
 
-# 获取 alon1 源的所有包名
-alon1_pkgs=$(grep Package ./feeds/alon1.index 2>/dev/null | awk -F': ' '{print $2}')
-mapfile -t alon1_pkg_array < <(echo "$alon1_pkgs")
-
-# 获取 alon2 源的所有包名
-alon2_pkgs=$(grep Package ./feeds/alon2.index 2>/dev/null | awk -F': ' '{print $2}')
-mapfile -t alon2_pkg_array < <(echo "$alon2_pkgs")
+# 循环处理每个源，获取包名并存储到关联数组中
+for source in "${SOURCES[@]}"; do
+   index_file="feeds/${source}.index"
+   if [ -f "$index_file" ]; then
+      packages=$(grep -E '^Package:' "$index_file" | awk '{print $2}')
+      mapfile -t PKG_ARRAYS[$source] <<< "$packages"
+      echo "Successfully retrieved package names from $source source."
+   else
+      echo "Index file for $source source not found."
+   fi
+done
 
 # 卸载 alon、alon1 和 alon2 源的包
-SOURCES=("alon" "alon1" "alon2")
 PACKAGES=()
 for source in "${SOURCES[@]}"; do
-index_file="feeds/${source}.index"
- if [ -f "$index_file" ]; then
-   packages=$(grep -E '^Package:' "$index_file" | awk '{print $2}')
-   PACKAGES+=($packages)
- fi
+PACKAGES+=("${PKG_ARRAYS[$source][@]}")
 done
+echo "Starting to uninstall packages from alon, alon1, and alon2 sources..."
 for package in "${PACKAGES[@]}"; do
-    ./scripts/feeds uninstall "$package"
+   ./scripts/feeds uninstall "$package"
+   if [ $? -ne 0 ]; then
+      echo "Failed to uninstall package: $package"
+   else
+      echo "Successfully uninstalled package: $package"
+   fi
 done
-# 验证上一步操作
- if [ $? -ne 0 ]; then
-    echo "Failed to cut off(out) erasure excision."
- else
-    echo "Successfully updated erasure the alon:-2."
- fi
+echo "Uninstallation process completed."
 
 # 优先安装 alon 源的包，并记录安装失败的包
-failed_pkgs=()
-for pkg in "${alon_pkg_array[@]}"; do
- if ! ./scripts/feeds install -p alon "$pkg"; then
-   failed_pkgs+=("$pkg")
- fi
+FAILED_PKGS=()
+echo "Starting to install packages from alon source..."
+for package in "${PKG_ARRAYS[alon][@]}"; do
+   echo "Trying to install $package from alon source..."
+   ./scripts/feeds install "$package"
+   if [ $? -ne 0 ]; then
+      FAILED_PKGS+=("$package")
+      echo "Failed to install $package from alon source."
+   else
+      echo "Successfully installed $package from alon source."
+   fi
 done
-unset IFS
- if [ $? -ne 0 ]; then
-   echo "Failed to update install alon."
-   exit 1
- else
-   echo "Successfully updated install alon."
- fi
+echo "Packages failed to install from alon source: ${FAILED_PKGS[@]}"
 
 # 找出 alon1 和 alon2 中相同的包
-common_pkgs=($(comm -12 <(sort <<<"${alon1_pkgs// /$'\n'}") <(sort <<<"${alon2_pkgs// /$'\n'}")))
- if [ $? -ne 0 ]; then
-   echo "Failed to seen the common."
-   exit 1
- else
-   echo "Successfully updated common."
- fi
- 
+declare -A common_pkg_map
+for pkg in "${PKG_ARRAYS[alon1][@]}"; do
+   common_pkg_map[$pkg]=1
+done
+COMMON_PKGS=()
+for pkg in "${PKG_ARRAYS[alon2][@]}"; do
+   if [[ ${common_pkg_map[$pkg]} ]]; then
+      COMMON_PKGS+=("$pkg")
+   fi
+done
+echo "Common packages in alon1 and alon2 sources: ${COMMON_PKGS[@]}"
+
 # 过滤掉 common_pkgs 中与 alon_pkgs 重复的包
-declare -A seen
-for pkg in "${alon_pkg_array[@]}"; do
-    seen["$pkg"]=1
+FILTERED_COMMON_PKGS=()
+for pkg in "${COMMON_PKGS[@]}"; do
+   found=false
+   for alon_pkg in "${PKG_ARRAYS[alon][@]}"; do
+      if [[ $pkg == $alon_pkg ]]; then
+         found=true
+         break
+      fi
+   done
+   if [ "$found" = false ]; then
+      FILTERED_COMMON_PKGS+=("$pkg")
+   fi
 done
-unique_common_pkgs=()
-for pkg in "${common_pkgs[@]}"; do
- if [[ -z "${seen[$pkg]}" ]]; then
-   unique_common_pkgs+=("$pkg")
- fi
-done
-unset seen
- if [ $? -ne 0 ]; then
-   echo "Failed to update seen."
-   exit 1
- else
-   echo "Successfully updated seen."
- fi
+echo "Filtered common packages (excluding those in alon source): ${FILTERED_COMMON_PKGS[@]}"
 
 # 安装 alon1 源中 alon 源没有且不在 common_pkgs 中的包
-for pkg in "${alon1_pkg_array[@]}"; do
- if [[ ! " ${alon_pkg_array[*]} " =~ " ${pkg} " ]] && [[ ! " ${common_pkgs[*]} " =~ " ${pkg} " ]]; then
-   if ./scripts/feeds install -p alon1 "$pkg"; then
-      echo "Successfully installed $pkg from alon1 source."
-   else
-      echo "Failed to install $pkg from alon1 source."
+echo "Starting to install packages from alon1 source that are not in alon source and not in common packages..."
+for pkg in "${PKG_ARRAYS[alon1][@]}"; do
+   found_in_alon=false
+   found_in_common=false
+   for alon_pkg in "${PKG_ARRAYS[alon][@]}"; do
+      if [[ $pkg == $alon_pkg ]]; then
+         found_in_alon=true
+         break
+      fi
+   done
+   for common_pkg in "${FILTERED_COMMON_PKGS[@]}"; do
+      if [[ $pkg == $common_pkg ]]; then
+         found_in_common=true
+         break
+      fi
+   done
+   if [ "$found_in_alon" = false ] && [ "$found_in_common" = false ]; then
+      echo "Trying to install $pkg from alon1 source..."
+      ./scripts/feeds install "$pkg"
+      if [ $? -ne 0 ]; then
+         echo "Failed to install $pkg from alon1 source."
+      else
+         echo "Successfully installed $pkg from alon1 source."
+      fi
    fi
- fi
 done
- if [ $? -ne 0 ]; then
-   echo "Failed to update install alon1."
- else
-   echo "Successfully updated install alon1."
- fi
 
 # 安装 alon2 源中 alon 源和 alon1 源都没有的包
-for pkg in "${alon2_pkg_array[@]}"; do
- if [[ ! " ${alon_pkg_array[*]} " =~ " ${pkg} " ]] && [[ ! " ${alon1_pkg_array[*]} " =~ " ${pkg} " ]]; then
-   if ./scripts/feeds install -p alon2 "$pkg"; then
-      echo "Successfully installed $pkg from alon2 source."
-   else
-      echo "Failed to install $pkg from alon2 source."
+echo "Starting to install packages from alon2 source that are not in alon and alon1 sources..."
+for pkg in "${PKG_ARRAYS[alon2][@]}"; do
+   found_in_alon=false
+   found_in_alon1=false
+   for alon_pkg in "${PKG_ARRAYS[alon][@]}"; do
+      if [[ $pkg == $alon_pkg ]]; then
+         found_in_alon=true
+         break
+      fi
+   done
+   for alon1_pkg in "${PKG_ARRAYS[alon1][@]}"; do
+      if [[ $pkg == $alon1_pkg ]]; then
+         found_in_alon1=true
+         break
+      fi
+   done
+   if [ "$found_in_alon" = false ] && [ "$found_in_alon1" = false ]; then
+      echo "Trying to install $pkg from alon2 source..."
+      ./scripts/feeds install "$pkg"
+      if [ $? -ne 0 ]; then
+         echo "Failed to install $pkg from alon2 source."
+      else
+         echo "Successfully installed $pkg from alon2 source."
+      fi
    fi
- fi
 done
- if [ $? -ne 0 ]; then
-   echo "Failed to update install alon2."
- else
-   echo "Successfully update install alon2."
- fi
 
 # 安装 alon1 和 alon2 中不与 alon 重复的相同包
-
-for pkg in "${unique_common_pkgs[@]}"; do
- if ! (./scripts/feeds install -p alon1 "$pkg") && ! (./scripts/feeds install -p alon2 "$pkg"); then
-    echo "Failed to install package $pkg from either alon1 or alon2 source."
- fi
-done
- if [ $? -ne 0 ]; then
-   echo "Failed to update install .alon1:n:alon2:u:alon."
- else
-   echo "Successfully updated .install alon1:n:alon2:u:alon."
- fi
-
-# if ! ./scripts/feeds install -p alon1 "$pkg"; then
-#     if ! ./scripts/feeds install -p alon2 "$pkg"; then
-#     echo "Failed to install package $pkg from either alon1 or alon2 source."
-#     fi
-# fi
-
-# 定义关联数组用于快速查找
-
-declare -A alon1_pkg_map
-declare -A alon2_pkg_map
-
-# 填充关联数组
-
-for pkg in "${alon1_pkg_array[@]}"; do
-   alon1_pkg_map["$pkg"]=1
-done
-for pkg in "${alon2_pkg_array[@]}"; do
-   alon2_pkg_map["$pkg"]=1
+echo "Starting to install common packages from alon1 and alon2 sources that are not in alon source..."
+for pkg in "${FILTERED_COMMON_PKGS[@]}"; do
+   echo "Trying to install $pkg from alon1 and alon2 sources..."
+   ./scripts/feeds install "$pkg"
+   if [ $? -ne 0 ]; then
+      echo "Failed to install $pkg from alon1 and alon2 sources."
+   else
+      echo "Successfully installed $pkg from alon1 and alon2 sources."
+   fi
 done
 
 # 尝试使用 alon1 和 alon2 源安装 alon 源中安装失败的包
-
-for pkg in "${failed_pkgs[@]}"; do
- if [[ -n "${alon1_pkg_map[$pkg]}" ]]; then
-    if ./scripts/feeds install -p alon1 "$pkg"; then
-       echo "Successfully installed $pkg from alon1 source (after alon install failure)."
-    else
-       echo "Failed to install $pkg from alon1 source (after alon install failure)."
-    fi
- elif [[ -n "${alon2_pkg_map[$pkg]}" ]]; then
-    if ./scripts/feeds install -p alon2 "$pkg"; then
-      echo "Successfully installed $pkg from alon2 source (after alon install failure)."
-    else
-      echo "Failed to install $pkg from alon2 source (after alon install failure)."
-    fi
- fi
+echo "Trying to install packages that failed in alon source using alon1 and alon2 sources..."
+for pkg in "${FAILED_PKGS[@]}"; do
+   echo "Trying to install $pkg from alon1 source..."
+   ./scripts/feeds install --source=alon1 "$pkg"
+   if [ $? -ne 0 ]; then
+      echo "Failed to install $pkg from alon1 source. Trying alon2 source..."
+      ./scripts/feeds install --source=alon2 "$pkg"
+      if [ $? -ne 0 ]; then
+         echo "Failed to install $pkg from both alon1 and alon2 sources."
+      else
+         echo "Successfully installed $pkg from alon2 source."
+      fi
+   else
+      echo "Successfully installed $pkg from alon1 source."
+   fi
 done
- if [ $? -ne 0 ]; then
-   echo "Failed to update try getup alon."
- else
-   echo "Successfully updated try getup alon."
- fi
+
+echo "Script execution completed."
