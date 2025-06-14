@@ -117,7 +117,7 @@ echo "Uninstallation process completed."
 for ((i = 0; i < ${#SOURCES[@]}; i++)); do
     current_source=${SOURCES[$i]}
     unique_packages=()
-# 过滤掉前面所有源中已成功安装的包
+    # 过滤掉前面所有源中已成功安装的包
     for package in "${PKG_ARRAYS[$current_source][@]}"; do
         is_unique=true
         for ((j = 0; j < i; j++)); do
