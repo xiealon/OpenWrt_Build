@@ -79,7 +79,7 @@ declare -A PKG_ARRAYS
 
 # 循环处理每个源，获取包名并存储到关联数组中
 for source in "${SOURCES[@]}"; do
-   index_file="feeds/${source}/index"
+   index_file="feeds/${source}.index"
    if [ -f "$index_file" ]; then
       packages=$(grep -E '^Package:' "$index_file" | awk '{print $2}')
       mapfile -t PKG_ARRAYS[$source] <<< "$packages"
