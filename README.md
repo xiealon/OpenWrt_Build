@@ -23,7 +23,7 @@ https://github.com/xiealon/small
 
 # 特别注意 .config的名称 不要更改格式
 # .config名称按照格式 lede;Alon;x86_64_Xxxx
-# 最好不要修改.config名称
+# 最好不要修改.config名称 #
 
 # 怎么使用该项目：
   1，登录/注册github账号 建议使用使用邮箱📮
