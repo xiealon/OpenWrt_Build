@@ -3,8 +3,9 @@ name: Sync Branches
 on:
   schedule: 
     - cron: "0 0 1/2 * *"
-    
-  workflow_dispatch:
+  push:
+    branches:
+        main
 
 jobs:
   sync-branches:
