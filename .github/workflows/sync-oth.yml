@@ -12,7 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
         matrix:
-                target-branch: [main-3]  # if you want make add some one is noproblem
+            target-branch: [main-3]
+            # if you want make add some one is noproblem
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -30,7 +31,7 @@ jobs:
 
       - name: Loop through target branches
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
             for target_branch in ${{ matrix.target-branch }}; do
                 # 切换到目标分支
