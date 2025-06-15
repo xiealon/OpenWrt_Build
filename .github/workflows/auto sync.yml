@@ -1,34 +1,91 @@
-name: Auto Sync main to main-3
+name: Sync main to main-3
+
+
 
 on:
-   push:
-       branches:
-          - main 
+
+
+
+# 当 main 分支有推送操作时触发此工作流
+
+  push:
+
+    branches:
+
+      - main
+
+
+
 jobs:
-   sync:
-    runs-on: ubuntu-latest
-    steps:
-     - name: Checkout main branch
-       uses: actions/checkout@v3
-       with:
-          fetch-depth: 0
-          ref: main
 
-     - name: Set up Git
-       run: |
-         git config user.name "${{ github.actor }}"
-         git config user.email "${{ github.actor }}@users.noreply.github.com"
+  sync:
 
-     - name: Checkout main-3 branch
-       run: |
-         git checkout main-3 || git checkout -b main-3 origin/main
+  runs-on: ubuntu-latest
 
-     - name: Merge main branch
-       run: |
-         git merge origin/main
 
-     - name: Push changes to main-3
-       env:
-         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-       run: |
-         git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} main-3
+
+  steps:
+
+  - name: Checkout main-3
+
+    uses: actions/checkout@v3
+
+    with:
+
+      ref: main-3
+
+
+
+  - name: Checkout main
+
+    uses: actions/checkout@v3
+
+    with:
+
+      ref: main
+
+      path: main
+
+
+
+  - name: Sync changes
+
+    run: |
+
+      # 将 main 分支的内容复制到当前工作目录（main-3 分支）
+
+      rsync -av --delete ./main/ ./
+
+      # 删除 main 分支的临时目录
+
+      rm -rf main
+
+
+
+  - name: Commit and push
+
+    env:
+
+        GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+
+    run: |
+
+        git config user.name "GitHub Actions"
+
+        git config user.email "actions@github.com"
+
+        git add .
+
+        if git diff --staged --quiet; then
+
+           echo "No changes to commit."
+
+        else
+
+           git commit -m "Sync from main"
+
+           git push origin main-3
+
+        fi
+
+ 
