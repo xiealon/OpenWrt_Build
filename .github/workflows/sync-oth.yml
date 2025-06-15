@@ -1,0 +1,50 @@
+name: Sync Branches
+
+on:
+  schedule: 
+    - cron: "0 0 1/2 * *"
+    
+  push:
+    branches:
+      - main
+
+jobs:
+  sync-branches:
+    runs-on: ubuntu-latest
+    strategy:
+        matrix:
+                target-branch: [main-3]  # if you want make add some one is noproblem
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+            fetch-depth: 0
+            ref: main 
+
+      - name: Configure Git
+        run: |
+            git config --global user.email "your-email@example.com"
+            git config --global user.name "Your Name"
+
+      - name: Fetch main branch
+        run: git fetch origin main
+
+      - name: Loop through target branches
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+            for target_branch in ${{ matrix.target-branch }}; do
+                # 切换到目标分支
+                 git checkout $target_branch
+                # 合并主分支代码到目标分支
+                git merge origin/main
+                if [ $? -eq 0 ]; then
+                    echo "Merge successful for $target_branch"
+                    # 推送更新后的目标分支代码
+                    git push origin $target_branch
+                else
+                    echo "Merge failed for $target_branch, resolving conflicts..."
+                    # 这里可以添加冲突解决逻辑，例如自动合并或手动干预
+                    exit 1
+                fi
+            done
