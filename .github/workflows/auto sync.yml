@@ -1,13 +1,10 @@
 name: Sync main to main-3
 
-
-
 on:
 
-
-
-# 当 main 分支有推送操作时触发此工作流
-
+  schedule:
+    - cron: "0 0 1/2 * *"
+    
   push:
 
     branches:
