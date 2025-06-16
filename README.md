@@ -32,6 +32,6 @@ https://github.com/xiealon/small
   
   3，进入你fork的项目 安装上述操作diy完成后或者直接点击
   
-    action，开启action功能  进入build OpenWrt的action
+    上方action，enable action功能  进入build OpenWrt
     
     点击右上角的 new workflow 点击运行 等待action完成即可。
