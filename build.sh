@@ -35,8 +35,8 @@ if [ "${CONFIG_REPO}" = "openwrt" ]; then
   REPO_URL="https://github.com/xiealon/openwrt"
   REPO_BRANCH="master"
 elif [ "${CONFIG_REPO}" = "lede" ]; then
-  REPO_URL="https://github.com/xiealon/lede"
-  REPO_BRANCH="master"
+  REPO_URL="https://github.com/xiealon/openwrt"
+  REPO_BRANCH="lede-17.01"
 else
   echo "${CONFIG_FILE} name error!"
   exit 1
