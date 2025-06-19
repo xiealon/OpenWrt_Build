@@ -174,5 +174,3 @@ for source in "${SOURCES[@]}"; do
         echo "$source: ${INSTALL_FAILED[$source]}"
     fi
 done
-
-   
