@@ -31,6 +31,7 @@ cp feeds.conf.default feeds.conf.default.bak
 
 # 处理新增的两个软件源
 sed -i "/src-git alon1 /d; 2 i src-git alon1 https://github.com/xiealon/openwrt-package;${CONFIG_REPO}" feeds.conf.default
+# sed -i "/src-git alon1 /d; \$a src-git alon1 https://github.com/xiealon/openwrt-package;${CONFIG_REPO}" feeds.conf.default
  if [ $? -ne 0 ]; then
    echo "Failed to modify feeds.conf.default for alon1 source."
    exit 1
@@ -39,27 +40,13 @@ sed -i "/src-git alon1 /d; 2 i src-git alon1 https://github.com/xiealon/openwrt-
  fi
  
 sed -i "/src-git alon2 /d; 3 i src-git alon2 https://github.com/xiealon/small;${CONFIG_REPO}" feeds.conf.default
+# sed -i "/src-git alon2 /d; \$a src-git alon2 https://github.com/xiealon/small;${CONFIG_REPO}" feeds.conf.default
  if [ $? -ne 0 ]; then
    echo "Failed to modify feeds.conf.default for alon2 source."
    exit 1
  else
    echo "Successfully updated alon2 in feeds.conf.default"
  fi
-# sed -i "/src-git alon1 /d; \$a src-git alon1 https://github.com/xiealon/openwrt-package" feeds.conf.default
-#  if [ $? -ne 0 ]; then
-#    echo "Failed to modify feeds.conf.default for alon1 source."
-#    exit 1
-#  else
-#    echo "Successfully updated alon1 in feeds.conf.default"
-#  fi
-
-# sed -i "/src-git alon2 /d; \$a src-git alon2 https://github.com/xiealon/small" feeds.conf.default
-#  if [ $? -ne 0 ]; then
-#    echo "Failed to modify feeds.conf.default for alon2 source."
-#    exit 1
-#  else
-#    echo "Successfully updated alon2 in feeds.conf.default"
-#  fi
 
 # 更新所有 feeds
 if ./scripts/feeds update -a; then
