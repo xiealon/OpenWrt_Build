@@ -58,7 +58,7 @@ else
 fi
 
 # 定义要处理的源列表
-SOURCES=("alon" "alon1" "alon2")
+SOURCES=("package" "luci" "routing" "telephony" "alon" "alon1" "alon2")
 declare -A PKG_ARRAYS
 declare -A INSTALL_SUCCESS
 declare -A INSTALL_FAILED
