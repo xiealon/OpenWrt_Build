@@ -18,7 +18,7 @@ fi
 
 # 配置软件源
 # 处理 alon 软件源并检查
-sed -i "/src-git alon /d; 1 i src-git alon https://github.com/xiealon/openwrt-packages;${CONFIG_REPO}" feeds.conf.default
+sed -i "/src-git alon /d; \$a src-git alon https://github.com/xiealon/openwrt-packages;${CONFIG_REPO}" feeds.conf.default
  if [ $? -ne 0 ]; then
    echo "Failed to modify feeds.conf.default for alon source."
    exit 1
@@ -57,58 +57,90 @@ else
    exit 1
 fi
 
-# 安装所有包
-if ./scripts/feeds install -a; then
-   echo "Feeds installed successfully."
-else
-   echo "Failed to install feeds."
-   cp feeds.conf.default.bak feeds.conf.default
-   exit 1
-fi
-
-# 移除不需要的包
-# rm -rf feeds/luci/applications/luci-app-mosdns
-# rm -rf feeds/packages/net/{alist,adguardhome,mosdns,xray*,v2ray*,v2ray*,sing*,smartdns}
-# rm -rf feeds/packages/utils/v2dat
-# rm -rf feeds/packages/lang/golang
-
-# 克隆新的 golang 包
-# git clone https://github.com/xiealon/golang feeds/packages/lang/golang
-
 # 定义要处理的源列表
-SOURCES=("alon" "packages" "luci" "routing" "telephony" "alon1" "alon2")
+SOURCES=("alon" "alon1" "alon2")
 declare -A PKG_ARRAYS
 declare -A INSTALL_SUCCESS
 declare -A INSTALL_FAILED
 
-# 循环处理每个源，获取包名并存储到关联数组中
+# 用于存储需要重试安装的包
+RETRY_PACKAGES=()
+
+# 用于存储每个包的依赖信息
+declare -A DEPENDENCIES
+
+# 用于存储每个包解析后的依赖列表
+declare -A PARSED_DEPENDENCIES
+
+# 用于快速检查包是否已安装
+declare -A INSTALLED_MAP
+
+# 先获取所有源的包名、版本和依赖信息
 for source in "${SOURCES[@]}"; do
     index_file="feeds/${source}/index"
     if [ -f "$index_file" ]; then
         packages=$(grep -E '^Package:' "$index_file" | awk '{print $2}')
         mapfile -t PKG_ARRAYS[$source] <<< "$packages"
-        echo "Successfully retrieved package names from $source source."
+        while IFS= read -r line; do
+            if [[ $line =~ ^Package:\ (.) ]]; then
+                pkg="${BASH_REMATCH[1]}"
+            elif [[ $line =~ ^Depends:\ (.) ]]; then
+                deps="${BASH_REMATCH[1]}"
+                DEPENDENCIES[$pkg]="$deps"
+            fi
+        done < "$index_file"
+            echo "Successfully retrieved package names and dependencies from $source source."
     else
         echo "Index file for $source source not found."
     fi
 done
 
-# 卸载所有定义源列表的包
-PACKAGES=()
-for source in "${SOURCES[@]}"; do
-
-    PACKAGES+=("${PKG_ARRAYS[$source][@]}")
-done
-echo "Starting to uninstall packages from all sources..."
-for package in "${PACKAGES[@]}"; do
-    ./scripts/feeds uninstall "$package"
-    if [ $? -ne 0 ]; then
-        echo "Failed to uninstall package: $package"
-    else
-        echo "Successfully uninstalled package: $package"
+# 检查依赖是否满足
+check_dependencies() {
+    local pkg="$1"
+    local deps="${DEPENDENCIES[$pkg]}"
+    # 如果没有依赖，直接返回成功
+    if [ -z "$deps" ]; then
+        return 0
     fi
-done
-echo "Uninstallation process completed."
+    # 检查是否已经解析过依赖
+    if [ -z "${PARSED_DEPENDENCIES[$pkg]}" ]; then
+        local parsed_deps=()
+        for dep in $(echo "$deps" | tr ',' ' '); do
+            # 提取包名，去除版本号等额外信息
+            local dep_name=$(echo "$dep" | sed 's/([^)]*)//g' | sed 's/[[:space:]]//g')
+            parsed_deps+=("$dep_name")
+        done
+        PARSED_DEPENDENCIES[$pkg]="${parsed_deps[@]}"
+    fi
+    # 用于检测循环依赖
+    local visited=()
+    local stack=("$pkg")
+
+    while [ ${#stack[@]} -gt 0 ]; do
+        local current_pkg="${stack[-1]}"
+        stack=("${stack[@]::${#stack[@]}-1}")
+
+        if [[ " ${visited[@]} " =~ " ${current_pkg} " ]]; then
+            echo "Circular dependency detected: $current_pkg is part of a cycle."
+            return 1
+        fi
+        visited+=("$current_pkg")
+
+        local current_deps=(${PARSED_DEPENDENCIES[$current_pkg]})
+        for dep in "${current_deps[@]}"; do
+            if [[ -z "${INSTALLED_MAP[$dep]}" ]]; then
+                echo "Dependency $dep for package $pkg is not installed."
+                return 1
+            fi
+            stack+=("$dep")
+        done
+    done
+
+    return 0
+ 
+
+}
 
 # 安装所有定义源列表的包，按源顺序进行
 remaining_packages=()
@@ -123,12 +155,19 @@ for source in "${SOURCES[@]}"; do
     fi
     remaining_packages=()
     for package in "${current_packages[@]}"; do
-        ./scripts/feeds install "$package"
-        if [ $? -eq 0 ]; then
-            echo "Successfully installed package: $package from $source source."
-            INSTALL_SUCCESS[$source]+="$package "
+        if check_dependencies "$package"; then
+            ./scripts/feeds install "$package"
+            if [ $? -eq 0 ]; then
+                echo "Successfully installed package: $package from $source source."
+                INSTALL_SUCCESS[$source]+="$package "
+                INSTALLED_MAP[$package]=1
+            else
+                echo "Failed to install package: $package from $source source."
+                INSTALL_FAILED[$source]+="$package "
+                remaining_packages+=("$package")
+            fi
         else
-            echo "Failed to install package: $package from $source source."
+            echo "Package $package cannot be installed due to unmet dependencies."
             INSTALL_FAILED[$source]+="$package "
             remaining_packages+=("$package")
         fi
