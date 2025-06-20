@@ -97,7 +97,7 @@ done
 PACKAGES=()
 for source in "${SOURCES[@]}"; do
 
-PACKAGES+=("${PKG_ARRAYS[$source][@]}")
+    PACKAGES+=("${PKG_ARRAYS[$source][@]}")
 done
 echo "Starting to uninstall packages from all sources..."
 for package in "${PACKAGES[@]}"; do
