@@ -82,7 +82,6 @@ declare -A INSTALL_SUCCESS
 declare -A INSTALL_FAILED
 
 # 循环处理每个源，获取包名并存储到关联数组中
-
 for source in "${SOURCES[@]}"; do
     index_file="feeds/${source}/index"
     if [ -f "$index_file" ]; then
@@ -95,9 +94,9 @@ for source in "${SOURCES[@]}"; do
 done
 
 # 卸载所有定义源列表的包
-
 PACKAGES=()
 for source in "${SOURCES[@]}"; do
+
 PACKAGES+=("${PKG_ARRAYS[$source][@]}")
 done
 echo "Starting to uninstall packages from all sources..."
@@ -106,71 +105,46 @@ for package in "${PACKAGES[@]}"; do
     if [ $? -ne 0 ]; then
         echo "Failed to uninstall package: $package"
     else
-       echo "Successfully uninstalled package: $package"
+        echo "Successfully uninstalled package: $package"
     fi
 done
 echo "Uninstallation process completed."
 
-# 依次安装每个源的包，过滤掉前面所有源中已成功安装的包
-
-for ((i = 0; i < ${#SOURCES[@]}; i++)); do
-    current_source=${SOURCES[$i]}
-    unique_packages=()
-    # 过滤掉前面所有源中已成功安装的包
-    for package in "${PKG_ARRAYS[$current_source][@]}"; do
-        is_unique=true
-        for ((j = 0; j < i; j++)); do
-            prev_source=${SOURCES[$j]}
-            if [[ " ${INSTALL_SUCCESS[$prev_source]} " =~ " ${package} " ]]; then
-                is_unique=false
-                break
-            fi
-        done
-        if $is_unique; then
-            unique_packages+=("$package")
-        fi
-    done
-    echo "Starting to install unique packages from $current_source source..."
-    for package in "${unique_packages[@]}"; do
+# 安装所有定义源列表的包，按源顺序进行
+remaining_packages=()
+for source in "${SOURCES[@]}"; do
+    echo "Starting to install packages from $source source..."
+    if [ ${#remaining_packages[@]} -eq 0 ]; then
+        # 如果没有剩余未安装的包，使用当前源的包列表
+        current_packages=("${PKG_ARRAYS[$source][@]}")
+    else
+        # 合并剩余未安装的包和当前源的包列表
+        current_packages=("${remaining_packages[@]}" "${PKG_ARRAYS[$source][@]}")
+    fi
+    remaining_packages=()
+    for package in "${current_packages[@]}"; do
         ./scripts/feeds install "$package"
         if [ $? -eq 0 ]; then
-            echo "Successfully installed package: $package from $current_source source."
-            INSTALL_SUCCESS[$current_source]+="$package "
+            echo "Successfully installed package: $package from $source source."
+            INSTALL_SUCCESS[$source]+="$package "
         else
-            echo "Failed to install package: $package from $current_source source."
-            INSTALL_FAILED[$current_source]+="$package "
+            echo "Failed to install package: $package from $source source."
+            INSTALL_FAILED[$source]+="$package "
+            remaining_packages+=("$package")
         fi
     done
+        echo "Installation process for $source source completed."
 done
 
-# 尝试在后续源中安装之前失败的包
-
-for ((i = 0; i < ${#SOURCES[@]}; i++)); do
-source=${SOURCES[$i]}
-failed_packages=(${INSTALL_FAILED[$source]})
-    for package in "${failed_packages[@]}"; do
-        for ((j = i + 1; j < ${#SOURCES[@]}; j++)); do
-            next_source=${SOURCES[$j]}
-            if [[ " ${PKG_ARRAYS[$next_source][@]} " =~ " ${package} " ]]; then
-                echo "Trying to install $package from $next_source source..."
-                ./scripts/feeds install "$package"
-                if [ $? -eq 0 ]; then
-                    echo "Successfully installed package: $package from $next_source source."
-                    INSTALL_SUCCESS[$next_source]+="$package "
-                    # 从失败列表中移除
-                    INSTALL_FAILED[$source]=$(echo "${INSTALL_FAILED[$source]}" | sed "s/\b$package\b//")
-                break
-                fi
-            fi
-        done
-    done
+# 输出每个源安装成功和失败的包
+for source in "${SOURCES[@]}"; do
+    echo "Packages successfully installed from $source source: ${INSTALL_SUCCESS[$source]}"
+    echo "Packages failed to install from $source source: ${INSTALL_FAILED[$source]}"
 done
 
 # 输出最终仍未安装成功的包
-
-echo "Packages that still failed to install:"
-for source in "${SOURCES[@]}"; do
-    if [ -n "${INSTALL_FAILED[$source]}" ]; then
-        echo "$source: ${INSTALL_FAILED[$source]}"
-    fi
-done
+if [ ${#remaining_packages[@]} -gt 0 ]; then
+    echo "Packages that failed to install from all sources: ${remaining_packages[*]}"
+else
+    echo "All packages were successfully installed."
+fi
