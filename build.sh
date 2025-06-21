@@ -31,10 +31,7 @@ CONFIG_REPO="${CONFIG_ARRAY[0]}"
 CONFIG_OWNER="${CONFIG_ARRAY[1]}"
 CONFIG_ARCH="${CONFIG_ARRAY[2]}"
 
-if [ "${CONFIG_REPO}" = "openwrt" ]; then
-  REPO_URL="https://github.com/xiealon/openwrt"
-  REPO_BRANCH="master"
-elif [ "${CONFIG_REPO}" = "lede" ]; then
+if [ "${CONFIG_REPO}" = "lede" ]; then
   REPO_URL="https://github.com/xiealon/lede"
   REPO_BRANCH="master"
 else
@@ -44,9 +41,9 @@ fi
 
 if [ ! -d "${WORK_PATH}/${CONFIG_REPO}" ]; then
   git clone --depth=1 -b "${REPO_BRANCH}" "${REPO_URL}" "${WORK_PATH}/${CONFIG_REPO}"
-  # if [ -d "${CONFIG_REPO}/package/kernel/r8125" ]; then
-  #   rm -rf "${CONFIG_REPO}/package/kernel/r8125"
-  # fi
+  if [ -d "${CONFIG_REPO}/package/kernel/r8125" ]; then
+    rm -rf "${CONFIG_REPO}/package/kernel/r8125"
+  fi
   if [ -d "${CONFIG_REPO}/package/lean/r8152" ]; then
      rm -rf "${CONFIG_REPO}/package/lean/r8152"
   fi
