@@ -18,7 +18,7 @@ REINSTALL_TARGETS=("alon")        # 需要严格重装的源
 # 🔄 初始化操作
 # 强制备份并确保首行源位置
 cp feeds.conf.default feeds.conf.default.$(date +%s).bak
-sed -i "/src-git alon /d; 1i src-git alon https://github.com/xiealon/openwrt-packages" feeds.conf.default
+sed -i "/src-git alon /d; 1i src-git alon https://github.com/xiealon/openwrt-packages;${CONFIG_REPO}" feeds.conf.default
 
 # 添加其他源
 # sed -i "/src-git alon1 /d; 2 i src-git alon1 https://github.com/xiealon/openwrt-package;${CONFIG_REPO}" feeds.conf.default
