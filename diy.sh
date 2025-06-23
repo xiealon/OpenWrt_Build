@@ -117,11 +117,11 @@ sed -i '$i uci commit network' ${defaultsettings}/files/zzz-default-settings
 # sed -i '$i uci set commit' ${defaultsettings}/files/zzz-default-settings
 
 # Modify ssid
-sed -i 's/OpenWrt/Alon/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
+# sed -i 's/OpenWrt/Alon/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
 # Enable wifi
-sed -i 's/.disabled=1/.disabled=0/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
+# sed -i 's/.disabled=1/.disabled=0/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
 # Enable MU-MIMO
-sed -i 's/mu_beamformer=0/mu_beamformer=1/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
+# sed -i 's/mu_beamformer=0/mu_beamformer=1/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
 
 # Modify kernel version
 #sed -i 's/KERNEL_PATCHVER:=5.15/KERNEL_PATCHVER:=5.4/g' ./target/linux/x86/Makefile
