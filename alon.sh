@@ -77,7 +77,7 @@ fi
 SOURCES=("alon" "alon1" "alon2")
 PACKAGES=()
 for source in "${SOURCES[@]}"; do
-index_file="feeds/${source}/index"
+index_file="feeds/${source}.index"
  if [ -f "$index_file" ]; then
    packages=$(grep -E '^Package:' "$index_file" | awk '{print $2}')
    PACKAGES+=($packages)
