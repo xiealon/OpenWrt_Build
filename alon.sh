@@ -114,6 +114,8 @@ main() {
     done
     # 核心安装流程
     pkg_manager_cmd update
+    pkg_manager_cmd install
+    pkg_manager_cmd list
     declare -Ag install_result
     if ! pkg_manager_cmd install "${INSTALL_PACKAGES[@]}" &>/dev/null; then
         declare -a initial_failed=()
