@@ -2,12 +2,17 @@
 #!/bin/bash
 #
 # 系统环境配置
+BRANCH="${1}"
+
+SYSTEM_TYPE="openwrt"
+
 declare -A SYSTEM_ENV=(
 ["openwrt"]="feeds.conf.default|./scripts/feeds|TAIL"
 ["ubuntu"]="/etc/apt/sources.list.d/custom.list|apt|TAIL"
 ["centos"]="/etc/yum.repos.d/custom.repo|yum|HEAD"
 )
-BRANCH="${1}"
+IFS='|' read -r _ PKG_MGR _ <<< "${SYSTEM_ENV[$SYSTEM_TYPE]}"
+
 # 修改源部分
 declare -A REPO_DEFINITIONS=(
 ["alon"]="https://github.com/xiealon/openwrt-packages;${BRANCH}|openwrt|HEAD"
@@ -24,7 +29,6 @@ declare -A REPO_DEFINITIONS=(
 SOURCE_PRIORITY=("alon" "alon1" "alon2" "alon3")
 INSTALL_PACKAGES=()
 MAX_RETRY_LEVEL=3
-SYSTEM_TYPE=openwrt
 IFS='|' read -r _ PKG_MGR _ <<< "${SYSTEM_ENV[$SYSTEM_TYPE]}"
 
 insert_repository() {
@@ -106,7 +110,7 @@ check_dependents() {
 }
 
 main() {
-    SYSTEM_TYPE=$(detect_environment)
+    SYSTEM_TYPE=${SYSTEM_TYPE}
     # 配置软件源
     for repo in "${SOURCE_PRIORITY[@]}"; do
         [[ "${REPO_DEFINITIONS[$repo]}" =~ $SYSTEM_TYPE ]] && insert_repository "$repo"
