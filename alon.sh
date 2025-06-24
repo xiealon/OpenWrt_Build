@@ -3,7 +3,6 @@
 #
 # 系统环境配置
 BRANCH="${1}"
-
 SYSTEM_TYPE="openwrt"
 
 declare -A SYSTEM_ENV=(
@@ -11,7 +10,6 @@ declare -A SYSTEM_ENV=(
 ["ubuntu"]="/etc/apt/sources.list.d/custom.list|apt|TAIL"
 ["centos"]="/etc/yum.repos.d/custom.repo|yum|HEAD"
 )
-IFS='|' read -r _ PKG_MGR _ <<< "${SYSTEM_ENV[$SYSTEM_TYPE]}"
 
 # 修改源部分
 declare -A REPO_DEFINITIONS=(
@@ -29,11 +27,10 @@ declare -A REPO_DEFINITIONS=(
 SOURCE_PRIORITY=("alon" "alon1" "alon2" "alon3")
 INSTALL_PACKAGES=()
 MAX_RETRY_LEVEL=3
-IFS='|' read -r _ PKG_MGR _ <<< "${SYSTEM_ENV[$SYSTEM_TYPE]}"
 
 insert_repository() {
     local repo_name=$1
-    IFS='|' read -r config_file _ default_pos <<< "${SYSTEM_ENV[$SYSTEM_TYPE]}"
+    IFS='|' read -r config_file PKG_MGR default_pos <<< "${SYSTEM_ENV[$SYSTEM_TYPE]}"
     mkdir -p "$(dirname "${config_file}")"
     local line_content
     case ${SYSTEM_TYPE} in
