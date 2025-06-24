@@ -79,7 +79,7 @@ pkg_manager_cmd() {
         "install")
             shift
             if [[ "$SYSTEM_TYPE" == "openwrt" ]]; then
-                "${PKGS_MGR} install -a "$@"
+                "${PKG_MGR} install -a "$@"
             else
                 "${PKG_MGR}" install -y "$@"
             fi ;;
