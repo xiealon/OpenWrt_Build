@@ -28,9 +28,9 @@ MANUAL_SYSTEM='openwrt'
 
 # 增强环境检测
 detect_environment() {
-    if [[ -n "$MANUAL_SYSTEM" ]]; then
-        echo "Using manual system: $MANUAL_SYSTEM"
-        SYSTEM_TYPE="$MANUAL_SYSTEM"
+    if [[ -n "${MANUAL_SYSTEM}" ]]; then
+        echo "Using manual system: ${MANUAL_SYSTEM}"
+        SYSTEM_TYPE="${MANUAL_SYSTEM}"
     else
         if grep -qi "OpenWrt" /etc/os-release 2>/dev/null; then
             SYSTEM_TYPE="openwrt"
@@ -43,7 +43,7 @@ detect_environment() {
             exit 1
         fi
     fi
-        echo "$SYSTEM_TYPE"
+        echo "${SYSTEM_TYPE}"
 }
 
 SYSTEM_TYPE=$(detect_environment)
@@ -52,39 +52,39 @@ IFS='|' read -r _ PKG_MGR _ <<< "${SYSTEM_ENV[$SYSTEM_TYPE]}"
 insert_repository() {
     local repo_name=$1
     IFS='|' read -r config_file _ default_pos <<< "${SYSTEM_ENV[$SYSTEM_TYPE]}"
-    mkdir -p "$(dirname "$config_file")"
+    mkdir -p "$(dirname "${config_file}")"
     local line_content
-    case $SYSTEM_TYPE in
+    case ${SYSTEM_TYPE} in
         "openwrt")
-            line_content="src-git $repo_name ${REPO_DEFINITIONS[$repo_name]%%|*}" ;;
+            line_content="src-git ${repo_name} ${REPO_DEFINITIONS[$repo_name]%%|*}" ;;
         "ubuntu")
             line_content="deb ${REPO_DEFINITIONS[$repo_name]%%|*}" ;;
         "centos")
-            line_content="[$repo_name]\nname=$repo_name\nbaseurl=${REPO_DEFINITIONS[$repo_name]%%|*}\nenabled=1\ngpgcheck=0" ;;
+            line_content="[$repo_name]\nname=${repo_name}\nbaseurl=${REPO_DEFINITIONS[$repo_name]%%|*}\nenabled=1\ngpgcheck=0" ;;
     esac
     if ! grep -q "$repo_name" "$config_file" 2>/dev/null; then
         local insert_cmd="\$a"
-        [[ "$default_pos" == "HEAD" ]] && insert_cmd="1i"
-        sed -i.bak.$(date +%s) "/$repo_name/d; ${insert_cmd}\\${line_content}" "$config_file"
+        [[ "${default_pos}" == "HEAD" ]] && insert_cmd="1i"
+        sed -i.bak.$(date +%s) "/${repo_name}/d; ${insert_cmd}\\${line_content}" "${config_file}"
     fi
 }
 pkg_manager_cmd() {
     case $1 in
         "update")
-            if [[ "$SYSTEM_TYPE" == "openwrt" ]]; then
+            if [[ "${SYSTEM_TYPE}" == "openwrt" ]]; then
                 "${PKG_MGR}" update -a
             else
                 "${PKG_MGR}" update -y
             fi ;;
         "install")
             shift
-            if [[ "$SYSTEM_TYPE" == "openwrt" ]]; then
+            if [[ "${SYSTEM_TYPE}" == "openwrt" ]]; then
                 "${PKG_MGR}" install -a "$@"
             else
                 "${PKG_MGR}" install -y "$@"
             fi ;;
         "list")
-            if [[ "$SYSTEM_TYPE" == "openwrt" ]]; then
+            if [[ "${SYSTEM_TYPE}" == "openwrt" ]]; then
                 "${PKG_MGR}" list | awk '{print $1}'
             else
                 "${PKG_MGR}" list --installed
@@ -110,13 +110,13 @@ smart_install() {
                 fi
             fi
         done
-        ($ ${#remaining[@]} > 0 $) && sleep $((retry_level * 2))
+        (( ${#remaining[@]} > 0 )) && sleep $((retry_level * 2))
     done
     install_result["remaining"]="${remaining[*]}"
 }
 check_dependents() {
     local pkg=$1
-    case $SYSTEM_TYPE in
+    case ${SYSTEM_TYPE} in
         "openwrt")
             opkg whatdepends "$pkg" | grep -q "Depends on" ;;
         "ubuntu")
