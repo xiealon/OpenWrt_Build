@@ -24,29 +24,7 @@ declare -A REPO_DEFINITIONS=(
 SOURCE_PRIORITY=("alon" "alon1" "alon2" "alon3")
 INSTALL_PACKAGES=()
 MAX_RETRY_LEVEL=3
-MANUAL_SYSTEM='openwrt'
-
-# 增强环境检测
-detect_environment() {
-    if [[ -n "$MANUAL_SYSTEM" ]]; then
-        echo "Using manual system: ${MANUAL_SYSTEM}"
-        SYSTEM_TYPE="${MANUAL_SYSTEM}"
-    # else
-    #     if grep -qi "OpenWrt" /etc/os-release 2>/dev/null; then
-    #         SYSTEM_TYPE="openwrt"
-    #     elif [ -f /etc/lsb-release ]; then
-    #         SYSTEM_TYPE="ubuntu"
-    #     elif [ -f /etc/redhat-release ]; then
-    #         SYSTEM_TYPE="centos"
-    #     else
-    #         echo "Unsupported system environment" >&2
-    #         exit 1
-    #     fi
-    fi
-        echo "${SYSTEM_TYPE}"
-}
-
-SYSTEM_TYPE=$(detect_environment)
+SYSTEM_TYPE=openwrt
 IFS='|' read -r _ PKG_MGR _ <<< "${SYSTEM_ENV[$SYSTEM_TYPE]}"
 
 insert_repository() {
