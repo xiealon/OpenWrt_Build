@@ -21,17 +21,23 @@ CONFIG_REPO="${1}"
 SOURCE_PRIORITY=("alon" "alon1" "alon2" "alon3")
 INSTALL_PACKAGES=()
 MAX_RETRY_LEVEL=3
-
+MANUAL_SYSTEM='openwrt'
+🔄 增强环境检测
 detect_environment() {
-    if grep -qi "OpenWrt" /etc/os-release 2>/dev/null; then
-        declare -g PKG_MGR="./scripts/feeds" SYSTEM_TYPE="openwrt"
-    elif [ -f /etc/lsb-release ]; then
-        declare -g PKG_MGR="apt" SYSTEM_TYPE="ubuntu"
-    elif [ -f /etc/redhat-release ]; then
-        declare -g PKG_MGR="yum" SYSTEM_TYPE="centos"
+    if [[ -n "$MANUAL_SYSTEM" ]]; then
+        echo "⚙️ 使用手动设置环境：$MANUAL_SYSTEM"
+        echo "$MANUAL_SYSTEM"
     else
-        echo "❌ Unsupported system environment" >&2
-        exit 1
+        if grep -qi "OpenWrt" /etc/os-release 2>/dev/null; then
+            declare -g PKG_MGR="./scripts/feeds" SYSTEM_TYPE="openwrt"
+        elif [ -f /etc/lsb-release ]; then
+            declare -g PKG_MGR="apt" SYSTEM_TYPE="ubuntu"
+        elif [ -f /etc/redhat-release ]; then
+            declare -g PKG_MGR="yum" SYSTEM_TYPE="centos"
+        else
+            echo "❌ Unsupported system environment" >&2
+            exit 1
+        fi
     fi
 }
 
