@@ -101,12 +101,12 @@ smart_install() {
         unset remaining
         for pkg in "${current_round[@]}"; do
             if pkg_manager_cmd install "$pkg" 2>/dev/null; then
-                install_result["success"]+=" $pkg"
+                install_result["success"]+= "$pkg"
             else
                 if check_dependents "$pkg"; then
                     remaining+=("$pkg")
                 else
-                    install_result["failed"]+=" $pkg"
+                    install_result["failed"]+= "$pkg"
                 fi
             fi
         done
