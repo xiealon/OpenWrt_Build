@@ -129,8 +129,7 @@ smart_install() {
 }
 
 main() {
-    detect_environment
-    echo "🖥️ 检测到运行环境：$SYSTEM_TYPE"
+    current_env=$(detect_environment)
 
     # 配置软件源
     for repo in "${SOURCE_PRIORITY[@]}"; do
