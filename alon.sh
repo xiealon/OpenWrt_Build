@@ -8,7 +8,6 @@ declare -A SYSTEM_ENV=(
 )
 
 BRANCH="${1}"
-
 declare -A REPO_DEFINITIONS=(
 ["alon"]="https://github.com/xiealon/openwrt-packages;${BRANCH}|openwrt|HEAD"
 ["alon"]="https://github.com/xiealon/openwrt-package|openwrt|TAIL"
