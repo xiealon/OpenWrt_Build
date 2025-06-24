@@ -46,6 +46,9 @@ detect_environment() {
         echo "$SYSTEM_TYPE"
 }
 
+SYSTEM_TYPE=$(detect_environment)
+IFS='|' read -r _ PKG_MGR _ <<< "${SYSTEM_ENV[$SYSTEM_TYPE]}"
+
 insert_repository() {
     local repo_name=$1
     IFS='|' read -r config_file _ default_pos <<< "${SYSTEM_ENV[$SYSTEM_TYPE]}"
