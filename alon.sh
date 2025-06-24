@@ -72,16 +72,16 @@ pkg_manager_cmd() {
     case $1 in
         "update")
             if [[ "$SYSTEM_TYPE" == "openwrt" ]]; then
-                ./scripts/feeds update -a
+                "${PKG_MGR} update -a
             else
-                "$PKG_MGR" update -y
+                "${PKG_MGR}" update -y
             fi ;;
         "install")
             shift
             if [[ "$SYSTEM_TYPE" == "openwrt" ]]; then
-                ./scripts/feeds install "$@"
+                "${PKGS_MGR} install -a "$@"
             else
-                "$PKG_MGR" install -y "$@"
+                "${PKG_MGR}" install -y "$@"
             fi ;;
         "list")
             if [[ "$SYSTEM_TYPE" == "openwrt" ]]; then
