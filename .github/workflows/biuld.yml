@@ -68,7 +68,6 @@ jobs:
           sudo apt full-upgrade -y
           sudo apt install -y jq
           sudo apt install -y sed
-          sudo apt install -y awk
           sudo apt install -y coreutils
           sudo apt install -y bash
           sudo apt install -y ack antlr3 asciidoc autoconf automake autopoint binutils bison build-essential \
