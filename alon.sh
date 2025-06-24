@@ -73,11 +73,16 @@ pkg_manager_cmd() {
             else
                 $PKG_MGR update -y
             fi ;;
-        "install")
+       "install")
             shift
-            local args=()
-            [[ $SYSTEM_TYPE != "openwrt" ]] && args+=("-y")
-            $PKG_MGR install "${args[@]}" "$@" ;;
+            if [[ $SYSTEM_TYPE == "openwrt" ]]; then
+                $PKG_MGR install -a "$@"
+            else
+                local args=()
+                args+=("-y")
+                $PKG_MGR install "${args[@]}" "$@"
+            fi ;;
+ 
         "list")
             if [[ $SYSTEM_TYPE == "openwrt" ]]; then
                 $PKG_MGR list | awk '{print $1}'
