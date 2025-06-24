@@ -7,6 +7,8 @@ declare -A SYSTEM_ENV=(
 ["centos"]="/etc/yum.repos.d/custom.repo|yum|HEAD"
 )
 
+CONFIG_REPO="${1}"
+
 declare -A REPO_DEFINITIONS=(
 ["alon"]="https://github.com/xiealon/openwrt-packages;${CONFIG_REPO}|openwrt|HEAD"
 ["alon"]="https://github.com/xiealon/openwrt-package|openwrt|TAIL"
