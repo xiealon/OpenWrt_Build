@@ -96,7 +96,7 @@ smart_install() {
     declare -Ag install_result
     local remaining=("${@}")
     local retry_level=0
-    while (( retry_level++ < MAX_RETRY_LEVEL $) && ($ ${#remaining[@]} > 0 )); do
+    while (( retry_level++ < MAX_RETRY_LEVEL )) && (( ${#remaining[@]} > 0 )); do
         declare -a current_round=("${remaining[@]}")
         unset remaining
         for pkg in "${current_round[@]}"; do
