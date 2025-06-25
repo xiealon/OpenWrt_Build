@@ -2,7 +2,6 @@
 #!/bin/bash
 #
 # 系统环境配置
-BRANCH="${1}"
 SYSTEM_TYPE="openwrt"
 
 declare -A SYSTEM_ENV=(
@@ -36,8 +35,9 @@ insert_repository() {
     case ${SYSTEM_TYPE} in
         "openwrt")
         if [ "$repo_name" = "alon" ]; then
+            local branch="${1}"
             local base_url="${REPO_DEFINITIONS[$repo_name]%%|*}"
-            line_content="src-git ${repo_name} ${base_url};${BRANCH}"
+            line_content="src-git ${repo_name} ${base_url};${branch}"
         else
             line_content="src-git ${repo_name} ${REPO_DEFINITIONS[$repo_name]%%|*}" ;;
         "ubuntu")
