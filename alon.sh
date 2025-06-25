@@ -34,12 +34,13 @@ insert_repository() {
     local line_content
     case ${SYSTEM_TYPE} in
         "openwrt")
-        if [ "$repo_name" = "alon" ]; then
-            local branch="${1}"
-            local base_url="${REPO_DEFINITIONS[$repo_name]%%|*}"
-            line_content="src-git ${repo_name} ${base_url};${branch}"
-        else
-            line_content="src-git ${repo_name} ${REPO_DEFINITIONS[$repo_name]%%|*}" ;;
+            if [ "$repo_name" = "alon" ]; then
+                local branch="${1}"
+                local base_url="${REPO_DEFINITIONS[$repo_name]%%|*}"
+                line_content="src-git ${repo_name} ${base_url};${branch}"
+            else
+                line_content="src-git ${repo_name} ${REPO_DEFINITIONS[$repo_name]%%|*}" 
+            fi ;;
         "ubuntu")
             line_content="deb ${REPO_DEFINITIONS[$repo_name]%%|*}" ;;
         "centos")
