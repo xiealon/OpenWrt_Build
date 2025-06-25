@@ -35,6 +35,9 @@ insert_repository() {
     local line_content
     case ${SYSTEM_TYPE} in
         "openwrt")
+        if [ "$repo_name" = "alon" ]; then
+            line_content="src-git ${repo_name} ${REPO_DEFINITIONS[$repo_name]%%|*;${BRANCH}}" ;;
+        else
             line_content="src-git ${repo_name} ${REPO_DEFINITIONS[$repo_name]%%|*}" ;;
         "ubuntu")
             line_content="deb ${REPO_DEFINITIONS[$repo_name]%%|*}" ;;
