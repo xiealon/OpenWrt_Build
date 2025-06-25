@@ -40,7 +40,13 @@ insert_repository() {
             line_content="deb ${REPO_DEFINITIONS[$repo_name]%%|*}" ;;
         "centos")
             line_content="[$repo_name]\nname=${repo_name}\nbaseurl=${REPO_DEFINITIONS[$repo_name]%%|*}\nenabled=1\ngpgcheck=0" ;;
-    esac
+    esac   
+    # 从 REPO_DEFINITIONS 中提取该源定义的插入位置
+    local repo_insert_pos=$(echo "${REPO_DEFINITIONS[$repo_name]}" | cut -d '|' -f 3)
+    # 如果 REPO_DEFINITIONS 中定义的位置不为空且与 SYSTEM_ENV 不同，则使用 REPO_DEFINITIONS 中的位置
+    if [ -n "$repo_insert_pos" ] && [ "$repo_insert_pos" != "$default_pos" ]; then
+        default_pos=$repo_insert_pos
+    fi
     if ! grep -q "$repo_name" "$config_file" 2>/dev/null; then
         local insert_cmd="\$a"
         [[ "${default_pos}" == "HEAD" ]] && insert_cmd="1i"
