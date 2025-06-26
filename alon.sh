@@ -74,11 +74,11 @@ insert_repository() {
     if ! grep -q "${repo_name}" "${config_file}" 2>/dev/null; then
         local insert_cmd="\$a "
         [[ "${default_pos}" == "HEAD" ]] && insert_cmd="1 i"
-        escaped_line=$(sed 's/[\/&]/\\&/g' <<< "${line_content}")
+        # escaped_line=$(sed 's/[\/&]/\\&/g' <<< "${line_content}")
         if [ "${SYSTEM_TYPE}" == "openwrt" ]; then
-            sed -i "/src-git ${repo_name} /d; ${insert_cmd} ${escaped_line}" "${config_file}"
+            sed -i "/src-git ${repo_name} /d; ${insert_cmd} ${line_content}" "${config_file}"
         else
-            sed -i.bak "/${repo_name} /d; ${insert_cmd} ${escaped_line}" "${config_file}"
+            sed -i.bak "/${repo_name} /d; ${insert_cmd} ${line_content}" "${config_file}"
         fi
     fi
 }
