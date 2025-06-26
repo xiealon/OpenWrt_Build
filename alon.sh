@@ -8,7 +8,7 @@ if [ -z "$1" ]; then
 fi
 echo "$1"
 
-BRANCH="${1}"
+BRANCH="$1"
 shift
 
 SYSTEM_TYPE="openwrt"
