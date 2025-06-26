@@ -70,14 +70,14 @@ pkg_manager_cmd() {
             if [[ "${SYSTEM_TYPE}" == "openwrt" ]]; then
                 "${PKG_MGR}" update -a
             else
-                "${PKG_MGR}" update -y
+                sudo "${PKG_MGR}" update -y
             fi ;;
         "install")
             shift
             if [[ "${SYSTEM_TYPE}" == "openwrt" ]]; then
                 "${PKG_MGR}" install -a "$@"
             else
-                "${PKG_MGR}" install -y "$@"
+                sudo "${PKG_MGR}" install -y "$@"
             fi ;;
         "list")
             if [[ "${SYSTEM_TYPE}" == "openwrt" ]]; then
