@@ -59,9 +59,10 @@ insert_repository() {
         local insert_cmd="\$a"
         [[ "${default_pos}" == "HEAD" ]] && insert_cmd="1 i"
         if [ "${SYSTEM_TYPE}" == "openwrt" ]; then
-            sed -i "/scr-git "${repo_name}"/d; "${insert_cmd}"\\\\"${line_content}"" "${config_file}"
+            sed -i "/src-git "${repo_name}"/d; "${insert_cmd}"\\\\"${line_content}"" "${config_file}"
         else
-            sed -i "/"${repo_name}"/d; "${insert_cmd}"\\\\"${line_content}"" "${config_file}"
+            sed -i.bak "/"${repo_name}"/d; "${insert_cmd}"\\\\"${line_content}"" "${config_file}"
+        fi
     fi
 }
 pkg_manager_cmd() {
