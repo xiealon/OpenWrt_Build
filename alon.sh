@@ -43,15 +43,21 @@ INSTALL_PACKAGES=()
 MAX_RETRY_LEVEL=3
 
 insert_repository() {
+    local repo_name="${1}"
+    local repo_definition="${REPO_DEFINITIONS[$repo_name]}"
+    IFS='|' read -ra definition <<< "$repo_definition"
     IFS='|' read -r config_file PKG_MGR default_pos <<< "${SYSTEM_ENV[$SYSTEM_TYPE]}"
     mkdir -p "$(dirname "${config_file}")"
-    local line_content
+    local line_content=""
+    local base_url=""
+    local branch=""
     case ${SYSTEM_TYPE} in
         "openwrt")
             if [ "${repo_name}" == "alon" ]; then
                 local branch="${BRANCH}"
-                local base_url="${REPO_DEFINITIONS[$repo_name]%%|*}"
+                local base_url="${definition[0]}"
                 line_content="src-git ${repo_name} ${base_url} ${branch}"
+                line_content="${line_content/${base_url} /${base_url};}
                 echo "${line_content}"
             else
                 line_content="src-git ${repo_name} ${base_url}"
@@ -62,10 +68,7 @@ insert_repository() {
         "centos")
             line_content="[$repo_name]\nname=${repo_name}\nbaseurl=${REPO_DEFINITIONS[$repo_name]%%|*}\nenabled=1\ngpgcheck=0" ;;
     esac
-    local repo_name="${1}"
     echo "${1}"
-    local repo_definition="${REPO_DEFINITIONS[$repo_name]}"
-    IFS='|' read -ra definition <<< "$repo_definition"
     local repo_insert_pos="${definition[2]}"
     # 如果 REPO_DEFINITIONS 中定义的位置不为空且与 SYSTEM_ENV 不同，则使用 REPO_DEFINITIONS 中的位置
     if [ -n "${repo_insert_pos}" ] && [ "${repo_insert_pos}" != "${default_pos}" ]; then
