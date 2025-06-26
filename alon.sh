@@ -60,6 +60,7 @@ insert_repository() {
                 line_content="${line_content/${base_url} /${base_url};}"
                 echo "${line_content}"
             else
+                local base_url="${definition[0]}"
                 line_content="src-git ${repo_name} ${base_url}"
                 echo "${line_content}"
             fi ;;
