@@ -69,7 +69,7 @@ insert_repository() {
     local repo_insert_pos="${definition[2]}"
     # 如果 REPO_DEFINITIONS 中定义的位置不为空且与 SYSTEM_ENV 不同，则使用 REPO_DEFINITIONS 中的位置
     if [ -n "${repo_insert_pos}" ] && [ "${repo_insert_pos}" != "${default_pos}" ]; then
-        default_pos= "${repo_insert_pos}"
+        default_pos="${repo_insert_pos}"
     fi
     if ! grep -q "${repo_name}" "${config_file}" 2>/dev/null; then
         local insert_cmd="\$a "
