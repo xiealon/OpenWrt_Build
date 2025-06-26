@@ -67,8 +67,8 @@ insert_repository() {
         default_pos == "${repo_insert_pos}"
     fi
     if ! grep -q "${repo_name}" "${config_file}" 2>/dev/null; then
-        local insert_cmd == "\$a "
-        [[ "${default_pos}" == "HEAD" ]] && insert_cmd == "1 i"
+        local insert_cmd = "\$a "
+        [[ "${default_pos}" == "HEAD" ]] && insert_cmd = "1 i"
         if [ "${SYSTEM_TYPE}" == "openwrt" ]; then
             sed -i "/src-git ${repo_name} /d; ${insert_cmd} ${line_content}" "${config_file}"
         else
