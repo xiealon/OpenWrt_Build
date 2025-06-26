@@ -37,7 +37,7 @@ insert_repository() {
     local line_content
     case ${SYSTEM_TYPE} in
         "openwrt")
-            if [ repo_name= "alon" ]; then
+            if [ "${repo_name}" == "alon" ]; then
                 local branch="${BRANCH}"
                 local base_url="${REPO_DEFINITIONS[$repo_name]%%|*}"
                 line_content="src-git "${repo_name}" "${base_url}";"${branch}""
@@ -58,7 +58,7 @@ insert_repository() {
     if ! grep -q "$repo_name" "$config_file" 2>/dev/null; then
         local insert_cmd="\$a"
         [[ "${default_pos}" == "HEAD" ]] && insert_cmd="1 i"
-        if [SYSTEM_TYPE="openwrt" ]; then
+        if [ "${SYSTEM_TYPE}" == "openwrt" ]; then
             sed -i "/scr-git "${repo_name}"/d; "${insert_cmd}"\\\\"${line_content}"" "${config_file}"
         else
             sed -i "/"${repo_name}"/d; "${insert_cmd}"\\\\"${line_content}"" "${config_file}"
