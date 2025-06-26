@@ -46,28 +46,29 @@ insert_repository() {
             if [ "${repo_name}" == "alon" ]; then
                 local branch="${BRANCH}"
                 local base_url="${REPO_DEFINITIONS[$repo_name]%%|*}"
-                line_content="src-git $repo_name $base_url;$branch"
+                line_content="src-git ${repo_name} ${base_url};${branch}"
+                echo "${line_content}
             else
-                line_content="src-git $repo_name ${REPO_DEFINITIONS[$repo_name]%%|*}" 
+                line_content="src-git ${repo_name} ${REPO_DEFINITIONS[$repo_name]%%|*}" 
             fi ;;
         "ubuntu")
             line_content="deb ${REPO_DEFINITIONS[$repo_name]%%|*}" ;;
         "centos")
-            line_content="[$repo_name]\nname=$repo_name\nbaseurl=${REPO_DEFINITIONS[$repo_name]%%|*}\nenabled=1\ngpgcheck=0" ;;
+            line_content="[$repo_name]\nname=${repo_name}\nbaseurl=${REPO_DEFINITIONS[$repo_name]%%|*}\nenabled=1\ngpgcheck=0" ;;
     esac
     # 从 REPO_DEFINITIONS 中提取该源定义的插入位置
     local repo_insert_pos=$(echo "${REPO_DEFINITIONS[$repo_name]}" | cut -d '|' -f 3)
     # 如果 REPO_DEFINITIONS 中定义的位置不为空且与 SYSTEM_ENV 不同，则使用 REPO_DEFINITIONS 中的位置
-    if [ -n "$repo_insert_pos" ] && [ "$repo_insert_pos" != "$default_pos" ]; then
-        default_pos=$repo_insert_pos
+    if [ -n "${repo_insert_pos}" ] && [ "${repo_insert_pos}" != "${default_pos}" ]; then
+        default_pos=${repo_insert_pos}
     fi
-    if ! grep -q "$repo_name" "$config_file" 2>/dev/null; then
+    if ! grep -q "${repo_name}" "${config_file}" 2>/dev/null; then
         local insert_cmd=" \$a "
-        [[ "$default_pos" == "HEAD" ]] && insert_cmd=" 1 i "
-        if [ "$SYSTEM_TYPE" == "openwrt" ]; then
-            sed -i "/src-git $repo_name /d; $insert_cmd $line_content" "$config_file"
+        [[ "${default_pos}" == "HEAD" ]] && insert_cmd="1 i"
+        if [ "${SYSTEM_TYPE}" == "openwrt" ]; then
+            sed -i "/src-git ${repo_name} /d; ${insert_cmd} ${line_content}" "${config_file}"
         else
-            sed -i.bak "/$repo_name /d; $insert_cmd\\$line_content" "$config_file"
+            sed -i.bak "/${repo_name} /d; ${insert_cmd}\\${line_content}" "${config_file}"
         fi
     fi
 }
