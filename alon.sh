@@ -83,7 +83,7 @@ pkg_manager_cmd() {
             if [[ "${SYSTEM_TYPE}" == "openwrt" ]]; then
                 "${PKG_MGR}" list | awk '{print $1}'
             else
-                "${PKG_MGR}" list --installed
+                sudo "${PKG_MGR}" list --installed
             fi ;;
     esac
 }
