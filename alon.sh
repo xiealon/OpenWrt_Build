@@ -32,7 +32,7 @@ declare -A REPO_DEFINITIONS=(
 # ["alon-ubuntu"]="https://ubuntu.prod.repo/ubuntu focal main restricted universe"  ## 镜像URL 发行版代号 组件列表 [用空格隔开]
 # ["alon-centos"]="https://centos.prod.repo/centos/7/os/x86-64/"                    ## 基础镜像URL
 
-SOURCE_PRIORITY=("alon" "alon1" "alon2" "alon3")
+SOURCE_PRIORITY=( "alon" "alon1" "alon2" "alon3" )
 INSTALL_PACKAGES=()
 MAX_RETRY_LEVEL=3
 
