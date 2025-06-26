@@ -2,6 +2,12 @@
 #!/bin/bash
 #
 # 系统环境配置
+if [ -z "$1" ]; then
+    echo "no information"
+    exit 1
+fi
+echo "$1"
+
 BRANCH="${1}"
 shift
 
