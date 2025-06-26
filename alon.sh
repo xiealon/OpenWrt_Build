@@ -26,11 +26,7 @@ declare -A REPO_DEFINITIONS=(
 ["alon2"]="https://github.com/xiealon/small|openwrt|TAIL"
 ["alon3"]="https://github.com/xiealon/small-package|openwrt|TAIL"
 )
-# ########################设置全局变量 sta
-repo_definition="${REPO_DEFINITIONS[$repo_name]}"
-IFS='|' read -ra definition <<< "$repo_definition"
-repo_insert_pos="${definition[2]}"  # 索引从0开始，故第3个字段是[2]
-# ########################设置全局变量 end
+#
 # 定义repo添加说明
 # ################################################################################  ## OpenWrt 以URL|openwrt|HEAD/TAIL [用竖线|隔开]
 # ["alon-ubuntu"]="https://ubuntu.prod.repo/ubuntu focal main restricted universe"  ## 镜像URL 发行版代号 组件列表 [用空格隔开]
@@ -47,7 +43,6 @@ INSTALL_PACKAGES=()
 MAX_RETRY_LEVEL=3
 
 insert_repository() {
-    local repo_name=$1
     IFS='|' read -r config_file PKG_MGR default_pos <<< "${SYSTEM_ENV[$SYSTEM_TYPE]}"
     mkdir -p "$(dirname "${config_file}")"
     local line_content
@@ -66,13 +61,18 @@ insert_repository() {
         "centos")
             line_content="[$repo_name]\nname=${repo_name}\nbaseurl=${REPO_DEFINITIONS[$repo_name]%%|*}\nenabled=1\ngpgcheck=0" ;;
     esac
+    local repo_name="${1}"
+    echo "${1}"
+    local repo_definition="${REPO_DEFINITIONS[$repo_name]}"
+    IFS='|' read -ra definition <<< "$repo_definition"
+    local repo_insert_pos="${definition[2]}"
     # 如果 REPO_DEFINITIONS 中定义的位置不为空且与 SYSTEM_ENV 不同，则使用 REPO_DEFINITIONS 中的位置
     if [ -n "${repo_insert_pos}" ] && [ "${repo_insert_pos}" != "${default_pos}" ]; then
-        default_pos == "${repo_insert_pos}"
+        default_pos= "${repo_insert_pos}"
     fi
     if ! grep -q "${repo_name}" "${config_file}" 2>/dev/null; then
-        local insert_cmd = "\$a "
-        [[ "${default_pos}" == "HEAD" ]] && insert_cmd = "1 i"
+        local insert_cmd= "\$a "
+        [[ "${default_pos}" == "HEAD" ]] && insert_cmd= "1 i"
         if [ "${SYSTEM_TYPE}" == "openwrt" ]; then
             sed -i "/src-git ${repo_name} /d; ${insert_cmd} ${line_content}" "${config_file}"
         else
