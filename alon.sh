@@ -26,7 +26,11 @@ declare -A REPO_DEFINITIONS=(
 ["alon2"]="https://github.com/xiealon/small|openwrt|TAIL"
 ["alon3"]="https://github.com/xiealon/small-package|openwrt|TAIL"
 )
-#
+# ########################设置全局变量 sta
+repo_definition="${REPO_DEFINITIONS[$repo_name]}"
+IFS='|' read -ra definition <<< "$repo_definition"
+repo_insert_pos="${definition[2]}"  # 索引从0开始，故第3个字段是[2]
+# ########################设置全局变量 end
 # 定义repo添加说明
 # ################################################################################  ## OpenWrt 以URL|openwrt|HEAD/TAIL [用竖线|隔开]
 # ["alon-ubuntu"]="https://ubuntu.prod.repo/ubuntu focal main restricted universe"  ## 镜像URL 发行版代号 组件列表 [用空格隔开]
