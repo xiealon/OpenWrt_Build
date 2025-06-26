@@ -9,7 +9,6 @@ fi
 echo "${1}"
 #
 BRANCH="${1}"
-shift
 #
 SYSTEM_TYPE="openwrt"
 #
