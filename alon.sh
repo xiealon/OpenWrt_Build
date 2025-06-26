@@ -75,9 +75,9 @@ insert_repository() {
         [[ "${default_pos}" == "HEAD" ]] && insert_cmd="1 i"
         escaped_line=$(sed 's/[\/&]/\\&/g' <<< "${line_content}")
         if [ "${SYSTEM_TYPE}" == "openwrt" ]; then
-            sed -i "/src-git ${repo_name} /d; ${insert_cmd}\\${escaped_line}" "${config_file}"
+            sed -i "/src-git ${repo_name} /d; ${insert_cmd} ${escaped_line}" "${config_file}"
         else
-            sed -i.bak "/${repo_name} /d; ${insert_cmd}\\${escaped_line}" "${config_file}"
+            sed -i.bak "/${repo_name} /d; ${insert_cmd} ${escaped_line}" "${config_file}"
         fi
     fi
 }
