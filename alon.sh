@@ -65,6 +65,7 @@ insert_repository() {
         fi
     fi
 }
+
 pkg_manager_cmd() {
     case $1 in
         "update")
