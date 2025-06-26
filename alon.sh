@@ -7,17 +7,18 @@ if [ -z "${1}" ]; then
     exit 1
 fi
 echo "${1}"
-#
+
 BRANCH="${1}"
-#
+shift
+
 SYSTEM_TYPE="openwrt"
-#
+
 declare -A SYSTEM_ENV=(
 ["openwrt"]="feeds.conf.default|./scripts/feeds|TAIL"
 ["ubuntu"]="/etc/apt/sources.list.d/custom.list|apt|TAIL"
 ["centos"]="/etc/yum.repos.d/custom.repo|yum|HEAD"
 )
-#
+
 # 修改源部分
 declare -A REPO_DEFINITIONS=(
 ["alon"]="https://github.com/xiealon/openwrt-packages|openwrt|HEAD"
@@ -25,7 +26,7 @@ declare -A REPO_DEFINITIONS=(
 ["alon2"]="https://github.com/xiealon/small|openwrt|TAIL"
 ["alon3"]="https://github.com/xiealon/small-package|openwrt|TAIL"
 )
-#
+
 # 定义repo添加说明
 # ################################################################################  ## OpenWrt 以URL|openwrt|HEAD/TAIL [用竖线|隔开]
 # ["alon-ubuntu"]="https://ubuntu.prod.repo/ubuntu focal main restricted universe"  ## 镜像URL 发行版代号 组件列表 [用空格隔开]
@@ -40,7 +41,7 @@ SOURCE_PRIORITY=(
 )
 INSTALL_PACKAGES=()
 MAX_RETRY_LEVEL=3
-#
+
 insert_repository() {
     IFS='|' read -r config_file PKG_MGR default_pos <<< "${SYSTEM_ENV[$SYSTEM_TYPE]}"
     mkdir -p "$(dirname "${config_file}")"
@@ -81,7 +82,7 @@ insert_repository() {
         fi
     fi
 }
-#
+
 pkg_manager_cmd() {
     case $1 in
         "update")
@@ -105,7 +106,7 @@ pkg_manager_cmd() {
             fi ;;
     esac
 }
-#
+
 smart_install() {
     declare -Ag install_result
     local remaining=("${@}")
@@ -128,7 +129,7 @@ smart_install() {
     done
     install_result["remaining"]="${remaining[*]}"
 }
-#
+
 check_dependents() {
     local pkg=$1
     case ${SYSTEM_TYPE} in
@@ -141,7 +142,7 @@ check_dependents() {
     esac
         return $?
 }
-#
+
 main() {
     SYSTEM_TYPE=${SYSTEM_TYPE}
     # 配置软件源
@@ -179,8 +180,9 @@ main() {
     
     exit $(( ${#install_result[failed]} + ${#install_result[remaining]} ))
 }
-#
+
 main "$@"
+
 # ####CentOS系统需预先安装 yum-utils ： sudo yum install -y yum-utils
 # ####需要以root权限执行
 # ####首次运行前执行如果以独立的脚本运行需要添加执行权限并传递各种参数按照你的需求
