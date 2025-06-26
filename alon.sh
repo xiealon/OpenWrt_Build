@@ -2,13 +2,13 @@
 #!/bin/bash
 #
 # 系统环境配置
-if [ -z "$1" ]; then
+if [ -z "${1}" ]; then
     echo "no information"
     exit 1
 fi
-echo "$1"
+echo "${1}"
 
-BRANCH="$1"
+BRANCH="${1}"
 shift
 
 SYSTEM_TYPE="openwrt"
@@ -21,7 +21,7 @@ declare -A SYSTEM_ENV=(
 
 # 修改源部分
 declare -A REPO_DEFINITIONS=(
-["alon"]="https://github.com/xiealon/openwrt-packages|openwrt|HEAD"
+["alon"]="https://github.com/xiealon/openwrt-packages|openwrt|HEAD
 ["alon1"]="https://github.com/xiealon/openwrt-package|openwrt|TAIL"
 ["alon2"]="https://github.com/xiealon/small|openwrt|TAIL"
 ["alon3"]="https://github.com/xiealon/small-package|openwrt|TAIL"
@@ -32,7 +32,13 @@ declare -A REPO_DEFINITIONS=(
 # ["alon-ubuntu"]="https://ubuntu.prod.repo/ubuntu focal main restricted universe"  ## 镜像URL 发行版代号 组件列表 [用空格隔开]
 # ["alon-centos"]="https://centos.prod.repo/centos/7/os/x86-64/"                    ## 基础镜像URL
 
-SOURCE_PRIORITY=( "alon" "alon1" "alon2" "alon3" )
+SOURCE_PRIORITY=(
+    "alon"
+    "alon1"
+    "alon2"
+    "alon3" 
+    
+)
 INSTALL_PACKAGES=()
 MAX_RETRY_LEVEL=3
 
