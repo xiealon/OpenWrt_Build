@@ -64,9 +64,9 @@ insert_repository() {
                 echo "${line_content}"
             fi ;;
         "ubuntu")
-            line_content="deb ${REPO_DEFINITIONS[$repo_name]%%|*}" ;;
+            line_content="deb ${definition[0]}" ;;
         "centos")
-            line_content="[$repo_name]\nname=${repo_name}\nbaseurl=${REPO_DEFINITIONS[$repo_name]%%|*}\nenabled=1\ngpgcheck=0" ;;
+            line_content="[$repo_name]\nname=${repo_name}\nbaseurl=${definition[0]}\nenabled=1\ngpgcheck=0" ;;
     esac
     echo "${1}"
     local repo_insert_pos="${definition[2]}"
