@@ -57,7 +57,7 @@ insert_repository() {
     fi
     if ! grep -q "$repo_name" "$config_file" 2>/dev/null; then
         local insert_cmd="\$a"
-        [[ "${default_pos}" == "HEAD" ]] && insert_cmd="1i"
+        [[ "${default_pos}" == "HEAD" ]] && insert_cmd="1 i"
         sed -i.bak.$(date +%s) "/${repo_name}/d; ${insert_cmd}\\${line_content}" "${config_file}"
     fi
 }
