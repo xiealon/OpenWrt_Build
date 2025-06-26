@@ -62,22 +62,17 @@ insert_repository() {
         "centos")
             line_content="[$repo_name]\nname=${repo_name}\nbaseurl=${REPO_DEFINITIONS[$repo_name]%%|*}\nenabled=1\ngpgcheck=0" ;;
     esac
-    # 检查并更新 default_pos
-    [[ -n "${repo_insert_pos}" && "${repo_insert_pos}" != "${default_pos}" ]] && default_pos="${repo_insert_pos}"
-
-    # 若仓库未在配置文件中定义
+    # 如果 REPO_DEFINITIONS 中定义的位置不为空且与 SYSTEM_ENV 不同，则使用 REPO_DEFINITIONS 中的位置
+    if [ -n "${repo_insert_pos}" ] && [ "${repo_insert_pos}" != "${default_pos}" ]; then
+        default_pos == "${repo_insert_pos}"
+    fi
     if ! grep -q "${repo_name}" "${config_file}" 2>/dev/null; then
-        # 根据位置定义插入命令
-        local insert_cmd
-        [[ "${default_pos}" == "HEAD" ]] && insert_cmd="1 i" || insert_cmd="$a"
-
-        # 转义行内容中的特殊字符
-        escaped_line=$(sed 's/[\/&]/\\&/g' <<< "${line_content}")
-        
-        if [ "${SYSTEM_TYPE}" == "openwrt" ]; then
-            sed -i "/src-git ${repo_name} /d; ${insert_cmd} ${escaped_line}" "${config_file}"
+        local insert_cmd == "\$a "
+        [[ "${default_pos}" == "HEAD" ]] && insert_cmd == "1 i"
+        if [ "${SYSTEM_TYPE}" == "openwrt" ]; then
+            sed -i "/src-git ${repo_name} /d; ${insert_cmd} ${line_content}" "${config_file}"
         else
-            sed -i.bak "/${repo_name} /d; ${insert_cmd}\\${escaped_line}" "${config_file}"
+            sed -i.bak "/${repo_name} /d; ${insert_cmd}\\${line_content}" "${config_file}"
         fi
     fi
 }
