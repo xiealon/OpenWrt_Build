@@ -61,7 +61,7 @@ insert_repository() {
         if [ "${SYSTEM_TYPE}" == "openwrt" ]; then
             sed -i "/src-git "${repo_name}"/d; "${insert_cmd}" "${line_content}"" "${config_file}"
         else
-            sed -i.bak "/"${repo_name}"/d; "${insert_cmd}"\"${line_content}"" "${config_file}"
+            sed -i.bak "/"${repo_name}"/d; "${insert_cmd}"\\"${line_content}"" "${config_file}"
         fi
     fi
 }
