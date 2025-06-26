@@ -21,10 +21,10 @@ declare -A SYSTEM_ENV=(
 
 # 修改源部分
 declare -A REPO_DEFINITIONS=(
-[ "alon"  ]="https://github.com/xiealon/openwrt-packages|openwrt|HEAD"
-[ "alon1" ]="https://github.com/xiealon/openwrt-package|openwrt|TAIL"
-[ "alon2" ]="https://github.com/xiealon/small|openwrt|TAIL"
-[ "alon3" ]="https://github.com/xiealon/small-package|openwrt|TAIL"
+["alon"]="https://github.com/xiealon/openwrt-packages|openwrt|HEAD"
+["alon1"]="https://github.com/xiealon/openwrt-package|openwrt|TAIL"
+["alon2"]="https://github.com/xiealon/small|openwrt|TAIL"
+["alon3"]="https://github.com/xiealon/small-package|openwrt|TAIL"
 )
 #
 # 定义repo添加说明
