@@ -53,16 +53,20 @@ insert_repository() {
     local branch=""
     case ${SYSTEM_TYPE} in
         "openwrt")
-            if [ "${repo_name}" == "alon" ]; then
-                local branch="${BRANCH}"
-                local base_url="${definition[0]}"
+            if [[ "${repo_name}" == "alon" ]]; then
+                base_url="${definition[0]}"
+                branch="${BRANCH}"
                 line_content="src-git ${repo_name} ${base_url} ${branch}"
-                line_content="${line_content/${base_url} /${base_url};}"
-                echo "${line_content}"
+                line_content="${line_content/ ${branch}/;${branch}}"
             else
-                local base_url="${definition[0]}"
                 line_content="src-git ${repo_name} ${base_url}"
-                echo "${line_content}"
+            fi
+                echo "[DEBUG] line_content: ${line_content}"  # 调试输出
+                # 使用明确 sed 语法
+            if ! grep -q "src-git ${repo_name} " "${config_file}"; then
+                sed -i.bak "/src-git ${repo_name} /d" "${config_file}"
+                [[ "${default_pos}" == "HEAD" ]] && sed -i "1 i\\${line_content}" "${config_file}"
+                [[ "${default_pos}" == "TAIL" ]] && sed -i "\$a\\${line_content}" "${config_file}"
             fi ;;
         "ubuntu")
             line_content="deb ${definition[0]}" ;;
