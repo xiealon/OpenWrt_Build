@@ -7,18 +7,18 @@ if [ -z "${1}" ]; then
     exit 1
 fi
 echo "${1}"
-
+#
 BRANCH="${1}"
 shift
-
+#
 SYSTEM_TYPE="openwrt"
-
+#
 declare -A SYSTEM_ENV=(
 ["openwrt"]="feeds.conf.default|./scripts/feeds|TAIL"
 ["ubuntu"]="/etc/apt/sources.list.d/custom.list|apt|TAIL"
 ["centos"]="/etc/yum.repos.d/custom.repo|yum|HEAD"
 )
-
+#
 # 修改源部分
 declare -A REPO_DEFINITIONS=(
 ["alon"]="https://github.com/xiealon/openwrt-packages|openwrt|HEAD"
@@ -41,7 +41,7 @@ SOURCE_PRIORITY=(
 )
 INSTALL_PACKAGES=()
 MAX_RETRY_LEVEL=3
-
+#
 insert_repository() {
     IFS='|' read -r config_file PKG_MGR default_pos <<< "${SYSTEM_ENV[$SYSTEM_TYPE]}"
     mkdir -p "$(dirname "${config_file}")"
@@ -73,14 +73,15 @@ insert_repository() {
     if ! grep -q "${repo_name}" "${config_file}" 2>/dev/null; then
         local insert_cmd= "\$a "
         [[ "${default_pos}" == "HEAD" ]] && insert_cmd= "1 i"
+        escaped_line=$(sed 's/[\/&]/\\&/g' <<< "${line_content}")
         if [ "${SYSTEM_TYPE}" == "openwrt" ]; then
-            sed -i "/src-git ${repo_name} /d; ${insert_cmd} ${line_content}" "${config_file}"
+            sed -i "/src-git ${repo_name} /d; ${insert_cmd}\\${escaped_line}" "${config_file}"
         else
-            sed -i.bak "/${repo_name} /d; ${insert_cmd}\\${line_content}" "${config_file}"
+            sed -i.bak "/${repo_name} /d; ${insert_cmd}\\${escaped_line}" "${config_file}"
         fi
     fi
 }
-
+#
 pkg_manager_cmd() {
     case $1 in
         "update")
@@ -104,7 +105,7 @@ pkg_manager_cmd() {
             fi ;;
     esac
 }
-
+#
 smart_install() {
     declare -Ag install_result
     local remaining=("${@}")
@@ -127,6 +128,7 @@ smart_install() {
     done
     install_result["remaining"]="${remaining[*]}"
 }
+#
 check_dependents() {
     local pkg=$1
     case ${SYSTEM_TYPE} in
@@ -139,7 +141,7 @@ check_dependents() {
     esac
         return $?
 }
-
+#
 main() {
     SYSTEM_TYPE=${SYSTEM_TYPE}
     # 配置软件源
@@ -177,9 +179,8 @@ main() {
     
     exit $(( ${#install_result[failed]} + ${#install_result[remaining]} ))
 }
-
+#
 main "$@"
-
-# ####CentOS系统需要预先安装 yum-utils ： sudo yum install -y yum-utils
+# ####CentOS系统需预先安装 yum-utils ： sudo yum install -y yum-utils
 # ####需要以root权限执行
 # ####首次运行前执行如果以独立的脚本运行需要添加执行权限并传递各种参数按照你的需求
