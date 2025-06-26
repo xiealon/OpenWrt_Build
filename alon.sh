@@ -51,10 +51,11 @@ insert_repository() {
             if [ "${repo_name}" == "alon" ]; then
                 local branch="${BRANCH}"
                 local base_url="${REPO_DEFINITIONS[$repo_name]%%|*}"
-                line_content="src-git ${repo_name} ${base_url} ${branch}"
+                line_content="src-git ${repo_name} ${base_url};${branch}"
                 echo "${line_content}"
             else
-                line_content="src-git ${repo_name} ${REPO_DEFINITIONS[$repo_name]%%|*}" 
+                line_content="src-git ${repo_name} ${base_url}"
+                echo "${line_content}"
             fi ;;
         "ubuntu")
             line_content="deb ${REPO_DEFINITIONS[$repo_name]%%|*}" ;;
@@ -71,8 +72,8 @@ insert_repository() {
         default_pos= "${repo_insert_pos}"
     fi
     if ! grep -q "${repo_name}" "${config_file}" 2>/dev/null; then
-        local insert_cmd= "\$a "
-        [[ "${default_pos}" == "HEAD" ]] && insert_cmd= "1 i"
+        local insert_cmd="\$a "
+        [[ "${default_pos}" == "HEAD" ]] && insert_cmd="1 i"
         escaped_line=$(sed 's/[\/&]/\\&/g' <<< "${line_content}")
         if [ "${SYSTEM_TYPE}" == "openwrt" ]; then
             sed -i "/src-git ${repo_name} /d; ${insert_cmd}\\${escaped_line}" "${config_file}"
