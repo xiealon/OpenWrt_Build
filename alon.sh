@@ -51,7 +51,7 @@ insert_repository() {
             if [ "${repo_name}" == "alon" ]; then
                 local branch="${BRANCH}"
                 local base_url="${REPO_DEFINITIONS[$repo_name]%%|*}"
-                line_content="src-git ${repo_name} ${base_url};${branch}"
+                line_content="src-git ${repo_name} ${base_url} ${branch}"
                 echo "${line_content}"
             else
                 line_content="src-git ${repo_name} ${base_url}"
