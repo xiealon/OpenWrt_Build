@@ -85,6 +85,8 @@ jobs:
           git clone --depth=1 https://github.com/xiealon/po2lmo
           (cd po2lmo && sudo make && sudo make install)
 
+          sudo make toolchain/install
+
           df -h
 
       - name: make
