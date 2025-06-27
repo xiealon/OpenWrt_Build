@@ -93,8 +93,6 @@ jobs:
 
           cd /mnt/openwrt
           
-          make toolchain/install
-          
           sudo ${GITHUB_WORKSPACE}/build.sh "${GITHUB_WORKSPACE}/${{ matrix.config }}"
 
       - name: create the files
