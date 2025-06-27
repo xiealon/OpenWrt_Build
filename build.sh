@@ -111,6 +111,14 @@ chmod +x "./diy.sh"
  else
    echo "Successfully updated diy.sh to run"
  fi
+ 
+make toolchain/install
+if [ $? -ne 0 ]; then
+   echo "Failed to update to toolchain."
+   exit 1
+ else
+   echo "Successfully updated to toolchain"
+ fi
 
 make defconfig
 
