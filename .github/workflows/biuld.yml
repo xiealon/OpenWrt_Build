@@ -69,7 +69,7 @@ jobs:
           sudo apt install -y jq
           sudo apt install -y sed
           sudo apt install -y coreutils
-          sudo apt-get install libc6-i386 lib32z1 lib32ncurses5 lib32bz2-1.0
+          sudo apt-get install libc6-i386 lib32z1
           sudo apt install -y bash bc lm-sensors wsdd2 smartmontools ntpdate
           sudo apt install -y ack antlr3 asciidoc autoconf automake autopoint binutils bison build-essential \
           bzip2 ccache cmake cpio curl device-tree-compiler fastjar flex gawk gettext gcc-multilib g++-multilib \
