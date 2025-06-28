@@ -93,6 +93,14 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: "3"
+
+      - name: Debug Python Info
+        run: |
+          echo "Python path: $(which python)"
+          echo "Python version: $(python --version)"
+          echo "PYTHONPATH: $PYTHONPATH"
+          echo "PATH: $PATH"
+ 
       
       - name: make
         run: |
