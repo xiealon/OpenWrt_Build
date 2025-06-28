@@ -78,7 +78,7 @@ jobs:
           libreadline-dev libssl-dev libtool llvm lrzsz msmtp ninja-build p7zip p7zip-full patch pkgconf \
           python3 python3-pyelftools python3-setuptools qemu-utils rsync scons squashfs-tools subversion \
           swig texinfo uglifyjs upx-ucl unzip vim wget xmlto xxd zlib1g-dev
-          sudo apt-get -y install libz-dev python3.5 libgcc1-s1:i386 git-core upx
+          sudo apt-get -y install libz-dev python3.5 git-core upx
           sudo apt install --reinstall libc6
           sudo systemctl daemon-reload
           # sudo apt -y autoremove --purge
