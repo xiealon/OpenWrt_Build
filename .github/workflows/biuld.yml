@@ -16,7 +16,7 @@ on:
 
 jobs:
   matrix:
-    runs-on: ubuntu-18 LTS x64
+    runs-on: ubuntu-18.04
     outputs:
       release: ${{ steps.set-matrix.outputs.release }}
       matrix: ${{ steps.set-matrix.outputs.matrix }}
