@@ -32,9 +32,9 @@ CONFIG_OWNER="${CONFIG_ARRAY[1]}"
 CONFIG_ARCH="${CONFIG_ARRAY[2]}"
 
 if [ "${CONFIG_REPO}" = "lede" ]; then
-#   REPO_URL="https://github.com/xiealon/openwrt-wolf"
-#   REPO_BRANCH="master"
-# elif [ "${CONFIG_REPO}" = "lede" ]; then
+  REPO_URL="https://github.com/xiealon/openwrt-wolf"
+  REPO_BRANCH="master"
+elif [ "${CONFIG_REPO}" = "lede" ]; then
   REPO_URL="https://github.com/xiealon/lede"
   REPO_BRANCH="master"
 else
