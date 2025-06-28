@@ -16,7 +16,7 @@ on:
 
 jobs:
   matrix:
-    runs-on: Ubuntu-lastest
+    runs-on: ubuntu-latest
     outputs:
       release: ${{ steps.set-matrix.outputs.release }}
       matrix: ${{ steps.set-matrix.outputs.matrix }}
@@ -63,16 +63,24 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
           sudo timedatectl set-timezone "Asia/Shanghai"
+
           sudo apt update
           sudo apt full-upgrade -y
+          sudo apt install -y jq
+          sudo apt install -y sed
+          sudo apt install -y coreutils
+          sudo apt-get install libc6-i386 lib32z1
+          sudo apt install -y bash bc lm-sensors wsdd2 smartmontools ntpdate
           sudo apt install -y ack antlr3 asciidoc autoconf automake autopoint binutils bison build-essential \
-          bzip2 ccache clang cmake cpio curl coreutils device-tree-compiler flex gawk gcc-multilib g++-multilib gettext \
+          bzip2 ccache clang cmake cpio curl device-tree-compiler flex gawk gcc-multilib g++-multilib gettext \
           genisoimage git gperf haveged help2man intltool libc6-dev-i386 libelf-dev libfuse-dev libglib2.0-dev \
           libgmp3-dev libltdl-dev libmpc-dev libmpfr-dev libncurses5-dev libncursesw5-dev libpython3-dev \
-          libreadline-dev libssl-dev libtool llvm lrzsz jq msmtp ninja-build p7zip p7zip-full patch pkgconf \
-          python3 python3-pyelftools python3-setuptools qemu-utils rsync sed scons squashfs-tools subversion \
+          libreadline-dev libssl-dev libtool llvm lrzsz msmtp ninja-build p7zip p7zip-full patch pkgconf \
+          python3 python3-pyelftools python3-setuptools qemu-utils rsync scons squashfs-tools subversion \
           swig texinfo uglifyjs upx-ucl unzip vim wget xmlto xxd zlib1g-dev
-          # sudo systemctl daemon-reload
+          sudo apt-get -y install libz-dev python3.5 python2.7 lib32gcc1 git-core upx
+          sudo apt install --reinstall libc6
+          sudo systemctl daemon-reload
           # sudo apt -y autoremove --purge
           sudo apt -y clean
 
@@ -80,19 +88,7 @@ jobs:
           (cd po2lmo && sudo make && sudo make install)
 
           df -h
-
-      - name: Set up Python 3.x
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.5"
-
-      - name: Debug Python Info
-        run: |
-          echo "Python path: $(which python)"
-          echo "Python version: $(python --version)"
-          echo "PYTHONPATH: $PYTHONPATH"
-          echo "PATH: $PATH"
-          
+      
       - name: make
         run: |
           sudo mkdir -p /mnt/openwrt
