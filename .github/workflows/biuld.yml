@@ -100,8 +100,7 @@ jobs:
           echo "Python version: $(python --version)"
           echo "PYTHONPATH: $PYTHONPATH"
           echo "PATH: $PATH"
- 
-      
+          
       - name: make
         run: |
           sudo mkdir -p /mnt/openwrt
