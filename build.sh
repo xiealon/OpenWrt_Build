@@ -140,7 +140,7 @@ if [ "${GITHUB_ACTIONS}" = "true" ]; then
 fi
 
 echo "download package"
-make download -j8 V=s
+make -j8 download V=s
 
 # find dl -size -1024c -exec ls -l {} \; -exec rm -f {} \;
 
