@@ -88,6 +88,11 @@ jobs:
           (cd po2lmo && sudo make && sudo make install)
 
           df -h
+
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3"
       
       - name: make
         run: |
