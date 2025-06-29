@@ -21,7 +21,7 @@ declare -A SYSTEM_ENV=(
 
 # modified the sources
 declare -A REPO_DEFINITIONS=(
-# ["alon"]="https://github.com/xiealon/openwrt-packages|openwrt|HEAD"
+["alon"]="https://github.com/xiealon/openwrt-packages|openwrt|HEAD"
 ["alon1"]="https://github.com/xiealon/openwrt-package|openwrt|TAIL"
 ["alon2"]="https://github.com/xiealon/small|openwrt|TAIL"
 ["alon3"]="https://github.com/xiealon/small-package|openwrt|TAIL"
@@ -33,7 +33,7 @@ declare -A REPO_DEFINITIONS=(
 # ["alon-centos"]="https://centos.prod.repo/centos/7/os/x86-64/"                    ## 基础镜像URL
 
 SOURCE_PRIORITY=(
-#     "alon"
+    "alon"
     "alon1"
     "alon2"
     "alon3" 
