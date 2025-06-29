@@ -140,7 +140,7 @@ if [ $? -ne 0 ]; then
  fi
  
 echo "download package"
-make -j8 download V=s
+make download V=s
 
 # find dl -size -1024c -exec ls -l {} \; -exec rm -f {} \;
 
