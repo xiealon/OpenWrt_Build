@@ -131,14 +131,6 @@ if [ "${GITHUB_ACTIONS}" = "true" ]; then
   popd || exit # "${CONFIG_PATH}"
 fi
 
-make toolchain/install
-if [ $? -ne 0 ]; then
-   echo "Failed to update to toolchain."
-   exit 1
- else
-   echo "Successfully updated to toolchain"
- fi
- 
 echo "download package"
 make download V=s
 
