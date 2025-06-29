@@ -21,7 +21,7 @@ echo "repo: ${repo}; owner: ${owner};"
 sed -i 's/192.168.1.1/192.168.100.1/g' package/base-files/files/bin/config_generate
 
 # Modify hostname
-sed -i 's/OpenWrt/Alon Creat By LEDE/g' package/base-files/files/bin/config_generate
+sed -i 's/OpenWrt/Alon Creat By/g' package/base-files/files/bin/config_generate
 
 # Modify timezone
 sed -i "s/'UTC'/'CST-8'\n        set system.@system[-1].zonename='Asia\/Shanghai'/g" package/base-files/files/bin/config_generate
