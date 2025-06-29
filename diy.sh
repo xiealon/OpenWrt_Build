@@ -57,64 +57,64 @@ fi
 
 # lede    ==> ${defaultsettings}
 # openwrt ==> feeds/alon/default-settings
-defaultsettings=*/base-files/files/etc/uci-defaults
+defaultsettings=*/base-files
 [ "${repo}" = "openwrt" ] && language=zh_cn || language=zh_Hans
 
 # Set default language
-#sed -i "s/en/${language}/g" ${defaultsettings}/zzz-default-settings
+#sed -i "s/en/${language}/g" ${defaultsettings}/files/etc/uci-defaults/zzz-default-settings
 #sed -i "s/en/${language}/g" package/luci/modules/luci-base/root/etc/uci-defaults/luci-base
 #sed -i "s/+@LUCI_LANG_en/+@LUCI_LANG_${language}/g" ${defaultsettings}/Makefile
 
 # Modify password to Null
-sed -i '/CYXluq4wUazHjmCDBCqXF/d' ${defaultsettings}/zzz-default-settings
+sed -i '/CYXluq4wUazHjmCDBCqXF/d' ${defaultsettings}/files/etc/uci-defaults/zzz-default-settings
 
 # Modify the version number
-sed -i "s/OpenWrt /${owner} build $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" ${defaultsettings}/zzz-default-settings
-sed -i "s/LEDE /${owner} build $(TZ=UTC-8 date "+%Y.%m.%d") @ LEDE /g" ${defaultsettings}/zzz-default-settings
+sed -i "s/OpenWrt /${owner} build $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" ${defaultsettings}/files/etc/uci-defaults/zzz-default-settings
+sed -i "s/LEDE /${owner} build $(TZ=UTC-8 date "+%Y.%m.%d") @ LEDE /g" ${defaultsettings}/files/etc/uci-defaults/zzz-default-settings
 
 # Remove openwrt_alon
-# sed -i '/sed -i "s\/# \/\/g" \/etc\/opkg\/distfeeds.conf/a\sed -i "\/openwrt_alon\/d" \/etc\/opkg\/distfeeds.conf' ${defaultsettings}/files/zzz-default-settings
+# sed -i '/sed -i "s\/# \/\/g" \/etc\/opkg\/distfeeds.conf/a\sed -i "\/openwrt_alon\/d" \/etc\/opkg\/distfeeds.conf' ${defaultsettings}/files/etc/uci-defaults/zzz-default-settings
 
 # Modify network setting 设置网络基本参数
-sed -i '$i uci set network.lan.ipaddr="192.168.100.1"' ${defaultsettings}/zzz-default-settings
-# sed -i '$i uci set network.lan.gateway=""' ${defaultsettings}/zzz-default-settings
-sed -i '$i uci set network.lan.netmask="255.255.255.0"' ${defaultsettings}/zzz-default-settings
-sed -i '$i uci set network.lan.dns="112.112.208.1 139.9.23.90 180.76.76.76 223.5.5.5 223.6.6.6 "' ${defaultsettings}/zzz-default-settings
+sed -i '$i uci set network.lan.ipaddr="192.168.100.1"' ${defaultsettings}/files/etc/uci-defaults/zzz-default-settings
+# sed -i '$i uci set network.lan.gateway=""' ${defaultsettings}/files/etc/uci-defaults/zzz-default-settings
+sed -i '$i uci set network.lan.netmask="255.255.255.0"' ${defaultsettings}/files/etc/uci-defaults/zzz-default-settings
+sed -i '$i uci set network.lan.dns="112.112.208.1 139.9.23.90 180.76.76.76 223.5.5.5 223.6.6.6 "' ${defaultsettings}/files/etc/uci-defaults/zzz-default-settings
 
 # modified the Dns servers
-sed -i '$i uci set network.lan.dns_search="ns1.huaweicloud - dns.com "' ${defaultsettings}/zzz-default-settings
-sed -i '$i uci set network.lan.dns_search="ns1.huaweicloud - dns.cn "' ${defaultsettings}/zzz-default-settings
-sed -i '$i uci set network.lan.dns_search="ns1.huaweicloud - dns.net "' ${defaultsettings}/zzz-default-settings
-sed -i '$i uci set network.lan.dns_search="ns1.huaweicloud - dns.org "' ${defaultsettings}/zzz-default-settings
+sed -i '$i uci set network.lan.dns_search="ns1.huaweicloud - dns.com "' ${defaultsettings}/files/etc/uci-defaults/zzz-default-settings
+sed -i '$i uci set network.lan.dns_search="ns1.huaweicloud - dns.cn "' ${defaultsettings}/files/etc/uci-defaults/zzz-default-settings
+sed -i '$i uci set network.lan.dns_search="ns1.huaweicloud - dns.net "' ${defaultsettings}/files/etc/uci-defaults/zzz-default-settings
+sed -i '$i uci set network.lan.dns_search="ns1.huaweicloud - dns.org "' ${defaultsettings}/files/etc/uci-defaults/zzz-default-settings
 
 # set the ipv6 prefix and suffix opening is not recommended
-sed -i '$i uci set network.lan.ip6assign="64"' ${defaultsettings}/zzz-default-settings
-sed -i '$i uci set network.lan.ip6ifaceid"eui64"' ${defaultsettings}/zzz-default-settings
+sed -i '$i uci set network.lan.ip6assign="64"' ${defaultsettings}/files/etc/uci-defaults/zzz-default-settings
+sed -i '$i uci set network.lan.ip6ifaceid"eui64"' ${defaultsettings}/files/etc/uci-defaults/zzz-default-settings
 
 # ignore lan DHCP
-# sed -i '$i uci set dhcp.lan.ignore="1"' ${defaultsettings}/zzz-default-settings
+# sed -i '$i uci set dhcp.lan.ignore="1"' ${defaultsettings}/files/etc/uci-defaults/zzz-default-settings
 
 # 删除WAN接口配置 delete wan network
-# sed -i '$i uci delete network.wan' ${defaultsettings}/zzz-default-settings
-# sed -i '$i uci delete network.wan6' ${defaultsettings}/zzz-default-settings
+# sed -i '$i uci delete network.wan' ${defaultsettings}/files/etc/uci-defaults/zzz-default-settings
+# sed -i '$i uci delete network.wan6' ${defaultsettings}/files/etc/uci-defaults/zzz-default-settings
 
 # 绑定所有物理接口到LAN  bind all Port to Lan
-# sed -i '$i uci set network.lan.ifname="eth0.1 eth1"' ${defaultsettings}/zzz-default-settings 
+# sed -i '$i uci set network.lan.ifname="eth0.1 eth1"' ${defaultsettings}/files/etc/uci-defaults/zzz-default-settings 
 
 # 包含VLAN和无线接口 include the VLAN and wireless （Port）
-# sed -i '$i uci set network.lan.type='bridge'' ${defaultsettings}/zzz-default-settings
+# sed -i '$i uci set network.lan.type='bridge'' ${defaultsettings}/files/etc/uci-defaults/zzz-default-settings
 
 # 提交 commit
-sed -i '$i uci commit network' ${defaultsettings}/zzz-default-settings
+sed -i '$i uci commit network' ${defaultsettings}/files/etc/uci-defaults/zzz-default-settings
 
 # Modify Default PPPOE Setting
-# sed -i '$i uci set network.wan.username=PPPOE_USERNAME' ${defaultsettings}/zzz-default-settings
-# sed -i '$i uci set network.wan.password=PPPOE_PASSWD' ${defaultsettings}/zzz-default-settings
-# sed -i '$i uci commit network' ${defaultsettings}/zzz-default-settings
+# sed -i '$i uci set network.wan.username=PPPOE_USERNAME' ${defaultsettings}/files/etc/uci-defaults/zzz-default-settings
+# sed -i '$i uci set network.wan.password=PPPOE_PASSWD' ${defaultsettings}/files/etc/uci-defaults/zzz-default-settings
+# sed -i '$i uci commit network' ${defaultsettings}/files/etc/uci-defaults/zzz-default-settings
 
 # auto update
-# sed -i '$i uci set autoupdater.general.enable="0"' ${defaultsettings}/zzz-default-settings
-# sed -i '$i uci set commit' ${defaultsettings}/zzz-default-settings
+# sed -i '$i uci set autoupdater.general.enable="0"' ${defaultsettings}/files/etc/uci-defaults/zzz-default-settings
+# sed -i '$i uci set commit' ${defaultsettings}/files/etc/uci-defaults/zzz-default-settings
 
 # Modify ssid
 # sed -i 's/OpenWrt/Alon/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
