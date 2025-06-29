@@ -32,10 +32,10 @@ CONFIG_OWNER="${CONFIG_ARRAY[1]}"
 CONFIG_ARCH="${CONFIG_ARRAY[2]}"
 
 if [ "${CONFIG_REPO}" == "lede" ]; then
-  REPO_URL="https://github.com/xiealon/openwrt;lede-17.01"
-  REPO_BRANCH="master"
-elif [ "${CONFIG_REPO}" == "lede" ]; then
-  REPO_URL="https://github.com/xiealon/lede"
+  REPO_URL="https://github.com/xiealon/openwrt"
+  REPO_BRANCH="lede-17.01"
+elif [ "${CONFIG_REPO}" == "openwrt" ]; then
+  REPO_URL="https://github.com/xiealon/openwrt"
   REPO_BRANCH="master"
 else
   echo "${CONFIG_FILE} name error!"
