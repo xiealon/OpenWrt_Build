@@ -79,7 +79,7 @@ jobs:
           python3 python3-pyelftools python3-setuptools qemu-utils rsync scons squashfs-tools subversion \
           swig texinfo uglifyjs upx-ucl unzip vim wget xmlto xxd zlib1g-dev
           sudo apt-get -y install libz-dev python3.6+ git-core upx
-          diff find gcc-6+
+          diff
           sudo apt install --reinstall libc6
           sudo systemctl daemon-reload
           # sudo apt -y autoremove --purge
