@@ -98,10 +98,17 @@ echo "Inserted repo: ${repo_name}"
 pkg_manager_cmd() {
     case $1 in
         "update")
-            if [[ "$SYSTEM_TYPE" == "openwrt" ]]; then
+            if [[ "${SYSTEM_TYPE}" == "openwrt" ]]; then
                 "${PKG_MGR}" update -a
             else
                 sudo "${PKG_MGR}" update -y
+            fi ;;
+        "golang")
+            if [[ "${SYSTEM_TYPE}" == "openwrt" ]]; then
+                rm -rf feeds/packages/lang/golang
+                git clone https://github.com/sbwml/packages_lang_golang -b 24.x feeds/packages/lang/golang
+            else
+                echo " no need golang "
             fi ;;
         "install")
             shift
