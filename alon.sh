@@ -106,7 +106,7 @@ pkg_manager_cmd() {
         "golang")
             if [[ "${SYSTEM_TYPE}" == "openwrt" ]]; then
                 rm -rf feeds/packages/lang/golang
-                git clone https://github.com/sbwml/packages_lang_golang -b 24.x feeds/packages/lang/golang
+                git clone https://github.com/xiealon/packages_lang_golang -b 24.x feeds/packages/lang/golang
             else
                 echo " no need golang "
             fi ;;
@@ -170,6 +170,7 @@ main() {
     done
     # install part
     pkg_manager_cmd update
+    pkg_manager_cmd golang
     pkg_manager_cmd install
     pkg_manager_cmd list
     declare -Ag install_result
