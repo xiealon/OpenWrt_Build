@@ -1,4 +1,4 @@
-#
+﻿#
 #!/bin/bash
 #
 # env set
@@ -46,13 +46,14 @@ insert_repository() {
 local repo_name="${1}"
 local repo_definition="${REPO_DEFINITIONS[$repo_name]}"
 IFS='|' read -ra definition <<< "$repo_definition"
-IFS='|' read -r config_file PKG_MGR system_default_pos <<< "${SYSTEM_ENV[$SYSTEM_TYPE]}"
-
-mkdir -p "$(dirname "${config_file}")"
+IFS='|' read -ra sys_opt <<< "${SYSTEM_ENV[$SYSTEM_TYPE]}"
+local opt_config_file="${sys_opt[0]}"
+local opt_system_default_pos="${sys_opt[2]}"
+mkdir -p "$(dirname "${opt_config_file}")"
 
 local repo_insert_pos="${definition[2]-}"
 
-local final_pos="${repo_insert_pos:-$system_default_pos}"
+local final_pos="${repo_insert_pos:-$opt_system_default_pos}"
 
 case "${SYSTEM_TYPE}" in
     "openwrt")
@@ -70,24 +71,24 @@ case "${SYSTEM_TYPE}" in
         
         echo "[DEBUG] OpenWrt line: ${line_content}"
         
-        if ! grep -q "${line_pattern}" "${config_file}"; then
-            sed -i.bak "/${line_pattern}/d" "${config_file}"
+        if ! grep -q "${line_pattern}" "${opt_config_file}"; then
+            sed -i.bak "/${line_pattern}/d" "${opt_config_file}"
             if [[ "${final_pos}" == "HEAD" ]]; then
-                sed -i "1 i\\${line_content}" "${config_file}"
+                sed -i "1 i\\${line_content}" "${opt_config_file}"
             else
-                sed -i "\$a\\${line_content}" "${config_file}"
+                sed -i "\$a\\${line_content}" "${opt_config_file}"
             fi
         fi
         ;;
         
     "ubuntu")
         local line_content="deb ${definition[0]}"
-        sed -i.bak "/${repo_name} /d; \\${final_pos} i\\${line_content}" "${config_file}"
+        sed -i.bak "/${repo_name} /d; \\${final_pos} i\\${line_content}" "${opt_config_file}"
         ;;
         
     "centos")
         local line_content="[${repo_name}]\nname=${repo_name}\nbaseurl=${definition[0]}\nenabled=1\ngpgcheck=0"
-        sed -i.bak "/${repo_name} /d; \\${final_pos} i\\${line_content}" "${config_file}"
+        sed -i.bak "/${repo_name} /d; \\${final_pos} i\\${line_content}" "${opt_config_file}"
         ;;
 esac
 
@@ -96,12 +97,13 @@ echo "Inserted repo: ${repo_name}"
 }
 
 pkg_manager_cmd() {
+    local opt_update_install="${sys_opt[1]}"
     case $1 in
         "update")
             if [[ "${SYSTEM_TYPE}" == "openwrt" ]]; then
-                "${PKG_MGR}" update -a
+                "${opt_update_install}" update -a
             else
-                sudo "${PKG_MGR}" update -y
+                sudo "${opt_update_install}" update -y
             fi ;;
         "golang")
             if [[ "${SYSTEM_TYPE}" == "openwrt" ]]; then
@@ -113,15 +115,15 @@ pkg_manager_cmd() {
         "install")
             shift
             if [[ "$SYSTEM_TYPE" == "openwrt" ]]; then
-                "${PKG_MGR}" install -a "$@"
+                "${opt_update_install}" install -a "$@"
             else
-                sudo "${PKG_MGR}" install -y "$@"
+                sudo "${opt_update_install}" install -y "$@"
             fi ;;
         "list")
             if [[ "$SYSTEM_TYPE" == "openwrt" ]]; then
-                "${PKG_MGR}" list | awk '{print $1}'
+                "${opt_update_install}" list | awk '{print $1}'
             else
-                sudo "${PKG_MGR}" list --installed
+                sudo "${opt_update_install}" list --installed
             fi ;;
     esac
 }
@@ -163,7 +165,7 @@ check_dependents() {
 }
 
 main() {
-    SYSTEM_TYPE=${SYSTEM_TYPE}
+    SYSTEM_TYPE="${SYSTEM_TYPE}"
     # send the sources
     for repo in "${SOURCE_PRIORITY[@]}"; do
         [[ "${REPO_DEFINITIONS[$repo]}" =~ $SYSTEM_TYPE ]] && insert_repository "$repo"
