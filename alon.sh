@@ -1,16 +1,16 @@
 #
 #!/bin/bash
 #
-# env set
+# env set test the figure of first
 if [ -z "${1}" ]; then
     echo "no information"
     exit 1
 fi
 echo "${1}"
-
+# evaluation the first figure and remove
 BRANCH="${1}"
 shift
-
+# manual set the sys_types
 SYSTEM_TYPE="openwrt"
 
 declare -A SYSTEM_ENV=(
@@ -19,7 +19,7 @@ declare -A SYSTEM_ENV=(
 ["centos"]="/etc/yum.repos.d/custom.repo|yum|HEAD"
 )
 
-# modified the sources
+# modified write the sources
 declare -A REPO_DEFINITIONS=(
 ["alon"]="https://github.com/xiealon/openwrt-packages-ing|openwrt|HEAD"
 ["alon1"]="https://github.com/xiealon/openwrt-package|openwrt|TAIL"
