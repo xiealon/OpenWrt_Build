@@ -21,7 +21,7 @@ declare -A SYSTEM_ENV=(
 
 # modified the sources
 declare -A REPO_DEFINITIONS=(
-["alon"]="https://github.com/xiealon/openwrt-packages-ing|openwrt|TAIL"
+["alon"]="https://github.com/xiealon/openwrt-packages-ing|openwrt|HEAD"
 ["alon1"]="https://github.com/xiealon/openwrt-package|openwrt|TAIL"
 ["alon2"]="https://github.com/xiealon/small|openwrt|TAIL"
 ["alon3"]="https://github.com/xiealon/small-package|openwrt|TAIL"
