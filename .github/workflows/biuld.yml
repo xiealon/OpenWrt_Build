@@ -99,7 +99,7 @@ jobs:
       - name: create the files
         run: |
           cd /mnt/openwrt
-          ls -al
+          sudo ls -al
             if [ $(ls *.img.gz | wc -l) -le 0 ]; then
               echo "No firmware found"
               exit 1
