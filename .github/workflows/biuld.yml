@@ -118,7 +118,7 @@ jobs:
         
       - name: Check file permissions
         run: |  
-          ls -l /mnt/openwrt/*.zip
+          sudo ls -l /mnt/openwrt/*.zip
         
       - name: Wait for file operations to complete
         run: |
