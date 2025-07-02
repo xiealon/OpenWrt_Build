@@ -90,7 +90,7 @@ jobs:
       
       - name: make
         run: |
-          sudo mkdir -p /mnt/openwrt
+          sudo mkdir -p /mnt/openwrt and create
 
           cd /mnt/openwrt
           
