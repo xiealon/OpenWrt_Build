@@ -96,6 +96,10 @@ jobs:
           cd /mnt/openwrt
           
           sudo ${GITHUB_WORKSPACE}/build.sh "${GITHUB_WORKSPACE}/${{ matrix.config }}" "true"
+
+      - name: create
+        run:
+          cd /mnt/openwrt
           
           ls -al
             if [ $(ls *.img.gz | wc -l) -le 0 ]; then
