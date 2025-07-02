@@ -151,8 +151,8 @@ ls -al
 # sed -i '/buildinfo/d; /\.bin/d; /\.manifest/d' sha256sums
 rm -rf packages *.buildinfo *.manifest *.bin sha256sums
 
-rm -f *.img.gz
-gzip -f *.img
+# rm -f *.img.gz  # Access to command code set the files for .gz
+# gzip -f *.img   # Use the code "CONFIG_TARGET_INMAGES_GZIP
 
 mv -f *.img.gz "${WORK_PATH}"
 
