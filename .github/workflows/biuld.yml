@@ -95,15 +95,13 @@ jobs:
           cd /mnt/openwrt
           
           sudo ${GITHUB_WORKSPACE}/build.sh "${GITHUB_WORKSPACE}/${{ matrix.config }}" "true"
-
-      - name: create the files
-        run: |
-          cd /mnt/openwrt
-          sudo ls -al
+          
+          ls -al
             if [ $(ls *.img.gz | wc -l) -le 0 ]; then
               echo "No firmware found"
               exit 1
             fi
+            
           sudo zip -q -r $(basename "${{ matrix.config }}" .config | awk -F';' '{printf $1"-"$3}')-${{ env.release }}.zip *.img.gz
             if [ $? -ne 0 ]; then
               echo "Failed to condense the files"
