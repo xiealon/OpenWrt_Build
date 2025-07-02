@@ -94,7 +94,7 @@ jobs:
 
           cd /mnt/openwrt
           
-          sudo ${GITHUB_WORKSPACE}/build.sh "${GITHUB_WORKSPACE}/${{ matrix.config }}"
+          sudo ${GITHUB_WORKSPACE}/build.sh "${GITHUB_WORKSPACE}/${{ matrix.config }}" "true"
 
       - name: create the files
         run: |
