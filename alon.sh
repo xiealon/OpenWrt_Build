@@ -45,21 +45,22 @@ MAX_RETRY_LEVEL=3
 insert_repository() {
 local repo_name="${1}"
 local repo_definition="${REPO_DEFINITIONS[$repo_name]}"
-IFS='|' read -ra definition <<< "$repo_definition"
-IFS='|' read -ra sys_opt <<< "${SYSTEM_ENV[$SYSTEM_TYPE]}"
+IFS='|' read -ra definition <<< "${repo_definition}"
+IFS='|' read -ra sys_opt <<< "${SYSTEM_ENV[${SYSTEM_TYPE}]}"
 local opt_config_file="${sys_opt[0]}"
 local opt_system_default_pos="${sys_opt[2]}"
 mkdir -p "$(dirname "${opt_config_file}")"
 
 local repo_insert_pos="${definition[2]-}"
 
-local final_pos="${repo_insert_pos:-$opt_system_default_pos}"
+local final_pos="${{repo_insert_pos}:-${opt_system_default_pos}}"
 
 case "${SYSTEM_TYPE}" in
     "openwrt")
         local base_url="${definition[0]}"
         local branch=""
-        local line_content="" line_pattern="src-git ${repo_name} "
+        local line_content="" 
+              line_pattern="src-git ${repo_name} "
         
         if [[ "${repo_name}" == "alon" ]]; then
             branch="${BRANCH}"
@@ -120,8 +121,8 @@ pkg_manager_cmd() {
                 sudo "${opt_update_install}" install -y "$@"
             fi ;;
         "list")
-            if [[ "$SYSTEM_TYPE" == "openwrt" ]]; then
-                "${opt_update_install}" list | awk '{print $1}'
+            if [[ "${SYSTEM_TYPE}" == "openwrt" ]]; then
+                "${opt_update_install}" list | awk '{print ${1}}'
             else
                 sudo "${opt_update_install}" list --installed
             fi ;;
@@ -137,13 +138,13 @@ smart_install() {
         declare -a current_round=("${remaining[@]}")
         unset remaining
         for pkg in "${current_round[@]}"; do
-            if pkg_manager_cmd install "$pkg" 2>/dev/null; then
-                install_result["success"]+= "$pkg"
+            if pkg_manager_cmd install "${pkg}" 2>/dev/null; then
+                install_result["success"]+= "${pkg}"
             else
-                if check_dependents "$pkg"; then
-                    remaining+=("$pkg")
+                if check_dependents "${pkg}"; then
+                    remaining+=("${pkg}")
                 else
-                    install_result["failed"]+= "$pkg"
+                    install_result["failed"]+= "${pkg}"
                 fi
             fi
         done
@@ -156,20 +157,20 @@ check_dependents() {
     local pkg=$1
     case ${SYSTEM_TYPE} in
         "openwrt")
-            opkg whatdepends "$pkg" | grep -q "Depends on" ;;
+            opkg whatdepends "${pkg}" | grep -q "Depends on" ;;
         "ubuntu")
-            apt-cache rdepends --installed "$pkg" | grep -qv "Reverse Depends:" ;;
+            apt-cache rdepends --installed "${pkg}" | grep -qv "Reverse Depends:" ;;
         "centos")
-            repoquery --installed --whatrequires "$pkg" | grep -q . ;;
+            repoquery --installed --whatrequires "${pkg}" | grep -q . ;;
     esac
-        return $?
+        return ${?}
 }
 
 main() {
     SYSTEM_TYPE="${SYSTEM_TYPE}"
     # send the sources
     for repo in "${SOURCE_PRIORITY[@]}"; do
-        [[ "${REPO_DEFINITIONS[$repo]}" =~ $SYSTEM_TYPE ]] && insert_repository "$repo"
+        [[ "${REPO_DEFINITIONS[$repo]}" =~ ${SYSTEM_TYPE} ]] && insert_repository "${repo}"
     done
     # install part
     pkg_manager_cmd update
@@ -179,7 +180,7 @@ main() {
     declare -Ag install_result
     if ! pkg_manager_cmd install "${INSTALL_PACKAGES[@]}" &>/dev/null; then
         declare -a initial_failed=()
-        case $SYSTEM_TYPE in
+        case ${SYSTEM_TYPE} in
             "ubuntu")
                 initial_failed=($(apt-get -s install "${INSTALL_PACKAGES[@]}" 2>&1 | 
                     awk '/E: Unable to locate package/ {print $NF}')) ;;
@@ -204,7 +205,7 @@ main() {
     exit $(( ${#install_result[failed]} + ${#install_result[remaining]} ))
 }
 
-main "$@"
+main "${@}"
 
 # ####CentOS need preinstall yum-util:sudo yum install -y yum-utils
 # ####root
