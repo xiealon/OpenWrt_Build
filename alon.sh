@@ -116,9 +116,9 @@ pkg_manager_cmd() {
         "install")
             shift
             if [[ "$SYSTEM_TYPE" == "openwrt" ]]; then
-                "${opt_update_install}" install -a "$@"
+                "${opt_update_install}" install -a "${@}"
             else
-                sudo "${opt_update_install}" install -y "$@"
+                sudo "${opt_update_install}" install -y "${@}"
             fi ;;
         "list")
             if [[ "${SYSTEM_TYPE}" == "openwrt" ]]; then
