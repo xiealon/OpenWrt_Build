@@ -53,7 +53,7 @@ mkdir -p "$(dirname "${opt_config_file}")"
 
 local repo_insert_pos="${definition[2]-}"
 
-local final_pos="${{repo_insert_pos}:-${opt_system_default_pos}}"
+local final_pos="{${repo_insert_pos}:-${opt_system_default_pos}}"
 
 case "${SYSTEM_TYPE}" in
     "openwrt")
