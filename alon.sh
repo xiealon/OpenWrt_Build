@@ -22,9 +22,9 @@ declare -A SYSTEM_ENV=(
 # modified write the sources
 declare -A REPO_DEFINITIONS=(
 ["alon"]="https://github.com/xiealon/openwrt-packages-ing|openwrt|HEAD"
-["alon1"]="https://github.com/xiealon/openwrt-package|openwrt|TAIL"
-["alon2"]="https://github.com/xiealon/small|openwrt|TAIL"
-["alon3"]="https://github.com/xiealon/small-package|openwrt|TAIL"
+["alon1"]="https://github.com/xiealon/openwrt-package|openwrt"
+["alon2"]="https://github.com/xiealon/small|openwrt"
+["alon3"]="https://github.com/xiealon/small-package|openwrt"
 )
 
 # definition repo notice
