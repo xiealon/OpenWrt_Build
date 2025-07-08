@@ -49,13 +49,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@main
 
+      - name: Restore Cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            openwrt/dl
+            openwrt/build_dir
+            openwrt/staging_dir
+            openwrt/ccache
+          key: ${{ runner.os }}-openwrt-${{ hashFiles('feeds.conf', '.config') }}
       # don't modify to run
       # - name: Free Disk Space (Ubuntu)
       #   uses: jlumbroso/free-disk-space@main
       #   with:
       #        tool-cache: true
           
-
       - name: Init Env
         env:
           DEBIAN_FRONTEND: noninteractive
@@ -136,6 +144,17 @@ jobs:
           tag_name: ${{ env.release }}
           files: /mnt/openwrt/*.zip
 
+      - name: Update Cache
+        if: always()  # 即使构建失败也保存缓存
+        uses: actions/cache/save@v3
+        with:
+          path: |
+            openwrt/dl
+            openwrt/build_dir
+            openwrt/staging_dir
+            openwrt/ccache
+          key: ${{ runner.os }}-openwrt-${{ hashFiles('feeds.conf', '.config') }}
+      
       - name: Delete workflow runs
         uses: Mattraks/delete-workflow-runs@v2
         with:
