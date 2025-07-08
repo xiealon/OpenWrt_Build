@@ -1,16 +1,16 @@
 #
 #!/bin/bash
 #
-# env set
+# env set test the figure of first
 if [ -z "${1}" ]; then
     echo "no information"
     exit 1
 fi
 echo "${1}"
-
+# evaluation the first figure and remove
 BRANCH="${1}"
 shift
-
+# manual set the sys_types
 SYSTEM_TYPE="openwrt"
 
 declare -A SYSTEM_ENV=(
@@ -19,12 +19,12 @@ declare -A SYSTEM_ENV=(
 ["centos"]="/etc/yum.repos.d/custom.repo|yum|HEAD"
 )
 
-# modified the sources
+# modified write the sources
 declare -A REPO_DEFINITIONS=(
-["alon"]="https://github.com/xiealon/openwrt-packages-ing|openwrt|TAIL"
-["alon1"]="https://github.com/xiealon/openwrt-package|openwrt|TAIL"
-["alon2"]="https://github.com/xiealon/small|openwrt|TAIL"
-["alon3"]="https://github.com/xiealon/small-package|openwrt|TAIL"
+["alon"]="https://github.com/xiealon/openwrt-packages-ing|openwrt|HEAD"
+["alon1"]="https://github.com/xiealon/openwrt-package|openwrt"
+["alon2"]="https://github.com/xiealon/small|openwrt"
+["alon3"]="https://github.com/xiealon/small-package|openwrt"
 )
 
 # definition repo notice
@@ -45,20 +45,22 @@ MAX_RETRY_LEVEL=3
 insert_repository() {
 local repo_name="${1}"
 local repo_definition="${REPO_DEFINITIONS[$repo_name]}"
-IFS='|' read -ra definition <<< "$repo_definition"
-IFS='|' read -r config_file PKG_MGR system_default_pos <<< "${SYSTEM_ENV[$SYSTEM_TYPE]}"
-
-mkdir -p "$(dirname "${config_file}")"
+IFS='|' read -ra definition <<< "${repo_definition}"
+IFS='|' read -ra sys_opt <<< "${SYSTEM_ENV[${SYSTEM_TYPE}]}"
+local opt_config_file="${sys_opt[0]}"
+local opt_system_default_pos="${sys_opt[2]}"
+mkdir -p "$(dirname "${opt_config_file}")"
 
 local repo_insert_pos="${definition[2]-}"
 
-local final_pos="${repo_insert_pos:-$system_default_pos}"
+local final_pos="${repo_insert_pos:-${opt_system_default_pos}}"
 
 case "${SYSTEM_TYPE}" in
     "openwrt")
         local base_url="${definition[0]}"
         local branch=""
-        local line_content="" line_pattern="src-git ${repo_name} "
+        local line_content="" 
+              line_pattern="src-git ${repo_name} "
         
         if [[ "${repo_name}" == "alon" ]]; then
             branch="${BRANCH}"
@@ -70,24 +72,24 @@ case "${SYSTEM_TYPE}" in
         
         echo "[DEBUG] OpenWrt line: ${line_content}"
         
-        if ! grep -q "${line_pattern}" "${config_file}"; then
-            sed -i.bak "/${line_pattern}/d" "${config_file}"
+        if ! grep -q "${line_pattern}" "${opt_config_file}"; then
+            sed -i.bak "/${line_pattern}/d" "${opt_config_file}"
             if [[ "${final_pos}" == "HEAD" ]]; then
-                sed -i "1 i\\${line_content}" "${config_file}"
+                sed -i "1 i\\${line_content}" "${opt_config_file}"
             else
-                sed -i "\$a\\${line_content}" "${config_file}"
+                sed -i "\$a\\${line_content}" "${opt_config_file}"
             fi
         fi
         ;;
         
     "ubuntu")
         local line_content="deb ${definition[0]}"
-        sed -i.bak "/${repo_name} /d; \\${final_pos} i\\${line_content}" "${config_file}"
+        sed -i.bak "/${repo_name} /d; \\${final_pos} i\\${line_content}" "${opt_config_file}"
         ;;
         
     "centos")
         local line_content="[${repo_name}]\nname=${repo_name}\nbaseurl=${definition[0]}\nenabled=1\ngpgcheck=0"
-        sed -i.bak "/${repo_name} /d; \\${final_pos} i\\${line_content}" "${config_file}"
+        sed -i.bak "/${repo_name} /d; \\${final_pos} i\\${line_content}" "${opt_config_file}"
         ;;
 esac
 
@@ -96,12 +98,13 @@ echo "Inserted repo: ${repo_name}"
 }
 
 pkg_manager_cmd() {
+    local opt_update_install="${sys_opt[1]}"
     case $1 in
         "update")
             if [[ "${SYSTEM_TYPE}" == "openwrt" ]]; then
-                "${PKG_MGR}" update -a
+                "${opt_update_install}" update -a
             else
-                sudo "${PKG_MGR}" update -y
+                sudo "${opt_update_install}" update -y
             fi ;;
         "golang")
             if [[ "${SYSTEM_TYPE}" == "openwrt" ]]; then
@@ -113,15 +116,15 @@ pkg_manager_cmd() {
         "install")
             shift
             if [[ "$SYSTEM_TYPE" == "openwrt" ]]; then
-                "${PKG_MGR}" install -a "$@"
+                "${opt_update_install}" install -a "${@}"
             else
-                sudo "${PKG_MGR}" install -y "$@"
+                sudo "${opt_update_install}" install -y "${@}"
             fi ;;
         "list")
-            if [[ "$SYSTEM_TYPE" == "openwrt" ]]; then
-                "${PKG_MGR}" list | awk '{print $1}'
+            if [[ "${SYSTEM_TYPE}" == "openwrt" ]]; then
+                "${opt_update_install}" list | awk '{print ${1}}'
             else
-                sudo "${PKG_MGR}" list --installed
+                sudo "${opt_update_install}" list --installed
             fi ;;
     esac
 }
@@ -130,17 +133,18 @@ smart_install() {
     declare -Ag install_result
     local remaining=("${@}")
     local retry_level=0
+    local pkg=""
     while (( retry_level++ < MAX_RETRY_LEVEL )) && (( ${#remaining[@]} > 0 )); do
         declare -a current_round=("${remaining[@]}")
         unset remaining
         for pkg in "${current_round[@]}"; do
-            if pkg_manager_cmd install "$pkg" 2>/dev/null; then
-                install_result["success"]+= "$pkg"
+            if pkg_manager_cmd install "${pkg}" 2>/dev/null; then
+                install_result["success"]+= "${pkg}"
             else
-                if check_dependents "$pkg"; then
-                    remaining+=("$pkg")
+                if check_dependents "${pkg}"; then
+                    remaining+=("${pkg}")
                 else
-                    install_result["failed"]+= "$pkg"
+                    install_result["failed"]+= "${pkg}"
                 fi
             fi
         done
@@ -153,20 +157,20 @@ check_dependents() {
     local pkg=$1
     case ${SYSTEM_TYPE} in
         "openwrt")
-            opkg whatdepends "$pkg" | grep -q "Depends on" ;;
+            opkg whatdepends "${pkg}" | grep -q "Depends on" ;;
         "ubuntu")
-            apt-cache rdepends --installed "$pkg" | grep -qv "Reverse Depends:" ;;
+            apt-cache rdepends --installed "${pkg}" | grep -qv "Reverse Depends:" ;;
         "centos")
-            repoquery --installed --whatrequires "$pkg" | grep -q . ;;
+            repoquery --installed --whatrequires "${pkg}" | grep -q . ;;
     esac
-        return $?
+        return ${?}
 }
 
 main() {
-    SYSTEM_TYPE=${SYSTEM_TYPE}
+    SYSTEM_TYPE="${SYSTEM_TYPE}"
     # send the sources
     for repo in "${SOURCE_PRIORITY[@]}"; do
-        [[ "${REPO_DEFINITIONS[$repo]}" =~ $SYSTEM_TYPE ]] && insert_repository "$repo"
+        [[ "${REPO_DEFINITIONS[$repo]}" =~ ${SYSTEM_TYPE} ]] && insert_repository "${repo}"
     done
     # install part
     pkg_manager_cmd update
@@ -176,7 +180,7 @@ main() {
     declare -Ag install_result
     if ! pkg_manager_cmd install "${INSTALL_PACKAGES[@]}" &>/dev/null; then
         declare -a initial_failed=()
-        case $SYSTEM_TYPE in
+        case ${SYSTEM_TYPE} in
             "ubuntu")
                 initial_failed=($(apt-get -s install "${INSTALL_PACKAGES[@]}" 2>&1 | 
                     awk '/E: Unable to locate package/ {print $NF}')) ;;
@@ -201,7 +205,7 @@ main() {
     exit $(( ${#install_result[failed]} + ${#install_result[remaining]} ))
 }
 
-main "$@"
+main "${@}"
 
 # ####CentOS need preinstall yum-util:sudo yum install -y yum-utils
 # ####root

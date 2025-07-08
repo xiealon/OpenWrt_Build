@@ -32,11 +32,11 @@ CONFIG_OWNER="${CONFIG_ARRAY[1]}"
 CONFIG_ARCH="${CONFIG_ARRAY[2]}"
 
 if [ "${CONFIG_REPO}" == "lede" ]; then
-  REPO_URL="https://github.com/xiealon/openwrt"
-  REPO_BRANCH="lede-17.01"
+  REPO_URL="https://github.com/xiealon/lede"
+  REPO_BRANCH="master"
 elif [ "${CONFIG_REPO}" == "openwrt" ]; then
-  REPO_URL="https://github.com/xiealon/openwrt"
-  REPO_BRANCH="openwrt-23.05"
+  REPO_URL="https://github.com/xiealon/openwrt-wolf"
+  REPO_BRANCH="master"
 else
   echo "${CONFIG_FILE} name error!"
   exit 1
@@ -151,8 +151,8 @@ ls -al
 # sed -i '/buildinfo/d; /\.bin/d; /\.manifest/d' sha256sums
 rm -rf packages *.buildinfo *.manifest *.bin sha256sums
 
-rm -f *.img.gz
-gzip -f *.img
+# rm -f *.img.gz  # Access to command code set the files for .gz
+# gzip -f *.img   # Use the code "CONFIG_TARGET_INMAGES_GZIP
 
 mv -f *.img.gz "${WORK_PATH}"
 
