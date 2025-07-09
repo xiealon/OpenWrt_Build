@@ -53,10 +53,10 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            openwrt/dl
-            openwrt/build_dir
-            openwrt/staging_dir
-            openwrt/ccache
+            /mnt/openwrt/dl
+            /mnt/openwrt/build_dir
+            /mnt/openwrt/staging_dir
+            /mnt/openwrt/ccache
           key: ${{ runner.os }}-openwrt-${{ hashFiles('feeds.conf', '.config') }}
       # don't modify to run
       # - name: Free Disk Space (Ubuntu)
@@ -149,10 +149,10 @@ jobs:
         uses: actions/cache/save@v3
         with:
           path: |
-            openwrt/dl
-            openwrt/build_dir
-            openwrt/staging_dir
-            openwrt/ccache
+            /mnt/openwrt/dl
+            /mnt/openwrt/build_dir
+            /mnt/openwrt/staging_dir
+            /mnt/openwrt/ccache
           key: ${{ runner.os }}-openwrt-${{ hashFiles('feeds.conf', '.config') }}
       
       - name: Delete workflow runs
