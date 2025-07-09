@@ -76,7 +76,7 @@ jobs:
           sudo apt full-upgrade -y
           sudo apt install -y jq
           sudo apt install -y sed
-          sudo apt install -y coreutils
+          sudo apt install -y coreutils libpcre2-dev
           sudo apt install -y e2fsprogs
           sudo apt-get install libc6-i386 lib32z1
           sudo apt install -y bash bc lm-sensors wsdd2 smartmontools ntpdate
