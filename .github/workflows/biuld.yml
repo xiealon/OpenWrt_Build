@@ -85,7 +85,7 @@ jobs:
           python3-pip python3-pyelftools python3-setuptools qemu-utils rsync scons sed \
           smartmontools squashfs-tools subversion swig texinfo uglifyjs upx-ucl unzip \
           vim wget wsdd2 xmlto xxd zlib1g-dev \
-          bc kmod gcc-i686-linux-gnu python-is-python3 libcap-dev libpam0g-dev libgmp-dev libmpfr-dev
+          bc kmod gcc-i686-linux-gnu python-is-python3 libcap-dev libpam0g-dev libgmp-dev libmpfr-dev \
           sudo apt install --reinstall libc6
           sudo systemctl daemon-reload
           # sudo apt -y autoremove --purge
