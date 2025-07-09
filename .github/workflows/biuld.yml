@@ -53,10 +53,10 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            /mnt/openwrt/dl
-            /mnt/openwrt/build_dir
-            /mnt/openwrt/staging_dir
-            /mnt/openwrt/ccache
+            "${GITHUB_WORKSPACE}"/openwrt/dl
+            "${GITHUB_WORKSPACE}"/openwrt/build_dir
+            "${GITHUB_WORKSPACE}"/openwrt/staging_dir
+            "${GITHUB_WORKSPACE}"/openwrt/ccache
           key: ${{ runner.os }}-openwrt-${{ hashFiles('feeds.conf', '.config') }}
       # don't modify to run
       # - name: Free Disk Space (Ubuntu)
@@ -99,15 +99,15 @@ jobs:
       
       - name: make
         run: |
-          sudo mkdir -p /mnt/openwrt
+          mkdir -p "${GITHUB_WORKSPACE}/openwrt"
 
-          cd /mnt/openwrt
+          cd "${GITHUB_WORKSPACE}/openwrt"
           
-          sudo ${GITHUB_WORKSPACE}/build.sh "${GITHUB_WORKSPACE}/${{ matrix.config }}"
+          "${GITHUB_WORKSPACE}"/build.sh "${GITHUB_WORKSPACE}/${{ matrix.config }}"
 
       - name: create
         run: |
-          cd /mnt/openwrt
+          cd /${GITHUB_WORKSPACE}/openwrt
           
           ls -al
             if [ $(ls *.img.gz | wc -l) -le 0 ]; then
@@ -115,7 +115,7 @@ jobs:
               exit 1
             fi
             
-          sudo zip -q -r $(basename "${{ matrix.config }}" .config | awk -F';' '{printf $1"-"$3}')-${{ env.release }}.zip *.img.gz
+          zip -q -r $(basename "${{ matrix.config }}" .config | awk -F';' '{printf $1"-"$3}')-${{ env.release }}.zip *.img.gz
             if [ $? -ne 0 ]; then
               echo "Failed to condense the files"
               exit 1
@@ -129,7 +129,7 @@ jobs:
         
       - name: Check file permissions
         run: |  
-          sudo ls -l /mnt/openwrt/*.zip
+          ls -l /${GITHUB_WORKSPACE}/openwrt/*.zip
         
       - name: Wait for file operations to complete
         run: |
@@ -142,17 +142,17 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ env.release }}
-          files: /mnt/openwrt/*.zip
+          files: /"${GITHUB_WORKSPACE}"/openwrt/*.zip
 
       - name: Update Cache
         if: always()  # 即使构建失败也保存缓存
         uses: actions/cache/save@v3
         with:
           path: |
-            /mnt/openwrt/dl
-            /mnt/openwrt/build_dir
-            /mnt/openwrt/staging_dir
-            /mnt/openwrt/ccache
+            /"${GITHUB_WORKSPACE}"/openwrt/dl
+            /"${GITHUB_WORKSPACE}"/openwrt/build_dir
+            /"${GITHUB_WORKSPACE}"/openwrt/staging_dir
+            /"${GITHUB_WORKSPACE}"/openwrt/ccache
           key: ${{ runner.os }}-openwrt-${{ hashFiles('feeds.conf', '.config') }}
       
       - name: Delete workflow runs
