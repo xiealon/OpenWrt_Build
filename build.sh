@@ -12,7 +12,7 @@ if [ -z "${1}" ] || [ ! -f "${1}" ]; then
 fi
 
 WORK_PATH="$(pwd)"
-REAL_PATH=$(realpath "${1}")
+REAL_PATH=$(realpath "${1}")                          # 传入的github_workspace/matrix路径
 SCRIPT_FILE="${WORK_PATH}/diy.sh"
 CONFIG_FILE="${REAL_PATH}"                            # 传入的配置文件
 ALON_PATH=$(dirname "${REAL_PATH}")
