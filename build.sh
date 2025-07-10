@@ -12,14 +12,14 @@ if [ -z "${1}" ] || [ ! -f "${1}" ]; then
 fi
 
 WORK_PATH="$(pwd)"
-
+REAL_PATH=$(realpath "${1}")
 SCRIPT_FILE="${WORK_PATH}/diy.sh"
-CONFIG_FILE=$(realpath "${1}")                        # 传入的配置文件
-ALON_PATH=$(dirname "${CONFIG_FILE}")
+CONFIG_FILE="${REAL_PATH}"                            # 传入的配置文件
+ALON_PATH=$(dirname "${REAL_PATH}")
 echo "Using ALON_PATH: ${ALON_PATH}"                  # 配置Alon源路径
-CONFIG_PATH=$(dirname "${CONFIG_FILE}")
+CONFIG_PATH=$(dirname "${REAL_PATH}")
 echo "Using CONFIG_PATH:${CONFIG_PATH}"               # 配置文件路径
-CONFIG_NAME=$(basename "${CONFIG_FILE}" .config)
+CONFIG_NAME=$(basename "${REAL_PATH}" .config)
 echo "Using CONFIG_NAME:${CONFIG_NAME}"               # 配置文件名
 IFS=';' read -r -a CONFIG_ARRAY <<< "${CONFIG_NAME}"  # 分割配置文件名
 
