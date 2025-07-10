@@ -53,10 +53,10 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            "${GITHUB_WORKSPACE}"/openwrt/dl
-            "${GITHUB_WORKSPACE}"/openwrt/build_dir
-            "${GITHUB_WORKSPACE}"/openwrt/staging_dir
-            "${GITHUB_WORKSPACE}"/openwrt/ccache
+            "${GITHUB_WORKSPACE}/openwrt/dl"
+            "${GITHUB_WORKSPACE}/openwrt/build_dir"
+            "${GITHUB_WORKSPACE}/openwrt/staging_dir"
+            "${GITHUB_WORKSPACE}/openwrt/ccache"
           key: ${{ runner.os }}-openwrt-${{ hashFiles('feeds.conf', '.config') }}
       # don't modify to run
       # - name: Free Disk Space (Ubuntu)
@@ -102,12 +102,14 @@ jobs:
           mkdir -p "${GITHUB_WORKSPACE}/openwrt"
 
           cd "${GITHUB_WORKSPACE}/openwrt"
+
+          chmod +x "${GITHUB_WORKSPACE}/build.sh"
           
           "${GITHUB_WORKSPACE}"/build.sh "${GITHUB_WORKSPACE}/${{ matrix.config }}"
 
       - name: create
         run: |
-          cd /${GITHUB_WORKSPACE}/openwrt
+          cd "${GITHUB_WORKSPACE}/openwrt"
           
           ls -al
             if [ $(ls *.img.gz | wc -l) -le 0 ]; then
@@ -129,7 +131,7 @@ jobs:
         
       - name: Check file permissions
         run: |  
-          ls -l /${GITHUB_WORKSPACE}/openwrt/*.zip
+          ls -l "${GITHUB_WORKSPACE}/openwrt/*.zip"
         
       - name: Wait for file operations to complete
         run: |
@@ -142,17 +144,17 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ env.release }}
-          files: /"${GITHUB_WORKSPACE}"/openwrt/*.zip
+          files: "${GITHUB_WORKSPACE}/openwrt/*.zip"
 
       - name: Update Cache
         if: always()  # 即使构建失败也保存缓存
         uses: actions/cache/save@v3
         with:
           path: |
-            /"${GITHUB_WORKSPACE}"/openwrt/dl
-            /"${GITHUB_WORKSPACE}"/openwrt/build_dir
-            /"${GITHUB_WORKSPACE}"/openwrt/staging_dir
-            /"${GITHUB_WORKSPACE}"/openwrt/ccache
+            "${GITHUB_WORKSPACE}/openwrt/dl"
+            "${GITHUB_WORKSPACE}/openwrt/build_dir"
+            "${GITHUB_WORKSPACE}/openwrt/staging_dir"
+            "${GITHUB_WORKSPACE}/openwrt/ccache"
           key: ${{ runner.os }}-openwrt-${{ hashFiles('feeds.conf', '.config') }}
       
       - name: Delete workflow runs
