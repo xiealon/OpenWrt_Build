@@ -49,21 +49,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@main
 
-      - name: Restore Cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            "${GITHUB_WORKSPACE}/openwrt/dl"
-            "${GITHUB_WORKSPACE}/openwrt/build_dir"
-            "${GITHUB_WORKSPACE}/openwrt/staging_dir"
-            "${GITHUB_WORKSPACE}/openwrt/ccache"
-          key: ${{ runner.os }}-openwrt-${{ hashFiles('feeds.conf', '.config') }}
       # don't modify to run
       # - name: Free Disk Space (Ubuntu)
       #   uses: jlumbroso/free-disk-space@main
       #   with:
       #        tool-cache: true
           
+
       - name: Init Env
         env:
           DEBIAN_FRONTEND: noninteractive
@@ -74,19 +66,19 @@ jobs:
 
           sudo apt update
           sudo apt full-upgrade -y
-          sudo apt install -y \
-          ack antlr3 asciidoc autoconf automake autopoint binutils bison build-essential \
-          bzip2 ccache clang cmake coreutils cpio curl device-tree-compiler e2fsprogs \
-          flex gawk gcc-multilib g++-multilib gcc git gperf haveged help2man intltool \
-          jq lib32z1 libc6-dev-i386 libc6-i386 libelf-dev libfuse-dev libglib2.0-dev \
-          libgmp3-dev libltdl-dev libmpc-dev libmpfr-dev libncurses5-dev libncursesw5-dev \
-          libpcre2-dev libpython3-dev libreadline-dev libssl-dev libtool llvm lm-sensors \
-          lrzsz msmtp ninja-build ntpdate p7zip p7zip-full patch pkgconf python3 \
-          python3-pip python3-pyelftools python3-setuptools rsync scons sed \
-          smartmontools squashfs-tools subversion swig texinfo uglifyjs upx-ucl unzip \
-          vim wget wsdd2 xmlto xxd zlib1g-dev \
-          bc python-is-python3 libcap-dev libpam0g-dev libgmp-dev libmpfr-dev
-          
+          sudo apt install -y jq
+          sudo apt install -y sed
+          sudo apt install -y coreutils
+          sudo apt-get install libc6-i386 lib32z1
+          sudo apt install -y bash bc lm-sensors wsdd2 smartmontools ntpdate
+          sudo apt install -y ack antlr3 asciidoc autoconf automake autopoint binutils bison build-essential \
+          bzip2 ccache clang cmake cpio curl device-tree-compiler flex gawk gcc-multilib g++-multilib gettext \
+          genisoimage git gperf haveged help2man intltool libc6-dev-i386 libelf-dev libfuse-dev libglib2.0-dev \
+          libgmp3-dev libltdl-dev libmpc-dev libmpfr-dev libncurses5-dev libncursesw5-dev libpython3-dev \
+          libreadline-dev libssl-dev libtool llvm lrzsz msmtp ninja-build p7zip p7zip-full patch pkgconf \
+          python3 python3-pyelftools python3-setuptools qemu-utils rsync scons squashfs-tools subversion \
+          swig texinfo uglifyjs upx-ucl unzip vim wget xmlto xxd zlib1g-dev
+          sudo apt-get -y install libz-dev python3.5 python2.7 lib32gcc1 git-core upx
           sudo apt install --reinstall libc6
           sudo systemctl daemon-reload
           # sudo apt -y autoremove --purge
@@ -99,23 +91,19 @@ jobs:
       
       - name: make
         run: |
-          mkdir -p "${GITHUB_WORKSPACE}/openwrt"
+          sudo mkdir -p /mnt/openwrt
 
-          cd "${GITHUB_WORKSPACE}/openwrt"
-          # chmod +x "${GITHUB_WORKSPACE}/build.sh" # spare
-          "${GITHUB_WORKSPACE}"/build.sh "${GITHUB_WORKSPACE}/${{ matrix.config }}" "false" "${GITHUB_WORKSPACE}"
-
-      - name: create
-        run: |
-          cd "${GITHUB_WORKSPACE}/openwrt"
+          cd /mnt/openwrt
           
+          sudo ${GITHUB_WORKSPACE}/build.sh "${GITHUB_WORKSPACE}/${{ matrix.config }}"
+
           ls -al
             if [ $(ls *.img.gz | wc -l) -le 0 ]; then
               echo "No firmware found"
               exit 1
             fi
-            
-          zip -q -r $(basename "${{ matrix.config }}" .config | awk -F';' '{printf $1"-"$3}')-${{ env.release }}.zip *.img.gz
+
+          sudo zip -q -r $(basename "${{ matrix.config }}" .config | awk -F';' '{printf $1"-"$3}')-${{ env.release }}.zip *.img.gz
             if [ $? -ne 0 ]; then
               echo "Failed to condense the files"
               exit 1
@@ -129,7 +117,7 @@ jobs:
         
       - name: Check file permissions
         run: |  
-          ls -l "${GITHUB_WORKSPACE}/openwrt/*.zip"
+          ls -l /mnt/openwrt/*.zip
         
       - name: Wait for file operations to complete
         run: |
@@ -142,19 +130,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ env.release }}
-          files: "${GITHUB_WORKSPACE}/openwrt/*.zip"
+          files: /mnt/openwrt/*.zip
 
-      - name: Update Cache
-        if: always()  # 即使构建失败也保存缓存
-        uses: actions/cache/save@v3
-        with:
-          path: |
-            "${GITHUB_WORKSPACE}/openwrt/dl"
-            "${GITHUB_WORKSPACE}/openwrt/build_dir"
-            "${GITHUB_WORKSPACE}/openwrt/staging_dir"
-            "${GITHUB_WORKSPACE}/openwrt/ccache"
-          key: ${{ runner.os }}-openwrt-${{ hashFiles('feeds.conf', '.config') }}
-      
       - name: Delete workflow runs
         uses: Mattraks/delete-workflow-runs@v2
         with:
