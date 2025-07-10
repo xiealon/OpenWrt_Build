@@ -103,7 +103,6 @@ jobs:
 
           cd "${GITHUB_WORKSPACE}/openwrt"
           # chmod +x "${GITHUB_WORKSPACE}/build.sh" # spare
-          
           "${GITHUB_WORKSPACE}"/build.sh "${GITHUB_WORKSPACE}/${{ matrix.config }}"
 
       - name: create
