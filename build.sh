@@ -15,7 +15,17 @@ WORK_PATH="$(pwd)"
 
 SCRIPT_FILE="${WORK_PATH}/diy.sh"
 CONFIG_FILE=$(realpath "${1}")                        # 传入的配置文件
-ALON_PATH=$("${GITHUB_WORKSPACE}")                    # 配置Alon源路径
+ALON_PATH="${GITHUB_WORKSPACE:-${3}}"
+# 检查路径是否存在
+if [ -z "$ALON_PATH" ]; then
+    echo "ERROR: Workspace path not provided!"
+    exit 1
+elif [ ! -d "$ALON_PATH" ]; then
+    echo "ERROR: Directory $ALON_PATH does not exist!"
+    exit 1
+fi
+    echo "Using workspace path: $ALON_PATH"           # 配置Alon源路径
+    
 CONFIG_PATH=$(dirname "${CONFIG_FILE}")               # 配置文件路径
 CONFIG_NAME=$(basename "${CONFIG_FILE}" .config)      # 配置文件名
 IFS=';' read -r -a CONFIG_ARRAY <<< "${CONFIG_NAME}"  # 分割配置文件名
