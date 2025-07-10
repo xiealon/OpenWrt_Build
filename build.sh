@@ -15,7 +15,7 @@ WORK_PATH="$(pwd)"
 
 SCRIPT_FILE="${WORK_PATH}/diy.sh"
 CONFIG_FILE=$(realpath "${1}")                        # 传入的配置文件
-ALON_PATH="${GITHUB_WORKSPACE:-${3}}"
+ALON_PATH=$(realpath "${GITHUB_WORKSPACE:-${3}}")
 echo "Using ALON_PATH: ${ALON_PATH}"                  # 配置Alon源路径
 CONFIG_PATH=$(dirname "${CONFIG_FILE}")
 echo "Using CONFIG_PATH:${CONFIG_PATH}"               # 配置文件路径
