@@ -122,7 +122,7 @@ pkg_manager_cmd() {
             fi ;;
         "list")
             if [[ "${SYSTEM_TYPE}" == "openwrt" ]]; then
-                "${opt_update_install}" list | awk '{print ${1}}'
+                "${opt_update_install}" list | awk '{print $1}'
             else
                 sudo "${opt_update_install}" list --installed
             fi ;;
