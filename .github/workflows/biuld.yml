@@ -80,7 +80,7 @@ jobs:
           python-is-python3
           # sudo apt install --reinstall libc6
           # sudo systemctl daemon-reload
-          sudo apt -y autoremove --purge
+          # sudo apt -y autoremove --purge
           sudo apt -y clean
 
           git clone --depth=1 https://github.com/xiealon/po2lmo
