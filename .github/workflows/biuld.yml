@@ -71,11 +71,11 @@ jobs:
           flex gawk gcc-multilib g++-multilib gcc git gperf haveged help2man intltool \
           jq lib32z1 libc6-dev-i386 libc6-i386 libelf-dev libfuse-dev libglib2.0-dev \
           libgmp3-dev libltdl-dev liblzma libmpc-dev libmpfr-dev libncurses5-dev libncursesw5-dev \
-          libpcre2-dev libpcre2-8-dev libpcre2-16-dev libpcre2-32-dev libpython3-dev libreadline-dev \
+          libpcre2-dev libpython3-dev libreadline-dev \
           libssl-dev libtool llvm lm-sensors lrzsz msmtp ninja-build ntpdate p7zip p7zip-full patch pkgconf \
           python3 python3-pip python3-pyelftools python3-setuptools qemu-utils rsync scons sed \
           smartmontools squashfs-tools subversion swig texinfo uglifyjs upx-ucl unzip \
-          vim wget wsdd2 xmlto xxd zlib1g zlib1g-dev \
+          vim wget wsdd2 xmlto xxd zlib1g-dev \
           bc kexec-tools libcap-dev libpam0g-dev libgmp-dev libmpfr-dev \
           python-is-python3
           # sudo apt install --reinstall libc6
