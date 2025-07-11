@@ -78,9 +78,9 @@ jobs:
           vim wget wsdd2 xmlto xxd zlib1g zlib1g-dev \
           bc kexec-tools libcap-dev libpam0g-dev libgmp-dev libmpfr-dev \
           python-is-python3
-          sudo apt install --reinstall libc6
-          sudo systemctl daemon-reload
-          # sudo apt -y autoremove --purge
+          # sudo apt install --reinstall libc6
+          # sudo systemctl daemon-reload
+          sudo apt -y autoremove --purge
           sudo apt -y clean
 
           git clone --depth=1 https://github.com/xiealon/po2lmo
