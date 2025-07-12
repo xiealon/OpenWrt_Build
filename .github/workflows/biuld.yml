@@ -66,17 +66,17 @@ jobs:
           sudo apt update
           sudo apt full-upgrade -y
           sudo apt install -y \
-          ack antlr3 asciidoc autoconf automake autopoint binutils binutils-multiarch bison build-essential \
+          ack antlr3 asciidoc autoconf automake autopoint bc binutils binutils-multiarch bison build-essential \
           bzip2 ccache clang cmake coreutils cpio curl device-tree-compiler e2fsprogs \
           flex gawk gcc-multilib g++-multilib gcc git gettex genisoimage gperf haveged help2man intltool \
           jq lib32z1 libc6-dev-i386 libc6-i386 libelf-dev libfuse-dev libglib2.0-dev \
-          libcap-dev libpam0g-dev libgmp3-dev libgmp-dev libmpfr-dev libltdl-dev libmpc-dev libmpfr-dev \
+          libcap-dev libpam0g-dev libcap-dev libpam0g-dev libgmp3-dev libgmp-dev libmpfr-dev libltdl-dev libmpc-dev libmpfr-dev \
           libncurses5-dev libncursesw5-dev libpcre2-dev libpython3-dev libreadline-dev libssl-dev libtool \
           llvm lm-sensors lrzsz msmtp ninja-build ntpdate p7zip p7zip-full patch pkgconf python3 \
           python3-pip python3-pyelftools python3-setuptools qemu-utils rsync scons sed \
           smartmontools squashfs-tools subversion swig texinfo uglifyjs upx-ucl unzip \
           vim wget wsdd2 xmlto xxd zlib1g-dev \
-          bc kexec-tools libcap-dev libpam0g-dev \
+          kexec-tools  \
           python-is-python3
           # sudo apt install --reinstall libc6
           # sudo systemctl daemon-reload
