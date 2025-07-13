@@ -68,7 +68,7 @@ jobs:
           sudo apt install -y \
           ack antlr3 asciidoc autoconf automake autopoint bc binutils binutils-multiarch bison build-essential \
           bzip2 ccache clang cmake coreutils cpio curl device-tree-compiler e2fsprogs \
-          flex gawk gcc-multilib g++-multilib gcc git gettext genisoimage gperf haveged help2man intltool \
+          flex gawk gettext gcc-multilib g++-multilib gcc git genisoimage gperf haveged help2man intltool \
           jq lib32z1 libc6-dev-i386 libc6-i386 libelf-dev libfuse-dev libglib2.0-dev \
           libcap-dev libpam0g-dev libcap-dev libpam0g-dev libgmp3-dev libgmp-dev libmpfr-dev libltdl-dev libmpc-dev libmpfr-dev \
           libncurses5-dev libncursesw5-dev libpcre2-dev libpython3-dev libreadline-dev libssl-dev libtool \
